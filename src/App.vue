@@ -1,27 +1,61 @@
 <template>
   <div id="app">
-    <Home />
+    <router-view />
   </div>
 </template>
 <script>
-import Home from "./views/home.vue";
-import { Button } from "vant";
 export default {
-  name: "app",
-  components: {
-    Home,
-    [Button.name]: Button
-  }
+  name: "App"
 };
 </script>
 
 <style>
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background: #fff;
+}
+/* 通用样式 */
+.border-radius {
+  border-radius: 7px;
+  overflow: hidden;
+}
+.text-center {
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+.img-text {
+  font-size: 0;
+}
+img {
+  vertical-align: middle;
+}
+.mt {
+  margin-top: 10px;
+}
+.mb {
+  margin-bottom: 10px;
+}
+.ml {
+  margin-left: 20px;
+}
+.bg-color {
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 66, 0, 0.5),
+    rgba(255, 66, 0, 1)
+  );
+}
+.text-color {
+  color: rgba(255, 66, 0, 1);
+}
+.text-color-white {
+  color: #fff;
+}
+.pb {
+  padding-bottom: 50px;
 }
 </style>
