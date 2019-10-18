@@ -30,18 +30,25 @@ export default {
       show: true,
       active: 0,
       customerInfo: {
-        cid: "",
+        cid: 1,
         cuserId: "",
         phone: ""
       },
-      // 推广渠道Id
-      cid: "",
-      // 银行用户是否登录标志
-      bankUserId: "",
+
       // api
       api: {
         checkCustomer: {
           url: "/customers/check",
+          method: "post"
+        },
+        // 获取签名
+        getSignature: {
+          url: "/system/signature",
+          method: "post"
+        },
+        // 访问次数增加
+        linkAdd: {
+          url: "/system/view-logs",
           method: "post"
         }
       }
@@ -50,6 +57,7 @@ export default {
   methods: {
     // 预约购买
     prePurchase() {
+      this.linkAdd(3);
       this.$router.push({ path: "/home" });
     },
     // 期货购买
@@ -60,7 +68,8 @@ export default {
       ) {
         Dialog({ message: "请在银行系统中登录后进行现货购买" });
       } else {
-        Dialog({ message: "正在全力开发中" });
+        this.linkAdd(2);
+        this.getSig();
       }
     },
     // 接收从民生银行跳转的连接参数
@@ -75,12 +84,56 @@ export default {
     checkCustomer() {
       let data = this.customerInfo;
       request({ ...this.api.checkCustomer, data }).then(res => {
+        // console.log(res);
+      });
+    },
+    linkAdd(type) {
+      let data = {
+        type,
+        cid: this.customerInfo.cid,
+        cuserId: this.customerInfo.cuserId
+      };
+      request({ ...this.api.linkAdd, data }).then(res => {
         console.log(res);
+      });
+    },
+    getSig() {
+      let baseUrl = "https://pages.tmall.com/wow/wt/act/lm-partner-login?";
+      let extJson = {
+        bizId: "LMALL201910180001",
+        bizUid: "17004044917089927",
+        timestamp: new Date().getTime()
+      };
+      let gotoUrl = "https://pages.tmall.com/wow/wt/act/im-pages";
+      const encodeURIData = {
+        extJson: encodeURIComponent(JSON.stringify(extJson)),
+        gotoUrl: encodeURIComponent(gotoUrl)
+      };
+      // .replace(/%7B/g, "{")
+      // .replace(/%7D/g, "}")
+      // .replace(/%3A/g, ":")
+      // .replace(/%2C/g, ","),
+      request({ ...this.api.getSignature, data: extJson }).then(res => {
+        let signature = res.data.data;
+        console.log("signature =" + signature);
+
+        let openUrl =
+          baseUrl +
+          "extJson=" +
+          encodeURIData.extJson +
+          "&signature=" +
+          signature +
+          "&gotoUrl=" +
+          encodeURIData.gotoUrl;
+        console.log("openUrl =", openUrl);
+
+        window.open(openUrl);
       });
     }
   },
   mounted() {
     this.checkLink();
+    this.linkAdd(1);
     this.checkCustomer();
   },
   components: {
