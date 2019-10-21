@@ -2,7 +2,7 @@ module.exports = {
   local: {
     VUE_APP_BASE_URL: "http://dev.hkjindian.com:8900"
   },
-  development: {
+  dev: {
     VUE_APP_BASE_URL: "http://dev.hkjindian.com:8900"
   },
   sit: {

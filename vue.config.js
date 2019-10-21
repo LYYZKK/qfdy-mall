@@ -1,4 +1,4 @@
-const envConfig = require("./src/config/env.config");
+// const envConfig = require("./src/config/env.config");
 
 module.exports = {
   /** 区分打包环境与开发环境
@@ -45,7 +45,7 @@ module.exports = {
     hotOnly: false, // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#configuring-proxy
     proxy: {
       "/api": {
-        target: envConfig[process.env.NODE_ENV].VUE_APP_BASE_URL,
+        target: process.env.NODE_ENV.VUE_APP_BASE_URL,
         ws: false,
         changeOrigin: true, //是否跨域
         pathRewrite: {
