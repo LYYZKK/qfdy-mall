@@ -34,7 +34,7 @@ export default {
         cuserId: "",
         phone: ""
       },
-
+      isVip: 0,
       // api
       api: {
         checkCustomer: {
@@ -43,13 +43,18 @@ export default {
         },
         // 获取签名
         getSignature: {
-          url: "/system/signature",
+          url: "/linked-mall/signature",
           method: "post"
         },
         // 访问次数增加
         linkAdd: {
           url: "/system/view-logs",
           method: "post"
+        },
+        // 民生银行参数解密
+        cmbcDescrypt: {
+          url: "/cmbc/descrypt",
+          method: "get"
         }
       }
     };
@@ -72,21 +77,28 @@ export default {
         this.getSig();
       }
     },
-    // 接收从民生银行跳转的连接参数
+    // 解密从民生银行跳转的连接参数
+    cmbcDescrypt() {
+      let params = this.$route.query.param;
+      request({ ...this.api.cmbcDescrypt, params }).then(res => {
+        console.log(res);
+      });
+    },
     // 1.用户是否登录
-    //
     checkLink() {
       this.customerInfo.cid = this.$route.query.cid;
       this.customerInfo.cuserId = this.$route.query.bankUserId;
       localStorage.setItem("cid", this.customerInfo.cid);
       localStorage.setItem("bankUserId", this.customerInfo.cuserId);
     },
+    // 验证客户身份
     checkCustomer() {
       let data = this.customerInfo;
       request({ ...this.api.checkCustomer, data }).then(res => {
-        // console.log(res);
+        this.isVip = res.data.isVip;
       });
     },
+    // 访问次数增加(首页)type:1,(现货购买)type:2,(期货购买)type:3
     linkAdd(type) {
       let data = {
         type,
@@ -97,22 +109,21 @@ export default {
         console.log(res);
       });
     },
+    // 获取签名
     getSig() {
       let baseUrl = "https://pages.tmall.com/wow/wt/act/lm-partner-login?";
       let extJson = {
         bizId: "LMALL201910180001",
         bizUid: "17004044917089927",
+        isVip: this.isVip,
         timestamp: new Date().getTime()
       };
-      let gotoUrl = "https://pages.tmall.com/wow/wt/act/im-pages";
+      let gotoUrl = "https://pages.tmall.com/wow/wt/act/qiaofudayuan?wh_biz=tm";
       const encodeURIData = {
         extJson: encodeURIComponent(JSON.stringify(extJson)),
         gotoUrl: encodeURIComponent(gotoUrl)
       };
-      // .replace(/%7B/g, "{")
-      // .replace(/%7D/g, "}")
-      // .replace(/%3A/g, ":")
-      // .replace(/%2C/g, ","),
+
       request({ ...this.api.getSignature, data: extJson }).then(res => {
         let signature = res.data.data;
         console.log("signature =" + signature);
@@ -132,9 +143,10 @@ export default {
     }
   },
   mounted() {
-    this.checkLink();
-    this.linkAdd(1);
-    this.checkCustomer();
+    this.cmbcDescrypt();
+    // this.checkLink();
+    // this.linkAdd(1);
+    // this.checkCustomer();
   },
   components: {
     [Image.name]: Image,
