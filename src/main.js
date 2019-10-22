@@ -9,7 +9,7 @@ router.beforeEach((to, from, next) => {
   next();
 });
 /*第一层if判断生产环境和开发环境*/
-console.log(process.env.NODE_ENV);
+console.log(process.env.VUE_APP_BASEURL);
 
 new Vue({
   router,

@@ -22,12 +22,14 @@ module.exports = {
     /* string or regex */
   ], // 是否为生产环境构建生成sourceMap?
   productionSourceMap: false, // 调整内部的webpack配置. // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
-  chainWebpack: () => {},
+  chainWebpack: config => {
+    config.resolve.symlinks(true);
+  },
   configureWebpack: () => {}, // CSS 相关选项
   css: {
     // 将组件内部的css提取到一个单独的css文件（只用在生产环境）
     // 也可以是传递给 extract-text-webpack-plugin 的选项对象
-    extract: true, // 允许生成 CSS source maps?
+    // extract: true, // 允许生成 CSS source maps?
     sourceMap: false, // pass custom options to pre-processor loaders. e.g. to pass options to // sass-loader, use { sass: { ... } }
     loaderOptions: {}, // Enable CSS modules for all css / pre-processor files. // This option does not affect *.vue files.
     modules: false
@@ -43,16 +45,17 @@ module.exports = {
     port: 8088,
     https: false,
     hotOnly: false, // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#configuring-proxy
-    proxy: {
-      "/api": {
-        target: process.env.NODE_ENV.VUE_APP_BASE_URL,
-        ws: false,
-        changeOrigin: true, //是否跨域
-        pathRewrite: {
-          "/api": "" //规定请求地址以什么作为开头
-        }
-      }
-    }
+    proxy: null
+    // proxy: {
+    //   "/api": {
+    //     target: process.env.NODE_ENV.VUE_APP_BASEURL,
+    //     ws: false,
+    //     changeOrigin: true, //是否跨域
+    //     pathRewrite: {
+    //       "/api": "" //规定请求地址以什么作为开头
+    //     }
+    //   }
+    // }
     // before: app => {}
   }, // 第三方插件配置
 

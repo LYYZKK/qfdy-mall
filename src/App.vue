@@ -1,11 +1,30 @@
 <template>
-  <div id="app">
+  <div id="app" ref="app">
     <router-view />
   </div>
 </template>
 <script>
 export default {
-  name: "App"
+  name: "App",
+  data() {
+    return {
+      height: {
+        height: ""
+      }
+    };
+  },
+  methods: {
+    appHeight() {
+      let appHeight = document.body.offsetHeight + "px";
+      this.$nextTick(() => {
+        this.$refs.app.style.height = appHeight;
+      });
+    }
+  },
+
+  mounted() {
+    this.appHeight();
+  }
 };
 </script>
 
@@ -18,6 +37,7 @@ body {
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   background: #fff;
+  overflow: auto;
 }
 /* 通用样式 */
 .border-radius {
