@@ -36,7 +36,7 @@
 </template>
 <script>
 import { Image, Row, Col, Dialog, Button } from "vant";
-import request from "@/utils/request.js";
+// import request from "@/utils/request.js";
 import banner from "@/assets/images/index/banner.png";
 import topBg from "@/assets/images/index/top-BG.png";
 export default {
