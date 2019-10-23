@@ -12,7 +12,7 @@
         <div class="text-center blue-text mt mb">核/心/产/区/稻/田</div>
         <van-row type="flex" justify="space-around" class="btn-margin">
           <van-col span="10" class="btn-buy text-center text-color-white" @click="spotBuy">
-            <van-row class="buy" type="flex" justify="space-around">
+            <van-row class="buy" type="flex" justify="space-around" align="center">
               <van-col span="3">
                 <van-image :src="left" class="btn-left-right" />
               </van-col>
@@ -86,7 +86,6 @@ import map from "@/assets/images/index/map.png";
 import riceText from "@/assets/images/index/rice-text.png";
 import left from "@/assets/images/index/btn-L.png";
 import right from "@/assets/images/index/btn-R.png";
-// import { loginForComm } from "@/utils/cmbcForClient.js";
 export default {
   name: "Index",
   data() {
@@ -98,7 +97,7 @@ export default {
       left,
       right,
       customerInfo: {
-        cid: 1,
+        cid: "",
         cuserId: "",
         phone: ""
       },
@@ -130,20 +129,28 @@ export default {
   methods: {
     // // 解密从民生银行跳转的连接参数
     cmbcDescrypt() {
-      // alert(localStorage.getItem("cid"));
+      console.log();
       let params = {
         param: this.$route.query.param
       };
-      request({ ...this.api.cmbcDescrypt, params }).then(res => {
-        if (res.data.success) {
-          let info = res.data.data.split("|");
-          this.customerInfo.phone = info[0];
-          this.customerInfo.cuserId = info[1];
-          localStorage.setItem("phone", this.customerInfo.phone);
-          localStorage.setItem("cuserId", this.customerInfo.cuserId);
-          this.checkCustomer();
-        }
-      });
+      if (params.param !== undefined) {
+        request({ ...this.api.cmbcDescrypt, params }).then(res => {
+          if (res.data.success) {
+            let info = res.data.data.split("|");
+            this.customerInfo.phone = info[0];
+            this.customerInfo.cuserId = info[1];
+            localStorage.setItem("phone", this.customerInfo.phone);
+            localStorage.setItem("cuserId", this.customerInfo.cuserId);
+            this.checkCustomer();
+          }
+        });
+      } else {
+        console.log("返回银行页面");
+        loginForComm(
+          window.location.host + this.$route.fullPath,
+          window.location.host + this.$route.fullPath
+        );
+      }
     },
     // 验证客户身份
     checkCustomer() {
@@ -152,8 +159,8 @@ export default {
         if (res.data.success) {
           this.isVip = res.data.data.isVip;
           localStorage.setItem("isVip", this.isVip);
-        } else {
-          // loginForComm(this.$route, this.$route);
+          this.linkAdd(2);
+          this.getSig();
         }
       });
     },
@@ -193,15 +200,7 @@ export default {
     },
     // 期货购买
     spotBuy() {
-      if (
-        this.customerInfo.cuserId === "" ||
-        this.customerInfo.cuserId === null
-      ) {
-        Dialog({ message: "请在银行系统中登录后进行现货购买" });
-      } else {
-        this.linkAdd(2);
-        this.getSig();
-      }
+      this.cmbcDescrypt();
     },
     // 访问次数增加(首页)type:1,(现货购买)type:2,(期货购买)type:3
     linkAdd(type) {
@@ -211,17 +210,14 @@ export default {
         cuserId: this.customerInfo.cuserId
       };
       request({ ...this.api.linkAdd, data }).then(res => {
-        console.log(res);
+        this.customerInfo.cid = res.data.data.cid;
       });
     }
 
     // 进入页面请求初始化
   },
   mounted() {
-    this.cmbcDescrypt();
-    // this.checkLink();
-    // this.linkAdd(1);
-    // this.checkCustomer();
+    this.linkAdd(1);
   },
   components: {
     [Image.name]: Image,
@@ -285,7 +281,7 @@ export default {
   font-family: "ZhenyanGB-Regular";
   width: 80%;
   text-align: center;
-  margin: 15% auto 0;
+  margin: 55px auto 0;
 }
 .text-bg {
   width: 80%;

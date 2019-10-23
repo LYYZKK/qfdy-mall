@@ -15,8 +15,6 @@ export default {
   },
   methods: {
     appHeight() {
-      // let appHeight = document.body.offsetHeight + "px";
-      // let appHeight = window.screen.availHeight + "px";
       let appHeight = document.documentElement.clientHeight + "px";
       this.$nextTick(() => {
         this.$refs.app.style.height = appHeight;

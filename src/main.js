@@ -1,6 +1,9 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
+// import VConsole from "vconsole";
+// const vConsole = new VConsole();
+// Vue.use(vConsole);
 Vue.config.productionTip = false;
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
@@ -8,9 +11,6 @@ router.beforeEach((to, from, next) => {
   }
   next();
 });
-/*第一层if判断生产环境和开发环境*/
-console.log(process.env.VUE_APP_BASE_API);
-
 new Vue({
   router,
   render: h => h(App)
