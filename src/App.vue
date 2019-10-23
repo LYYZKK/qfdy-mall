@@ -15,7 +15,9 @@ export default {
   },
   methods: {
     appHeight() {
-      let appHeight = document.body.offsetHeight + "px";
+      // let appHeight = document.body.offsetHeight + "px";
+      // let appHeight = window.screen.availHeight + "px";
+      let appHeight = document.documentElement.clientHeight + "px";
       this.$nextTick(() => {
         this.$refs.app.style.height = appHeight;
       });
@@ -38,6 +40,8 @@ body {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   background: #fff;
   overflow: auto;
+  max-width: 500px;
+  margin: 0 auto;
 }
 /* 通用样式 */
 .border-radius {

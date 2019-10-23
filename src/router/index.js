@@ -13,7 +13,13 @@ Vue.use(Router);
 export default new Router({
   mode: "history",
   routes: [
-    { path: "/", redirect: "/index" },
+    {
+      path: "/",
+      meta: {
+        title: "乔府商城"
+      },
+      redirect: "/index"
+    },
     {
       path: "/index",
       component: Index,

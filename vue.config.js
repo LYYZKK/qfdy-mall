@@ -1,4 +1,4 @@
-// const envConfig = require("./src/config/env.config");
+const envConfig = require("./src/config/env.config");
 
 module.exports = {
   /** 区分打包环境与开发环境
@@ -16,7 +16,7 @@ module.exports = {
   // 那么将这个值改为 '/my-app/'
   baseUrl: "/", // 构建好的文件输出到哪里
   outputDir: "dist", // where to put static assets (js/css/img/font/...) // 是否在保存时使用‘eslint-loader’进行检查 // 有效值: true | false | 'error' // 当设置为‘error’时，检查出的错误会触发编译失败
-  lintOnSave: true, // 使用带有浏览器内编译器的完整构建版本 // https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only
+  lintOnSave: false, // 使用带有浏览器内编译器的完整构建版本 // https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only
   runtimeCompiler: true, // babel-loader默认会跳过`node_modules`依赖. // 通过这个选项可以显示转译一个依赖
   transpileDependencies: [
     /* string or regex */
@@ -39,23 +39,27 @@ module.exports = {
 
   pwa: {}, // configure webpack-dev-server behavior
   devServer: {
+    overlay: {
+      warning: false,
+      errors: false
+    },
     open: process.platform === "darwin",
     disableHostCheck: false,
     host: "0.0.0.0",
     port: 8088,
     https: false,
     hotOnly: false, // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#configuring-proxy
-    proxy: null
-    // proxy: {
-    //   "/api": {
-    //     target: process.env.NODE_ENV.VUE_APP_BASEURL,
-    //     ws: false,
-    //     changeOrigin: true, //是否跨域
-    //     pathRewrite: {
-    //       "/api": "" //规定请求地址以什么作为开头
-    //     }
-    //   }
-    // }
+    // proxy: null
+    proxy: {
+      "/api": {
+        target: envConfig[process.env.mode].VUE_APP_BASE_URL,
+        ws: false,
+        changeOrigin: true, // 是否跨域
+        pathRewrite: {
+          "/api": "" // 规定请求地址以什么作为开头
+        }
+      }
+    }
     // before: app => {}
   }, // 第三方插件配置
 

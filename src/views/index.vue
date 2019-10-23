@@ -1,58 +1,108 @@
 <template>
   <div class="main">
     <div class="top">
-      <!-- <van-image src="https://img.yzcdn.cn/vant/cat.jpeg" /> -->
       <div class="banner">
         <div class="text">专属私家定制稻田</div>
-        <!-- <van-image :src="banner" class="banner-image" /> -->
       </div>
-      <div class="bg">
-        <div class="rice-text">五常大米</div>
+      <div class="bottom">
+        <div class="rice-text">
+          <van-image :src="riceText" />
+        </div>
         <div class="text-right text-color-white text-bg">民生银行客户尊享</div>
-        <div class="text-center blue-text">核/心/产/区/稻/田</div>
-        <div>
-          <van-button round color="rgba(177, 136, 75, .8)" class="btn-buy">大米现货</van-button>
-          <van-button round color="rgba(177, 136, 75, .8)" class="btn-buy">稻田预购</van-button>
-        </div>
-        <!-- <van-image :src="topBg" class="banner-image" /> -->
+        <div class="text-center blue-text mt mb">核/心/产/区/稻/田</div>
+        <van-row type="flex" justify="space-around" class="btn-margin">
+          <van-col span="10" class="btn-buy text-center text-color-white" @click="spotBuy">
+            <van-row class="buy" type="flex" justify="space-around">
+              <van-col span="3">
+                <van-image :src="left" class="btn-left-right" />
+              </van-col>
+              <van-col class="font-size" style="letter-spacing:2px;">大米现货</van-col>
+              <van-col span="3">
+                <van-image :src="right" class="btn-left-right" />
+              </van-col>
+            </van-row>
+          </van-col>
+          <van-col span="10" class="btn-buy text-center text-color-white">
+            <van-row class="buy" type="flex" justify="space-around" align="center">
+              <van-col span="3">
+                <van-image :src="left" class="btn-left-right" />
+              </van-col>
+              <van-col class="font-size" style="letter-spacing:2px;">稻田预购</van-col>
+              <van-col span="3">
+                <van-image :src="right" class="btn-left-right" />
+              </van-col>
+            </van-row>
+          </van-col>
+        </van-row>
+        <van-row type="flex" justify="center">
+          <van-col span="4" class="text-center text-color-blue"></van-col>
+          <van-col span="4" class="text-center text-color-blue font-size">天然</van-col>
+          <van-col span="4" class="text-center text-color-blue font-size">绿色</van-col>
+          <van-col span="4" class="text-center text-color-blue font-size">原生态</van-col>
+          <van-col span="4" class="text-center text-color-blue"></van-col>
+        </van-row>
+        <van-row type="flex" justify="center">
+          <van-col span="4" class="text-center text-color-blue font-size"></van-col>
+          <van-col span="4" class="text-center text-color-blue font-size">新鲜</van-col>
+          <van-col span="4" class="text-center text-color-blue font-size">活米</van-col>
+          <van-col span="4" class="text-center text-color-blue font-size">人人爱</van-col>
+          <van-col span="4" class="text-center text-color-blue"></van-col>
+        </van-row>
       </div>
-      <!-- ="../assets/images/index/banner.png -->
     </div>
-    <!-- <van-row type="flex" justify="space-around" class="mt">
-      <van-col span="10" class="border-radius bg-color" @click="spotBuy">
-        <div>
-          <van-image src="https://img.yzcdn.cn/vant/cat.jpeg" />
-        </div>
-        <div class="text-center text-color-white mb mt">现货购买</div>
-      </van-col>
-      <van-col span="10" class="border-radius bg-color" @click="prePurchase">
-        <div>
-          <van-image src="https://img.yzcdn.cn/vant/cat.jpeg" />
-        </div>
-        <div class="text-center text-color-white mt mb">预约购买</div>
-      </van-col>
-    </van-row>-->
+    <div class="footer">
+      <div class="text-center red-color">北纬45º世界黄金水稻带</div>
+      <van-image :src="map" class="map" />
+      <div class="mt">
+        <div class="title text-color-blue">稀缺资源</div>
+        <div class="small-text yellow-text-color">五常稻田235万亩</div>
+        <div class="small-text yellow-text-color">核心产区仅40万亩</div>
+      </div>
+      <div class="mt">
+        <div class="small-text yellow-text-color">阿里科技 手机可视</div>
+        <div class="small-text yellow-text-color">从种子到餐桌8个环节99道工序</div>
+        <div class="title text-color-blue">全程可溯源</div>
+        <div class="small-text yellow-text-color">专属管家服务</div>
+        <div class="small-text yellow-text-color">每月一次鲜米配送</div>
+      </div>
+      <div class="mt">
+        <div class="title text-color-blue">咱家</div>
+        <div class="small-title text-color-blue">在东北那旮沓有块地</div>
+        <div class="small-text yellow-text-color">2分地产100斤</div>
+        <div class="small-text yellow-text-color">2分地为1单元 可成倍数认购</div>
+      </div>
+      <div class="mt">
+        <div class="small-title yellow-text-color">高端大气上档次</div>
+        <div class="title text-color-blue">送礼相当有面</div>
+      </div>
+      <div class="small-text text-color-blue mb mt">全国统一服务热线：400-1002753</div>
+    </div>
   </div>
 </template>
 <script>
 import { Image, Row, Col, Dialog, Button } from "vant";
-// import request from "@/utils/request.js";
-import banner from "@/assets/images/index/banner.png";
-import topBg from "@/assets/images/index/top-BG.png";
+import request from "@/utils/request.js";
+import map from "@/assets/images/index/map.png";
+import riceText from "@/assets/images/index/rice-text.png";
+import left from "@/assets/images/index/btn-L.png";
+import right from "@/assets/images/index/btn-R.png";
+// import { loginForComm } from "@/utils/cmbcForClient.js";
 export default {
   name: "Index",
   data() {
     return {
       show: true,
       active: 0,
-      banner,
-      topBg,
+      map,
+      riceText,
+      left,
+      right,
       customerInfo: {
         cid: 1,
         cuserId: "",
         phone: ""
       },
-      isVip: 0,
+      isVip: "",
       // api
       api: {
         checkCustomer: {
@@ -78,90 +128,97 @@ export default {
     };
   },
   methods: {
-    // 预约购买
-    // prePurchase() {
-    //   this.linkAdd(3);
-    //   this.$router.push({ path: "/home" });
-    // },
-    // 期货购买
-    // spotBuy() {
-    //   if (
-    //     this.customerInfo.cuserId === "" ||
-    //     this.customerInfo.cuserId === null
-    //   ) {
-    //     Dialog({ message: "请在银行系统中登录后进行现货购买" });
-    //   } else {
-    //     this.linkAdd(2);
-    //     this.getSig();
-    //   }
-    // },
     // // 解密从民生银行跳转的连接参数
-    // cmbcDescrypt() {
-    //   let params = {
-    //     param: this.$route.query.param
-    //   };
-    //   console.log(params);
-    //   request({ ...this.api.cmbcDescrypt, params }).then(res => {
-    //     console.log(res);
-    //   });
-    // },
-    // 1.用户是否登录
-    // checkLink() {
-    //   this.customerInfo.cid = this.$route.query.cid;
-    //   this.customerInfo.cuserId = this.$route.query.bankUserId;
-    //   localStorage.setItem("cid", this.customerInfo.cid);
-    //   localStorage.setItem("bankUserId", this.customerInfo.cuserId);
-    // },
+    cmbcDescrypt() {
+      // alert(localStorage.getItem("cid"));
+      let params = {
+        param: this.$route.query.param
+      };
+      request({ ...this.api.cmbcDescrypt, params }).then(res => {
+        if (res.data.success) {
+          let info = res.data.data.split("|");
+          this.customerInfo.phone = info[0];
+          this.customerInfo.cuserId = info[1];
+          localStorage.setItem("phone", this.customerInfo.phone);
+          localStorage.setItem("cuserId", this.customerInfo.cuserId);
+          this.checkCustomer();
+        }
+      });
+    },
     // 验证客户身份
-    // checkCustomer() {
-    //   let data = this.customerInfo;
-    //   request({ ...this.api.checkCustomer, data }).then(res => {
-    //     this.isVip = res.data.isVip;
-    //   });
-    // },
-    // 访问次数增加(首页)type:1,(现货购买)type:2,(期货购买)type:3
-    // linkAdd(type) {
-    //   let data = {
-    //     type,
-    //     cid: this.customerInfo.cid,
-    //     cuserId: this.customerInfo.cuserId
-    //   };
-    //   request({ ...this.api.linkAdd, data }).then(res => {
-    //     console.log(res);
-    //   });
-    // }
+    checkCustomer() {
+      let data = this.customerInfo;
+      request({ ...this.api.checkCustomer, data }).then(res => {
+        if (res.data.success) {
+          this.isVip = res.data.data.isVip;
+          localStorage.setItem("isVip", this.isVip);
+        } else {
+          // loginForComm(this.$route, this.$route);
+        }
+      });
+    },
     // 获取签名
-    // getSig() {
-    //   let baseUrl = "https://pages.tmall.com/wow/wt/act/lm-partner-login?";
-    //   let extJson = {
-    //     bizId: "LMALL201910180001",
-    //     bizUid: "17004044917089927",
-    //     isVip: this.isVip,
-    //     timestamp: new Date().getTime()
-    //   };
-    //   let gotoUrl = "https://pages.tmall.com/wow/wt/act/qiaofudayuan?wh_biz=tm";
-    //   const encodeURIData = {
-    //     extJson: encodeURIComponent(JSON.stringify(extJson)),
-    //     gotoUrl: encodeURIComponent(gotoUrl)
-    //   };
-    //   request({ ...this.api.getSignature, data: extJson }).then(res => {
-    //     let signature = res.data.data;
-    //     console.log("signature =" + signature);
-    //     let openUrl =
-    //       baseUrl +
-    //       "extJson=" +
-    //       encodeURIData.extJson +
-    //       "&signature=" +
-    //       signature +
-    //       "&gotoUrl=" +
-    //       encodeURIData.gotoUrl;
-    //     console.log("openUrl =", openUrl);
-    //     window.open(openUrl);
-    //   });
-    // }
+    getSig() {
+      let baseUrl = "https://pages.tmall.com/wow/wt/act/lm-partner-login?";
+      let extJson = {
+        bizId: "LMALL201910180001",
+        bizUid: "17004044917089927",
+        isVip: this.isVip,
+        timestamp: new Date().getTime()
+      };
+      let gotoUrl = "https://pages.tmall.com/wow/wt/act/qiaofudayuan?wh_biz=tm";
+      const encodeURIData = {
+        extJson: encodeURIComponent(JSON.stringify(extJson)),
+        gotoUrl: encodeURIComponent(gotoUrl)
+      };
+      request({ ...this.api.getSignature, data: extJson }).then(res => {
+        if (res.data.success) {
+          let signature = res.data.data;
+          let openUrl =
+            baseUrl +
+            "extJson=" +
+            encodeURIData.extJson +
+            "&signature=" +
+            signature +
+            "&gotoUrl=" +
+            encodeURIData.gotoUrl;
+          window.open(openUrl);
+        }
+      });
+    },
+    // 预约购买
+    prePurchase() {
+      this.linkAdd(3);
+      this.$router.push({ path: "/home" });
+    },
+    // 期货购买
+    spotBuy() {
+      if (
+        this.customerInfo.cuserId === "" ||
+        this.customerInfo.cuserId === null
+      ) {
+        Dialog({ message: "请在银行系统中登录后进行现货购买" });
+      } else {
+        this.linkAdd(2);
+        this.getSig();
+      }
+    },
+    // 访问次数增加(首页)type:1,(现货购买)type:2,(期货购买)type:3
+    linkAdd(type) {
+      let data = {
+        type,
+        cid: this.customerInfo.cid,
+        cuserId: this.customerInfo.cuserId
+      };
+      request({ ...this.api.linkAdd, data }).then(res => {
+        console.log(res);
+      });
+    }
+
+    // 进入页面请求初始化
   },
   mounted() {
-    // this.cmbcDescrypt();
+    this.cmbcDescrypt();
     // this.checkLink();
     // this.linkAdd(1);
     // this.checkCustomer();
@@ -178,8 +235,9 @@ export default {
 <style scoped>
 .main {
   height: 100%;
-  background-color: pink;
   overflow: auto;
+  box-sizing: border-box;
+  /* justify-content:  */
 }
 .top {
   height: 100%;
@@ -197,13 +255,14 @@ export default {
   height: 100%;
   width: auto;
 } */
-.top .bg {
+.top .bottom {
   position: absolute;
   bottom: 0;
   height: 60%;
   width: 100%;
   background: url(../assets/images/index/top-BG.png) no-repeat;
   background-size: 100% 100%;
+  padding-bottom: 10px;
 }
 .text {
   position: absolute;
@@ -222,19 +281,21 @@ export default {
   color: rgba(24, 62, 2, 1);
   font-weight: bolder;
   text-align: center;
-  margin-top: 15%;
-  font-size: 60px;
+  font-size: 50px;
   font-family: "ZhenyanGB-Regular";
+  width: 80%;
+  text-align: center;
+  margin: 15% auto 0;
 }
 .text-bg {
-  width: 70%;
+  width: 80%;
   margin: 0 auto;
   background: url(../assets/images/index/text.png) no-repeat center;
   background-size: 100% 100%;
   box-sizing: border-box;
 }
 .text-right {
-  padding-left: 25%;
+  padding-left: 30%;
 }
 .blue-text {
   color: rgba(18, 60, 3, 1);
@@ -242,8 +303,56 @@ export default {
   letter-spacing: 10px;
   font-weight: 800;
 }
+.btn-margin {
+  margin-bottom: 10px;
+}
 .btn-buy {
-  /* border-image: url(../assets/images/index/btn-border.png); */
   background: url(../assets/images/index/btn-border.png) no-repeat;
+  background-size: 100% 100%;
+  overflow: hidden;
+  padding: 5px 3px;
+}
+.btn-buy .buy {
+  border-radius: 20px;
+  line-height: 40px;
+  background-color: rgba(177, 136, 75, 1);
+}
+.btn-left-right {
+  vertical-align: middle;
+}
+.text-color-blue {
+  color: rgba(18, 60, 3, 1);
+}
+.font-size {
+  font-weight: 800;
+  font-size: 14px;
+}
+.footer {
+  background: url(../assets/images/index/bot-BG.png) no-repeat center;
+  background-size: 100% 100%;
+  text-align: center;
+}
+.footer .red-color {
+  color: rgba(199, 20, 25, 1);
+  margin-top: 20px;
+  font-weight: 800;
+}
+.map {
+  width: 90%;
+}
+.title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+.small-title {
+  font-size: 16px;
+  font-weight: 800;
+}
+.small-text {
+  font-size: 12px;
+}
+.yellow-text-color {
+  color: rgba(177, 136, 75, 1);
 }
 </style>

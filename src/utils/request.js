@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const request = axios.create({
-  baseURL: process.env.VUE_APP_BASEURL,
+  baseURL: "api",
   timeout: 60000
 });
 // 拦截器

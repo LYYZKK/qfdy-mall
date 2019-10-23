@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build:test": "vue-cli-service build --mode test",
-    "build:pro": "vue-cli-service build --mode prod",
-    "lint": "vue-cli-service lint"
+    "start": "cross-env mode=local vue-cli-service serve --open --mode local",
+    "build:dev": "cross-env mode=dev vue-cli-service build",
+    "build:sit": "cross-env mode=sit vue-cli-service build",
+    "build:prod": "cross-env mode=prod vue-cli-service build"
   },
   "dependencies": {
     "axios": "^0.19.0",
     "core-js": "^2.6.9",
+    "cross-env": "5.1.1",
+    "cross-port-killer": "1.0.1",
     "crypto-js": "^3.1.9-1",
     "vant": "^2.2.6",
     "vue": "^2.6.10",
@@ -20,12 +22,16 @@
     "@vue/cli-plugin-babel": "^3.12.0",
     "@vue/cli-plugin-eslint": "^3.12.0",
     "@vue/cli-service": "^3.12.0",
-    "babel-eslint": "^10.0.1",
+    "babel-eslint": "^10.0.3",
     "babel-plugin-import": "^1.12.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.0",
+    "stylus": "^0.54.7",
+    "stylus-loader": "^3.0.2",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
@@ -34,12 +40,60 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
+      "plugin:vue/strongly-recommended",
       "eslint:recommended"
     ],
-    "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
+    },
+    "rules": {
+      "generator-star-spacing": "off",
+      "no-mixed-operators": 0,
+      "vue/max-attributes-per-line": [
+        2,
+        {
+          "singleline": 5,
+          "multiline": {
+            "max": 1,
+            "allowFirstLine": false
+          }
+        }
+      ],
+      "vue/attribute-hyphenation": 0,
+      "vue/html-self-closing": 0,
+      "vue/component-name-in-template-casing": 0,
+      "vue/html-closing-bracket-spacing": 0,
+      "vue/singleline-html-element-content-newline": 0,
+      "vue/no-unused-components": 0,
+      "vue/multiline-html-element-content-newline": 0,
+      "vue/no-use-v-if-with-v-for": 0,
+      "vue/html-closing-bracket-newline": 0,
+      "vue/no-parsing-error": 0,
+      "no-console": 0,
+      "spaced-comment": [
+        "error",
+        "always",
+        {
+          "line": {
+            "markers": [
+              "/"
+            ],
+            "exceptions": [
+              "-",
+              "+"
+            ]
+          },
+          "block": {
+            "markers": [
+              "!"
+            ],
+            "exceptions": [
+              "*"
+            ],
+            "balanced": true
+          }
+        }
+      ]
     }
   },
   "postcss": {
