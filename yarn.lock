@@ -5120,6 +5120,11 @@ lodash.memoize@^4.1.2:
   resolved "https://registry.npm.taobao.org/lodash.memoize/download/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
 
+lodash.replace@^4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/lodash.replace/-/lodash.replace-4.1.4.tgz#531c0960dfb5256172afc1c34a4f0ba6f0cb20b8"
+  integrity sha1-UxwJYN+1JWFyr8HDSk8LpvDLILg=
+
 lodash.transform@^4.6.0:
   version "4.6.0"
   resolved "https://registry.npm.taobao.org/lodash.transform/download/lodash.transform-4.6.0.tgz#12306422f63324aed8483d3f38332b5f670547a0"

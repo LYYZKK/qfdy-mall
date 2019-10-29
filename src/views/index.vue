@@ -97,11 +97,10 @@ export default {
       left,
       right,
       customerInfo: {
-        cid: "",
+        cid: 1,
         cuserId: "",
         phone: ""
       },
-      isVip: "",
       // api
       api: {
         checkCustomer: {
@@ -121,7 +120,7 @@ export default {
         // 民生银行参数解密
         cmbcDescrypt: {
           url: "/cmbc/descrypt",
-          method: "get"
+          method: "post"
         }
       }
     };
@@ -129,11 +128,13 @@ export default {
   methods: {
     // // 解密从民生银行跳转的连接参数
     cmbcDescrypt() {
-      console.log();
+      localStorage.clear();
+      console.log("民生银行param===", this.$route.query.param);
       let params = {
         param: this.$route.query.param
       };
       if (params.param !== undefined) {
+        localStorage.setItem("isLogin", 1);
         request({ ...this.api.cmbcDescrypt, params }).then(res => {
           if (res.data.success) {
             let info = res.data.data.split("|");
@@ -145,79 +146,97 @@ export default {
           }
         });
       } else {
-        console.log("返回银行页面");
-        loginForComm(
-          window.location.host + this.$route.fullPath,
-          window.location.host + this.$route.fullPath
-        );
+        localStorage.setItem("isLogin", 0);
       }
     },
     // 验证客户身份
     checkCustomer() {
-      let data = this.customerInfo;
-      request({ ...this.api.checkCustomer, data }).then(res => {
+      let params = this.customerInfo;
+      request({ ...this.api.checkCustomer, params }).then(res => {
         if (res.data.success) {
-          this.isVip = res.data.data.isVip;
-          localStorage.setItem("isVip", this.isVip);
-          this.linkAdd(2);
-          this.getSig();
+          console.log(res.data.data);
+          localStorage.setItem("isVip", res.data.data.isVip);
+          localStorage.setItem("id", res.data.data.id);
         }
       });
     },
     // 获取签名
-    getSig() {
-      let baseUrl = "https://pages.tmall.com/wow/wt/act/lm-partner-login?";
-      let extJson = {
-        bizId: "LMALL201910180001",
-        bizUid: "17004044917089927",
-        isVip: this.isVip,
-        timestamp: new Date().getTime()
-      };
-      let gotoUrl = "https://pages.tmall.com/wow/wt/act/qiaofudayuan?wh_biz=tm";
-      const encodeURIData = {
-        extJson: encodeURIComponent(JSON.stringify(extJson)),
-        gotoUrl: encodeURIComponent(gotoUrl)
-      };
-      request({ ...this.api.getSignature, data: extJson }).then(res => {
-        if (res.data.success) {
-          let signature = res.data.data;
-          let openUrl =
-            baseUrl +
-            "extJson=" +
-            encodeURIData.extJson +
-            "&signature=" +
-            signature +
-            "&gotoUrl=" +
-            encodeURIData.gotoUrl;
-          window.open(openUrl);
-        }
-      });
+    getSign() {
+      const _this = this;
+      let isLogin = localStorage.getItem("isLogin");
+      console.log("isLogin===", isLogin);
+      if (isLogin === "1") {
+        let baseUrl = "https://pages.tmall.com/wow/wt/act/lm-partner-login?";
+        let extJson = {
+          bizId: "LMALL201910180001",
+          bizUid: "17004044917089927",
+          isVip: localStorage.getItem("isVip"),
+          timestamp: new Date().getTime()
+        };
+        let gotoUrl =
+          "https://pages.tmall.com/wow/wt/act/qiaofudayuan?wh_biz=tm";
+        const encodeURIData = {
+          extJson: encodeURIComponent(JSON.stringify(extJson)),
+          gotoUrl: encodeURIComponent(gotoUrl)
+        };
+        request({ ...this.api.getSignature, params: extJson }).then(res => {
+          console.log("getSignature request with res =", res);
+
+          if (res.data.success) {
+            let signature = res.data.data;
+            let openUrl =
+              baseUrl +
+              "extJson=" +
+              encodeURIData.extJson +
+              "&signature=" +
+              signature +
+              "&gotoUrl=" +
+              encodeURIData.gotoUrl;
+            gotoShopUrl(openUrl);
+          } else {
+            console.log("获取签名失败");
+          }
+        });
+      } else {
+        // eslint-disable-next-line no-undef
+        loginForComm(
+          window.location.protocol +
+            "//" +
+            window.location.host +
+            this.$route.path,
+          window.location.protocol +
+            "//" +
+            window.location.host +
+            this.$route.path
+        );
+      }
     },
     // 预约购买
     prePurchase() {
       this.linkAdd(3);
       this.$router.push({ path: "/home" });
     },
-    // 期货购买
+    // 现货购买
     spotBuy() {
-      this.cmbcDescrypt();
+      this.linkAdd(2);
+      this.getSign();
     },
     // 访问次数增加(首页)type:1,(现货购买)type:2,(期货购买)type:3
     linkAdd(type) {
-      let data = {
+      let params = {
         type,
-        cid: this.customerInfo.cid,
-        cuserId: this.customerInfo.cuserId
+        cid: this.customerInfo.cid
       };
-      request({ ...this.api.linkAdd, data }).then(res => {
-        this.customerInfo.cid = res.data.data.cid;
+      request({ ...this.api.linkAdd, params }).then(res => {
+        if (res.data.success) {
+          console.log("访问次数加一成功");
+        }
       });
     }
-
-    // 进入页面请求初始化
   },
   mounted() {
     this.linkAdd(1);
+    this.cmbcDescrypt();
   },
   components: {
     [Image.name]: Image,

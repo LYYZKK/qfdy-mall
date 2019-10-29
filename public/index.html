@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta
       name="viewport"
-      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"
+      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no
+    ,viewport-fit=cover"
     />
     <title>乔府商城</title>
   </head>
@@ -225,12 +226,16 @@
 
     var cmbcParams = "";
     function setFuncParams() {
+      alert(
+        "进入setFuncParams JsonToStr(cmbcParams) =" + JsonToStr(cmbcParams)
+      );
       return JsonToStr(cmbcParams);
     }
 
     // 设置标题栏内容和左右按钮的事件
     function setTitleBar(jsonParam) {
       cmbcParams = jsonParam;
+      alert("进入setTitleBar, 参数:" + jsonParam);
       setWebitEvent("setFuncParams()", "updateTitleInfo");
     }
 

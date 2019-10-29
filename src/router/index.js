@@ -8,6 +8,8 @@ import OrderList from "@/views/goods/order-list.vue";
 import Mine from "@/views/goods/mine.vue";
 import Home from "@/views/home.vue";
 import MineInfo from "@/views/goods/mine-info.vue";
+import OrderDetail from "@/views/goods/order-detail.vue";
+import Modify from "@/views/goods/mine-modify.vue";
 
 Vue.use(Router);
 export default new Router({
@@ -22,6 +24,7 @@ export default new Router({
     },
     {
       path: "/index",
+      name: "Index",
       component: Index,
       meta: {
         title: "乔府商城"
@@ -29,6 +32,7 @@ export default new Router({
     },
     {
       path: "/home",
+      name: "Home",
       component: Home,
       children: [
         {
@@ -37,30 +41,46 @@ export default new Router({
         },
         {
           path: "/booking",
+          name: "Product",
           component: Product
         },
         {
           path: "/order-list",
+          name: "OrderList",
           component: OrderList
         },
         {
           path: "/mine",
+          name: "Mine",
           component: Mine
-        },
-        {
-          path: "/mine-info",
-          component: MineInfo
         }
       ]
     },
 
     {
       path: "/product-detail",
+      name: "ProductDetail",
       component: ProductDetail
     },
     {
       path: "/product-submit",
+      name: "ProductSubmit",
       component: ProductSubmit
+    },
+    {
+      path: "/mine-info",
+      name: "MineInfo",
+      component: MineInfo
+    },
+    {
+      path: "/order-detail",
+      name: "OrderDetail",
+      component: OrderDetail
+    },
+    {
+      path: "/modify",
+      name: "Modify",
+      component: Modify
     }
   ]
 });

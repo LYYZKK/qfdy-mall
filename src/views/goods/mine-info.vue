@@ -1,6 +1,7 @@
 <template>
   <div>
     <NavBar :title="title" />
+
     <van-contact-card type="edit" name="张三" tel="13000000000" />
   </div>
 </template>

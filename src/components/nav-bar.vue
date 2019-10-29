@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bar">
     <van-nav-bar :title="title" left-text="返回" left-arrow @click-left="onClickLeft" />
   </div>
 </template>
@@ -13,7 +13,13 @@ export default {
   },
   methods: {
     onClickLeft() {
-      this.$router.go(-1);
+      if (this.$route.name === "Product") {
+        this.$router.push({ path: "/index" });
+      } else if (this.$route.name === "OrderDetail") {
+        this.$router.push({ name: "OrderList" });
+      } else {
+        this.$router.go(-1);
+      }
     }
   },
   props: {
@@ -26,4 +32,12 @@ export default {
 </script>
 
 <style>
+.bar {
+  width: 100%;
+  height: 50px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
 </style>

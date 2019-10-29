@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mainContent">
     <router-view to="/booking" />
     <van-tabbar v-model="active" route>
       <van-tabbar-item icon="home-o" to="/booking">商品列表</van-tabbar-item>

@@ -38,8 +38,13 @@ body {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   background: #fff;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   max-width: 500px;
   margin: 0 auto;
+  background-color: #eee;
+}
+* {
+  box-sizing: border-box;
 }
 /* 通用样式 */
 .border-radius {
@@ -74,10 +79,33 @@ img {
 .text-color {
   color: rgba(255, 66, 0, 1);
 }
+.text-color-999 {
+  color: #999;
+}
 .text-color-white {
   color: #fff;
 }
 .pb {
   padding-bottom: 50px;
+}
+.mainContent {
+  padding: 46px 0;
+}
+.border {
+  margin: 10px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 10px;
+  background: #fff;
+}
+.round {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 35px;
+}
+.van-card {
+  background-color: #fff !important;
 }
 </style>
