@@ -113,7 +113,6 @@ export default {
     },
     initPage() {
       let cmbcParam = this.$route.query.param;
-      console.log(cmbcParam);
       if (cmbcParam !== undefined) {
         this.cmbcDescrypt();
       }

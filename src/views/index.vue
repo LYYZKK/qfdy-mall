@@ -23,7 +23,7 @@
               </van-col>
             </van-row>
           </van-col>
-          <van-col span="10" class="btn-buy text-center text-color-white" @click="prePurchase">
+          <van-col span="10" class="btn-buy text-center text-color-white">
             <van-row class="buy" type="flex" justify="space-around" align="center">
               <van-col span="3">
                 <van-image :src="left" class="btn-left-right" />
@@ -126,6 +126,7 @@ export default {
     getSign() {
       let isLogin = localStorage.getItem("isLogin");
       console.log("isLogin===", isLogin);
+
       if (isLogin === "1") {
         let baseUrl = "https://pages.tmall.com/wow/wt/act/lm-partner-login?";
         let extJson = {
@@ -135,7 +136,7 @@ export default {
           timestamp: new Date().getTime()
         };
         let gotoUrl =
-          "https://pages.tmall.com/wow/wt/act/qiaofudayuan?wh_biz=tm";
+          "https://pages.tmall.com/wow/wt/act/qiaofudayuan?wh_biz=tm&env=wapa";
         const encodeURIData = {
           extJson: encodeURIComponent(JSON.stringify(extJson)),
           gotoUrl: encodeURIComponent(gotoUrl)
@@ -197,6 +198,9 @@ export default {
     initPage() {
       let cmbcParam = this.$route.query.param;
       console.log(cmbcParam);
+      // let baseUrl =
+      //   "https%3a%2f%2fpages.tmall.com%2fwow%2fwt%2fact%2fqiaofudayuan%3fwh_biz%3dtm%26env%3dwapa";
+      // console.log(decodeURIComponent(baseUrl));
       if (cmbcParam !== undefined) {
         this.cmbcDescrypt();
       }
@@ -217,10 +221,8 @@ export default {
 </script>
 <style scoped>
 .main {
-  height: 100%;
   overflow: auto;
   box-sizing: border-box;
-  /* justify-content:  */
 }
 .top {
   height: 100%;
@@ -229,23 +231,17 @@ export default {
 
 .top .banner {
   position: relative;
-  /* height: 50%; */
-  /* background: url() no-repeat; */
-  /* background-size: cover; */
+  width: 100%;
+  height: auto;
 }
-/* .banner-image {
-  display: block;
-  height: 100%;
-  width: auto;
-} */
 .top .bottom {
   position: absolute;
-  bottom: 0;
-  height: 60%;
+  bottom: -100%;
+  left: 0;
+  padding: 20% 0;
   width: 100%;
   background: url(../assets/images/index/top-BG.png) no-repeat;
   background-size: 100% 100%;
-  padding-bottom: 10px;
 }
 .text {
   position: absolute;
@@ -268,7 +264,7 @@ export default {
   font-family: "ZhenyanGB-Regular";
   width: 80%;
   text-align: center;
-  margin: 55px auto 0;
+  margin: 0 auto;
 }
 .text-bg {
   width: 80%;
@@ -311,6 +307,7 @@ export default {
   font-size: 14px;
 }
 .footer {
+  padding-top: 90%;
   background: url(../assets/images/index/bot-BG.png) no-repeat center;
   background-size: 100% 100%;
   text-align: center;
