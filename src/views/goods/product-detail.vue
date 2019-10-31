@@ -7,7 +7,7 @@
     <van-button
       class="fixed"
       size="large"
-      @click="show=true"
+      @click="purchase"
       color="linear-gradient(to right,
     rgba(255, 66, 0, 0.5),
     rgba(255, 66, 0, 1))"
@@ -28,8 +28,10 @@
 import { Sku, Image, Button, Lazyload } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
+import mixin from "@/utils/mixin.js";
 export default {
   name: "ProductDetail",
+  mixins: [mixin],
   data() {
     return {
       show: false,
@@ -58,13 +60,34 @@ export default {
       }
     };
   },
-  props: {
-    // productId: {
-    //   type: Number,
-    //   required: true
-    // }
-  },
   methods: {
+    // 点击购买判断用户是否登录
+    purchase() {
+      let isLogin = parseInt(localStorage.getItem("isLogin"));
+      console.log(typeof isLogin);
+      if (isLogin === 1) {
+        this.show = true;
+      } else {
+        console.log(
+          "未登录将跳转银行登录页面传输路径为",
+          window.location.protocol +
+            "//" +
+            window.location.host +
+            this.$route.fullPath
+        );
+        // eslint-disable-next-line no-undef
+        loginForComm(
+          window.location.protocol +
+            "//" +
+            window.location.host +
+            this.$route.fullPath,
+          window.location.protocol +
+            "//" +
+            window.location.host +
+            this.$route.fullPath
+        );
+      }
+    },
     onBuyClicked(value) {
       this.$router.push({
         name: "ProductSubmit",
@@ -72,11 +95,11 @@ export default {
       });
     },
     getProductById() {
-      if (this.$route.query.id) {
+      if (this.$route.params.id) {
         request({
           ...this.api.getProductById,
           urlReplacements: [
-            { substr: "{id}", replacement: this.$route.query.id }
+            { substr: "{id}", replacement: this.$route.params.id }
           ]
         }).then(res => {
           this.picture = res.data.data.img;
@@ -87,9 +110,17 @@ export default {
           this.sku.stock_num = res.data.data.count;
         });
       }
+    },
+    initPage() {
+      let cmbcParam = this.$route.query.param;
+      console.log(cmbcParam);
+      if (cmbcParam !== undefined) {
+        this.cmbcDescrypt();
+      }
     }
   },
   mounted() {
+    this.initPage();
     this.getProductById();
   },
 

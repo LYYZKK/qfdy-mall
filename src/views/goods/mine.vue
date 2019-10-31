@@ -4,12 +4,7 @@
     <div>
       <van-cell-group>
         <van-field v-model="customerInfo.name" label="姓名" left-icon="contact" :disabled="disabled" />
-        <van-field
-          v-model="customerInfo.phone"
-          label="手机号"
-          left-icon="phone-o"
-          :disabled="disabled"
-        />
+        <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o" disabled />
         <van-field
           v-model="customerInfo.address"
           label="地址"

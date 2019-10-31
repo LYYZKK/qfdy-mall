@@ -17,6 +17,8 @@ export default {
         this.$router.push({ path: "/index" });
       } else if (this.$route.name === "OrderDetail") {
         this.$router.push({ name: "OrderList" });
+      } else if (this.$route.name === "OrderList") {
+        this.$router.push({ name: "Product" });
       } else {
         this.$router.go(-1);
       }

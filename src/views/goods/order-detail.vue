@@ -18,14 +18,30 @@
       <van-cell-group>
         <van-cell title="订单编号" :value="order.orderNo"></van-cell>
         <van-cell title="下单时间" :value="order.orderTime"></van-cell>
-        <van-cell title="付款时间" :value="order.payTime===''?order.payTime:'未付款，请立即付款'"></van-cell>
+        <van-cell title="付款时间" :value="order.payTime"></van-cell>
         <van-cell title="备注" :value="order.mark"></van-cell>
       </van-cell-group>
-      <div class="mt" v-if="order.payStatus!==2">
-        <van-button size="large" color="red" @click="show=true">立即付款</van-button>
+      <div class="mt">
+        <van-row gutter="20">
+          <van-col
+            v-if="order.orderStatus===0||order.orderStatus===1"
+            :span="order.orderStatus===0?12:24"
+          >
+            <van-button size="large" @click="cancelOrder" type="default">取消订单</van-button>
+          </van-col>
+          <van-col span="12" v-if="order.orderStatus===0">
+            <van-button size="large" color="red" @click="show=true">立即付款</van-button>
+          </van-col>
+        </van-row>
       </div>
     </div>
-    <van-dialog v-model="show" title="确认付款" show-cancel-button @confirm="submit" @cancel="cancel">
+    <van-dialog
+      v-model="show"
+      title="确认付款"
+      show-cancel-button
+      @confirm="submit"
+      @cancel="cancelOrder"
+    >
       <h1 class="text-center">￥{{ order.totalAmount }}</h1>
     </van-dialog>
   </div>
@@ -54,23 +70,51 @@ export default {
       centered: true,
       title: "订单详情",
       order: {},
+      customerId: "",
       api: {
         getProductById: {
           url: "/orders/{id}",
           method: "get"
+        },
+        cancelOrder: {
+          url: "/orders/{id}/cancel",
+          method: "patch"
+        },
+        payOrder: {
+          url: "/orders/{id}/pay",
+          method: "patch"
         }
       }
     };
   },
-  props: {
-    // productId: {
-    //   type: Number,
-    //   required: true
-    // }
-  },
   methods: {
-    submit() {},
-    cancel() {},
+    submit() {
+      request({
+        ...this.api.payOrder,
+        urlReplacements: [{ substr: "{id}", replacement: this.$route.query.id }]
+      }).then(res => {
+        if (res.data.success) {
+          this.$router.push({
+            name: "OrderList",
+            params: { customerId: this.customerId }
+          });
+        }
+      });
+    },
+    cancelOrder() {
+      request({
+        ...this.api.cancelOrder,
+        urlReplacements: [{ substr: "{id}", replacement: this.$route.query.id }]
+      }).then(res => {
+        if (res.data.success) {
+          this.$router.push({
+            name: "OrderList",
+            params: { customerId: this.customerId }
+          });
+          console.log("订单取消成功");
+        }
+      });
+    },
     onBuyClicked(value) {
       this.$router.push({
         name: "ProductSubmit",
@@ -86,6 +130,7 @@ export default {
           ]
         }).then(res => {
           this.order = res.data.data;
+          this.customerId = parseInt(localStorage.getItem("id"));
           console.log(res.data.data);
         });
       }

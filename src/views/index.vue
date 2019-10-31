@@ -2,6 +2,7 @@
   <div class="main">
     <div class="top">
       <div class="banner">
+        <van-image :src="banner" class="btn-left-right" />
         <div class="text">专属私家定制稻田</div>
       </div>
       <div class="bottom">
@@ -22,7 +23,7 @@
               </van-col>
             </van-row>
           </van-col>
-          <van-col span="10" class="btn-buy text-center text-color-white">
+          <van-col span="10" class="btn-buy text-center text-color-white" @click="prePurchase">
             <van-row class="buy" type="flex" justify="space-around" align="center">
               <van-col span="3">
                 <van-image :src="left" class="btn-left-right" />
@@ -86,8 +87,11 @@ import map from "@/assets/images/index/map.png";
 import riceText from "@/assets/images/index/rice-text.png";
 import left from "@/assets/images/index/btn-L.png";
 import right from "@/assets/images/index/btn-R.png";
+import banner from "@/assets/images/index/banner.png";
+import mixin from "@/utils/mixin.js";
 export default {
   name: "Index",
+  mixins: [mixin],
   data() {
     return {
       show: true,
@@ -96,6 +100,7 @@ export default {
       riceText,
       left,
       right,
+      banner,
       customerInfo: {
         cid: 1,
         cuserId: "",
@@ -103,10 +108,6 @@ export default {
       },
       // api
       api: {
-        checkCustomer: {
-          url: "/customers/check",
-          method: "post"
-        },
         // 获取签名
         getSignature: {
           url: "/linked-mall/signature",
@@ -116,53 +117,13 @@ export default {
         linkAdd: {
           url: "/system/view-logs",
           method: "post"
-        },
-        // 民生银行参数解密
-        cmbcDescrypt: {
-          url: "/cmbc/descrypt",
-          method: "post"
         }
       }
     };
   },
   methods: {
-    // // 解密从民生银行跳转的连接参数
-    cmbcDescrypt() {
-      localStorage.clear();
-      console.log("民生银行param===", this.$route.query.param);
-      let params = {
-        param: this.$route.query.param
-      };
-      if (params.param !== undefined) {
-        localStorage.setItem("isLogin", 1);
-        request({ ...this.api.cmbcDescrypt, params }).then(res => {
-          if (res.data.success) {
-            let info = res.data.data.split("|");
-            this.customerInfo.phone = info[0];
-            this.customerInfo.cuserId = info[1];
-            localStorage.setItem("phone", this.customerInfo.phone);
-            localStorage.setItem("cuserId", this.customerInfo.cuserId);
-            this.checkCustomer();
-          }
-        });
-      } else {
-        localStorage.setItem("isLogin", 0);
-      }
-    },
-    // 验证客户身份
-    checkCustomer() {
-      let params = this.customerInfo;
-      request({ ...this.api.checkCustomer, params }).then(res => {
-        if (res.data.success) {
-          console.log(res.data.data);
-          localStorage.setItem("isVip", res.data.data.isVip);
-          localStorage.setItem("id", res.data.data.id);
-        }
-      });
-    },
     // 获取签名
     getSign() {
-      const _this = this;
       let isLogin = localStorage.getItem("isLogin");
       console.log("isLogin===", isLogin);
       if (isLogin === "1") {
@@ -232,11 +193,18 @@ export default {
           console.log("访问次数加一成功");
         }
       });
+    },
+    initPage() {
+      let cmbcParam = this.$route.query.param;
+      console.log(cmbcParam);
+      if (cmbcParam !== undefined) {
+        this.cmbcDescrypt();
+      }
     }
   },
   mounted() {
     this.linkAdd(1);
-    this.cmbcDescrypt();
+    this.initPage();
   },
   components: {
     [Image.name]: Image,
@@ -261,9 +229,9 @@ export default {
 
 .top .banner {
   position: relative;
-  height: 50%;
-  background: url(../assets/images/index/banner.png) no-repeat;
-  background-size: cover;
+  /* height: 50%; */
+  /* background: url() no-repeat; */
+  /* background-size: cover; */
 }
 /* .banner-image {
   display: block;

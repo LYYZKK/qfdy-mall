@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     getProductById(id) {
-      this.$router.push({ path: "/product-detail", query: { id: id } });
+      this.$router.push({ name: "ProductDetail", params: { id: id } });
     },
     getProducts() {
       request({ ...this.api.getProducts }).then(res => {

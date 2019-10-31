@@ -226,16 +226,12 @@
 
     var cmbcParams = "";
     function setFuncParams() {
-      alert(
-        "进入setFuncParams JsonToStr(cmbcParams) =" + JsonToStr(cmbcParams)
-      );
       return JsonToStr(cmbcParams);
     }
 
     // 设置标题栏内容和左右按钮的事件
     function setTitleBar(jsonParam) {
       cmbcParams = jsonParam;
-      alert("进入setTitleBar, 参数:" + jsonParam);
       setWebitEvent("setFuncParams()", "updateTitleInfo");
     }
 

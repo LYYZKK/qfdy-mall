@@ -58,7 +58,7 @@ export default new Router({
     },
 
     {
-      path: "/product-detail",
+      path: "/product-detail/:id",
       name: "ProductDetail",
       component: ProductDetail
     },

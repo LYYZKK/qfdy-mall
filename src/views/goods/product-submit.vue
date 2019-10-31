@@ -6,13 +6,13 @@
         <van-col span="2">
           <div class="round bg-color">
             <van-icon name="phone" color="#fff" />
-            <!-- <van-icon name="location"  /> -->
           </div>
         </van-col>
         <van-col span="20">
           <div>
-            {{ customerName }}
-            <span class="text-color-999">{{ this.phone }}</span>
+            {{ customerInfo.name }}
+            <span class="text-color-999">{{ customerInfo.phone }}</span>
+            <div>{{ customerInfo.address }}</div>
           </div>
         </van-col>
       </van-row>
@@ -93,6 +93,8 @@ export default {
     return {
       show: false,
       checked: true,
+      title: "确认订单",
+
       good: {
         img: "",
         name: "",
@@ -100,23 +102,61 @@ export default {
         description: "",
         mark: ""
       },
-      title: "确认订单",
-      customerName: "嘿嘿嘿",
-      phone: "1101101010101010",
       centered: true,
       order: {
         price: 0,
         count: 0
       },
+      orderId: "",
+      customerInfo: {
+        name: "",
+        phone: "",
+        address: "",
+        id: ""
+      },
       api: {
         getGoodById: {
           url: "/products/{id}",
           method: "get"
+        },
+        addOrder: {
+          url: "/orders",
+          method: "post"
+        },
+
+        // 获取客户信息
+        getCustomerInfo: {
+          url: "/customers/{id}",
+          method: "get"
+        },
+        cancelOrder: {
+          url: "/orders/{id}/cancel",
+          method: "patch"
+        },
+        payOrder: {
+          url: "/orders/{id}/pay",
+          method: "patch"
         }
       }
     };
   },
   methods: {
+    getCustomerInfo() {
+      this.customerInfo.phone = localStorage.getItem("phone");
+      this.customerInfo.id = localStorage.getItem("id");
+      let id = localStorage.getItem("id");
+      if (id) {
+        request({
+          ...this.api.getCustomerInfo,
+          urlReplacements: [{ substr: "{id}", replacement: id }]
+        }).then(res => {
+          if (res.data.success) {
+            this.customerInfo.name = res.data.data.name;
+            this.customerInfo.address = res.data.data.address;
+          }
+        });
+      }
+    },
     getGoodById() {
       console.log(2222222);
       if (this.$route.params.goods.goodsId) {
@@ -126,29 +166,55 @@ export default {
             { substr: "{id}", replacement: this.$route.params.goods.goodsId }
           ]
         }).then(res => {
-          console.log(res.data.data);
           this.good.img = res.data.data.img;
           this.good.name = res.data.data.name;
           this.good.price = res.data.data.price;
           this.good.description = res.data.data.description;
-          console.log(this.good);
         });
       }
     },
-
+    // 提交生成订单
     onSubmit() {
-      this.show = true;
-      // Dialog({ message: "支付中。。。" });
+      let params = {
+        customerId: parseInt(localStorage.getItem("id")),
+        totalAmount: this.totalPrice / 100,
+        orderProducts: [{ productId: 1, productNum: this.order.count }]
+      };
+
+      request({ ...this.api.addOrder, params }).then(res => {
+        if (res.data.success) {
+          this.show = true;
+          this.orderId = res.data.data.id;
+        }
+      });
     },
+    // 确定支付
     submit() {
       console.log("提交支付");
-      this.$router.push({ name: "OrderDetail" });
+      request({
+        ...this.api.payOrder,
+        urlReplacements: [{ substr: "{id}", replacement: this.orderId }]
+      }).then(res => {
+        if (res.data.success) {
+          this.$router.push({
+            name: "OrderDetail",
+            query: { id: this.orderId }
+          });
+        }
+      });
     },
+    // 取消支付
     cancel() {
-      console.log("取消支付");
-      this.$router.push({
-        name: "OrderDetail",
-        query: { id: this.$route.params.goods.goodsId }
+      request({
+        ...this.api.cancelOrder,
+        urlReplacements: [{ substr: "{id}", replacement: this.orderId }]
+      }).then(res => {
+        if (res.data.success) {
+          this.$router.push({
+            name: "OrderDetail",
+            query: { id: this.orderId }
+          });
+        }
       });
     },
     onClickButton() {
@@ -168,6 +234,7 @@ export default {
     }
   },
   mounted() {
+    this.getCustomerInfo();
     this.getOrder();
   },
   components: {
