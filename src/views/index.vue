@@ -144,7 +144,10 @@ export default {
           extJson: encodeURIComponent(JSON.stringify(extJson)),
           gotoUrl: gotoUrl
         };
-        request({ ...this.api.getSignature, params: extJson }).then(res => {
+        request({
+          ...this.api.getSignature,
+          params: { extJson: JSON.stringify(extJson) }
+        }).then(res => {
           console.log("getSignature request with res =", res);
           if (res.data.success) {
             let signature = res.data.data;
