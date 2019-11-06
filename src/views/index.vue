@@ -138,8 +138,7 @@ export default {
           timestamp: new Date().getTime()
         };
         let gotoUrl =
-          // "http://pre-wormhole.tmall.com/wow/wt/act/lm-pages?&wh_page=detail&itemId=605893851179&env=wapa";
-          "http%3a%2f%2fpre-wormhole.tmall.com%2fwow%2fwt%2fact%2flm-pages%3f%26wh_page%3ddetail%26itemId%3d605893851179%26env%3dwapa";
+          "https%3a%2f%2fpages.tmall.com%2fwow%2fwt%2fact%2fqiaofudayuan%3fwh_biz%3dtm%26env%3dwapa";
         const encodeURIData = {
           extJson: encodeURIComponent(JSON.stringify(extJson)),
           gotoUrl: gotoUrl
