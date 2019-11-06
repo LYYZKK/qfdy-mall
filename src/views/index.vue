@@ -137,16 +137,15 @@ export default {
           cid: this.customerInfo.cid,
           timestamp: new Date().getTime()
         };
-        console.log(typeof extJson.bankUserId);
         let gotoUrl =
-          "http://pre-wormhole.tmall.com/wow/wt/act/lm-pages?&wh_page=detail&itemId=605893851179&env=wapa";
+          // "http://pre-wormhole.tmall.com/wow/wt/act/lm-pages?&wh_page=detail&itemId=605893851179&env=wapa";
+          "http%3a%2f%2fpre-wormhole.tmall.com%2fwow%2fwt%2fact%2flm-pages%3f%26wh_page%3ddetail%26itemId%3d605893851179%26env%3dwapa";
         const encodeURIData = {
           extJson: encodeURIComponent(JSON.stringify(extJson)),
-          gotoUrl: encodeURIComponent(gotoUrl)
+          gotoUrl: gotoUrl
         };
         request({ ...this.api.getSignature, params: extJson }).then(res => {
           console.log("getSignature request with res =", res);
-
           if (res.data.success) {
             let signature = res.data.data;
             let openUrl =
@@ -157,6 +156,7 @@ export default {
               signature +
               "&gotoUrl=" +
               encodeURIData.gotoUrl;
+            console.log(openUrl);
             gotoShopUrl(openUrl);
           } else {
             console.log("获取签名失败");
@@ -199,11 +199,7 @@ export default {
       });
     },
     initPage() {
-      let cmbcParam = this.$route.query.param;
-      console.log(cmbcParam);
-      if (cmbcParam !== undefined) {
-        this.cmbcDescrypt();
-      }
+      this.cmbcDescrypt();
     }
   },
   mounted() {

@@ -18,12 +18,12 @@ export default {
   methods: {
     // 解密从民生银行跳转的连接参数
     cmbcDescrypt() {
-      localStorage.clear();
       console.log("民生银行param===", this.$route.query.param);
       let params = {
         param: this.$route.query.param
       };
       if (params.param !== undefined) {
+        localStorage.clear();
         localStorage.setItem("isLogin", 1);
         request({ ...this.api.cmbcDescrypt, params }).then(res => {
           if (res.data.success) {
@@ -33,6 +33,9 @@ export default {
             this.checkCustomer();
           }
         });
+      } else if (this.$route.query.bankUserId && this.$route.query.cid) {
+        localStorage.removeItem("isLogin");
+        localStorage.setItem("isLogin", 1);
       } else {
         localStorage.setItem("isLogin", 0);
       }
