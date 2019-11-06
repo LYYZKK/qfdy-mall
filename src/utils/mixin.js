@@ -29,7 +29,7 @@ export default {
           if (res.data.success) {
             let info = res.data.data.split("|");
             localStorage.setItem("phone", info[0]);
-            localStorage.setItem("cuserId", info[1]);
+            localStorage.setItem("cuserId", info[1]); // 银行客户id
             this.checkCustomer();
           }
         });
@@ -48,7 +48,7 @@ export default {
         if (res.data.success) {
           console.log(res.data.data);
           localStorage.setItem("isVip", res.data.data.isVip);
-          localStorage.setItem("id", res.data.data.id);
+          localStorage.setItem("id", res.data.data.code); // 商城用户ID
         }
       });
     }

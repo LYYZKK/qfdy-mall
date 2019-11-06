@@ -126,17 +126,20 @@ export default {
     getSign() {
       let isLogin = localStorage.getItem("isLogin");
       console.log("isLogin===", isLogin);
-
       if (isLogin === "1") {
         let baseUrl = "https://pages.tmall.com/wow/wt/act/lm-partner-login?";
         let extJson = {
           bizId: "LMALL201910180001",
           bizUid: "17004044917089927",
-          isVip: localStorage.getItem("isVip"),
+          bankUserId: parseInt(localStorage.getItem("cuserId")),
+          userId: parseInt(localStorage.getItem("id")),
+          isVip: parseInt(localStorage.getItem("isVip")),
+          cid: this.customerInfo.cid,
           timestamp: new Date().getTime()
         };
+        console.log(typeof extJson.bankUserId);
         let gotoUrl =
-          "https://pages.tmall.com/wow/wt/act/qiaofudayuan?wh_biz=tm&env=wapa";
+          "http://pre-wormhole.tmall.com/wow/wt/act/lm-pages?&wh_page=detail&itemId=605893851179&env=wapa";
         const encodeURIData = {
           extJson: encodeURIComponent(JSON.stringify(extJson)),
           gotoUrl: encodeURIComponent(gotoUrl)
@@ -198,9 +201,6 @@ export default {
     initPage() {
       let cmbcParam = this.$route.query.param;
       console.log(cmbcParam);
-      // let baseUrl =
-      //   "https%3a%2f%2fpages.tmall.com%2fwow%2fwt%2fact%2fqiaofudayuan%3fwh_biz%3dtm%26env%3dwapa";
-      // console.log(decodeURIComponent(baseUrl));
       if (cmbcParam !== undefined) {
         this.cmbcDescrypt();
       }
