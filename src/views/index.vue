@@ -13,25 +13,17 @@
         <div class="text-center blue-text mt mb">核/心/产/区/稻/田</div>
         <van-row type="flex" justify="space-around" class="btn-margin">
           <van-col span="10" class="btn-buy text-center text-color-white" @click="spotBuy">
-            <van-row class="buy" type="flex" justify="space-around" align="center">
-              <van-col span="3">
-                <van-image :src="left" class="btn-left-right" />
-              </van-col>
+            <van-row class="buy" type="flex" justify="center" align="center">
+              <van-image :src="left" class="btn-left-right icon-width" />
               <van-col class="font-size" style="letter-spacing:2px;">大米现货</van-col>
-              <van-col span="3">
-                <van-image :src="right" class="btn-left-right" />
-              </van-col>
+              <van-icon name="arrow" class="icon-width" />
             </van-row>
           </van-col>
           <van-col span="10" class="btn-buy text-center text-color-white">
-            <van-row class="buy" type="flex" justify="space-around" align="center">
-              <van-col span="3">
-                <van-image :src="left" class="btn-left-right" />
-              </van-col>
+            <van-row class="buy" type="flex" justify="center" align="center">
+              <van-image :src="right" class="btn-left-right icon-width" />
               <van-col class="font-size" style="letter-spacing:2px;">稻田预购</van-col>
-              <van-col span="3">
-                <van-image :src="right" class="btn-left-right" />
-              </van-col>
+              <van-icon name="arrow" class="icon-width" />
             </van-row>
           </van-col>
         </van-row>
@@ -81,12 +73,12 @@
   </div>
 </template>
 <script>
-import { Image, Row, Col, Dialog, Button } from "vant";
+import { Image, Row, Col, Dialog, Button, Icon } from "vant";
 import request from "@/utils/request.js";
 import map from "@/assets/images/index/map.png";
 import riceText from "@/assets/images/index/rice-text.png";
-import left from "@/assets/images/index/btn-L.png";
-import right from "@/assets/images/index/btn-R.png";
+import left from "@/assets/images/index/btn-buy1.png";
+import right from "@/assets/images/index/btn-buy2.png";
 import banner from "@/assets/images/index/banner.png";
 import mixin from "@/utils/mixin.js";
 export default {
@@ -111,11 +103,6 @@ export default {
         // 获取签名
         getSignature: {
           url: "/linked-mall/signature",
-          method: "post"
-        },
-        // 访问次数增加
-        linkAdd: {
-          url: "/system/view-logs",
           method: "post"
         }
       }
@@ -180,32 +167,20 @@ export default {
     },
     // 预约购买
     prePurchase() {
-      this.linkAdd(3);
+      this.linkAdd(2);
       this.$router.push({ path: "/home" });
     },
     // 现货购买
     spotBuy() {
-      this.linkAdd(2);
+      this.linkAdd(3);
       this.getSign();
     },
-    // 访问次数增加(首页)type:1,(现货购买)type:2,(期货购买)type:3
-    linkAdd(type) {
-      let params = {
-        type,
-        cid: this.customerInfo.cid
-      };
-      request({ ...this.api.linkAdd, params }).then(res => {
-        if (res.data.success) {
-          console.log("访问次数加一成功");
-        }
-      });
-    },
+
     initPage() {
       this.cmbcDescrypt();
     }
   },
   mounted() {
-    this.linkAdd(1);
     this.initPage();
   },
   components: {
@@ -213,6 +188,7 @@ export default {
     [Row.name]: Row,
     [Col.name]: Col,
     [Button.name]: Button,
+    [Icon.name]: Icon,
     [Dialog.Component.name]: Dialog.Component
   }
 };
@@ -284,18 +260,22 @@ export default {
   margin-bottom: 10px;
 }
 .btn-buy {
-  background: url(../assets/images/index/btn-border.png) no-repeat;
   background-size: 100% 100%;
   overflow: hidden;
   padding: 5px 3px;
 }
 .btn-buy .buy {
-  border-radius: 20px;
+  border-radius: 8px;
   line-height: 40px;
-  background-color: rgba(177, 136, 75, 1);
+  background-color: #c71419;
 }
 .btn-left-right {
   vertical-align: middle;
+  /* margin-right: 10px; */
+}
+.icon-width {
+  width: 20px;
+  margin: 0 5px;
 }
 .text-color-blue {
   color: rgba(18, 60, 3, 1);
