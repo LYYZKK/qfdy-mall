@@ -23,7 +23,7 @@
         :poster="images.video"
         :src="images.movie"
       ></video> -->
-      <img :src="images.video" alt width="100%" @click="initVideo" />
+      <img :src="images.video" alt width="100%" />
       <img :src="images.text_img" alt width="100%" />
     </van-row>
     <!-- main -->
