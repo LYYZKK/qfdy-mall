@@ -189,9 +189,6 @@ import icon from "@/assets/images/new/bot-icon.png";
 import movie from "@/assets/images/new/movie.mp4";
 import poter from "@/assets/images/new/poter.png";
 import buy from "@/assets/images/new/buy.png";
-// import videojs from "video.js";
-// import "videojs-contrib-hls";
-// import "video.js/dist/video-js.css";
 export default {
   name: "Index",
   mixins: [mixin],
@@ -319,6 +316,9 @@ export default {
     initPage() {
       this.cmbcDescrypt();
     }
+  },
+  mounted() {
+    this.initPage();
   },
   components: {
     [Image.name]: Image,
