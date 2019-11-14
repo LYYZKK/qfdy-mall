@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "cross-env mode=local vue-cli-service serve --open --mode local",
+    "start": "cross-env mode=local vue-cli-service serve --open",
     "build:dev": "cross-env mode=dev vue-cli-service build",
     "build:sit": "cross-env mode=sit vue-cli-service build",
     "build:prod": "cross-env mode=prod vue-cli-service build"

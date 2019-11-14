@@ -114,18 +114,17 @@ export default {
       let isLogin = localStorage.getItem("isLogin");
       console.log("isLogin===", isLogin);
       if (isLogin === "1") {
-        let baseUrl = "https://pages.tmall.com/wow/wt/act/lm-partner-login?";
+        let baseUrl = process.env.LINKED_MALL_BASE_URL;
         let extJson = {
-          bizId: "LMALL201910180001",
-          bizUid: "17004044917089927",
+          bizId: process.env.LINKED_MALL_bizId,
+          bizUid: process.env.bizUid,
           bankUserId: parseInt(localStorage.getItem("cuserId")),
           userId: parseInt(localStorage.getItem("id")),
           isVip: parseInt(localStorage.getItem("isVip")),
           cid: this.customerInfo.cid,
           timestamp: new Date().getTime()
         };
-        let gotoUrl =
-          "https%3a%2f%2fpages.tmall.com%2fwow%2fwt%2fact%2fqiaofudayuan%3fwh_biz%3dtm%26env%3dwapa";
+        let gotoUrl = encodeURIComponent(process.env.LINKED_MALL_GOTO_URL);
         const encodeURIData = {
           extJson: encodeURIComponent(JSON.stringify(extJson)),
           gotoUrl: gotoUrl
