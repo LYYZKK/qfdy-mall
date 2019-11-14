@@ -1,77 +1,152 @@
 <template>
-  <div class="main">
-    <div class="top">
-      <div class="banner">
-        <van-image :src="banner" class="btn-left-right" />
-        <div class="text">专属私家定制稻田</div>
-      </div>
-      <div class="bottom">
-        <div class="rice-text">
-          <van-image :src="riceText" />
+  <div class="bg-color">
+    <!-- 顶部 -->
+    <van-row type="flex" justify="space-between" align="center" class="top">
+      <van-image :src="images.logo" width="50%"></van-image>
+      <van-col class="font-size-12">
+        <span class="nav">首页</span>
+        <span class="nav">定制稻田</span>
+        <span class="nav" @click="spotBuy">现货抢购</span>
+      </van-col>
+    </van-row>
+    <!-- 视频 -->
+    <van-row>
+      <!-- <video
+        id="video"
+        width="100%"
+        height="100%"
+        x5-video-player-fullscreen="true"
+        x5-playsinline
+        playsinline
+        webkit-playsinline
+        preload="auto"
+        :poster="images.video"
+        :src="images.movie"
+      ></video> -->
+      <img :src="images.video" alt width="100%" />
+      <img :src="images.text_img" alt width="100%" />
+    </van-row>
+    <!-- main -->
+    <!-- 定制专属稻田 -->
+    <van-row class="pd">
+      <van-col class="pd1">
+        <img :src="images.title1" alt width="100%" />
+      </van-col>
+      <van-col>
+        <img :src="images.img1" alt width="100%" />
+      </van-col>
+    </van-row>
+    <van-row class="text-color-yellow pd">
+      <van-col class="margin-top-20">
+        <img :src="images.text1" alt width="50%" />
+      </van-col>
+      <van-col :span="24">
+        <img :src="images.poter" alt="" />
+        <span class="margin-top-5">&nbsp;私享管家</span>
+      </van-col>
+      <van-col :span="24">
+        <img :src="images.poter" alt="" />
+        <span class="margin-top-5">&nbsp;仓储保险</span>
+      </van-col>
+      <van-col :span="24">
+        <img :src="images.poter" alt="" />
+        <span class="margin-top-5">&nbsp;每月一次鲜米免费配送服务</span>
+      </van-col>
+      <van-col :span="24">
+        <img :src="images.poter" alt="" />
+        <span class="margin-top-5">&nbsp;七天无理由退订</span>
+      </van-col>
+    </van-row>
+    <van-row class="buy_btn">
+      <van-col class="left">
+        <div>点击预约</div>
+      </van-col>
+      <van-col class="right">
+        <img :src="images.buy" alt="" />
+      </van-col>
+    </van-row>
+    <!-- 现货抢购 -->
+    <van-row class="pd">
+      <van-col class="pd1">
+        <img :src="images.title2" alt width="100%" />
+      </van-col>
+      <van-col>
+        <img :src="images.img2" alt width="100%" />
+      </van-col>
+    </van-row>
+    <van-row class="text-color-yellow pd">
+      <van-col class="margin-top-bottom">
+        <img :src="images.text2" alt width="50%" />
+      </van-col>
+      <van-col :span="24">
+        <img :src="images.poter" />
+        <span>&nbsp;采用世界领先恒温仓储技术</span>
+      </van-col>
+      <van-col :span="24">
+        <img :src="images.poter" alt="" />
+        <span class="margin-top-5">&nbsp;保持水分&nbsp;留住营养</span>
+      </van-col>
+    </van-row>
+    <van-row class="buy_btn" @click="spotBuy">
+      <van-col class="left">
+        <div>点击尝鲜</div>
+      </van-col>
+      <van-col class="right">
+        <img :src="images.buy" alt="" />
+      </van-col>
+    </van-row>
+    <!-- 官方出品 -->
+    <van-row>
+      <van-col class="pd1">
+        <img :src="images.title4" alt width="100%" />
+      </van-col>
+      <van-col>
+        <img :src="images.img4" alt width="100%" />
+      </van-col>
+      <van-row class="text-align-center text-color-yellow pd2">
+        <img :src="images.text4" width="50px;" />
+        <div>
+          民生银行联合五常市政府、阿里云推出了“五常大米专属定制稻田”项目。
         </div>
-        <div class="text-right text-color-white text-bg">民生银行客户尊享</div>
-        <div class="text-center blue-text mt mb">核/心/产/区/稻/田</div>
-        <van-row type="flex" justify="space-around" class="btn-margin">
-          <van-col span="10" class="btn-buy text-center text-color-white" @click="spotBuy">
-            <van-row class="buy" type="flex" justify="center" align="center">
-              <van-image :src="left" class="btn-left-right icon-width" />
-              <van-col class="font-size" style="letter-spacing:2px;">大米现货</van-col>
-              <van-icon name="arrow" class="icon-width" />
-            </van-row>
-          </van-col>
-          <van-col span="10" class="btn-buy text-center text-color-white">
-            <van-row class="buy" type="flex" justify="center" align="center">
-              <van-image :src="right" class="btn-left-right icon-width" />
-              <van-col class="font-size" style="letter-spacing:2px;">稻田预购</van-col>
-              <van-icon name="arrow" class="icon-width" />
-            </van-row>
-          </van-col>
-        </van-row>
-        <van-row type="flex" justify="center">
-          <van-col span="4" class="text-center text-color-blue"></van-col>
-          <van-col span="4" class="text-center text-color-blue font-size">天然</van-col>
-          <van-col span="4" class="text-center text-color-blue font-size">绿色</van-col>
-          <van-col span="4" class="text-center text-color-blue font-size">原生态</van-col>
-          <van-col span="4" class="text-center text-color-blue"></van-col>
-        </van-row>
-        <van-row type="flex" justify="center">
-          <van-col span="4" class="text-center text-color-blue font-size"></van-col>
-          <van-col span="4" class="text-center text-color-blue font-size">新鲜</van-col>
-          <van-col span="4" class="text-center text-color-blue font-size">活米</van-col>
-          <van-col span="4" class="text-center text-color-blue font-size">人人爱</van-col>
-          <van-col span="4" class="text-center text-color-blue"></van-col>
-        </van-row>
+      </van-row>
+      <van-row gutter="10" class="pd">
+        <van-col span="12">
+          <img :src="images.img4_1" alt width="100%" />
+        </van-col>
+        <van-col span="12">
+          <img :src="images.img4_2" alt width="100%" />
+        </van-col>
+      </van-row>
+      <van-row gutter="10" class="pd margin-top-5">
+        <van-col span="12">
+          <img :src="images.img4_3" alt width="100%" />
+        </van-col>
+        <van-col span="12">
+          <img :src="images.img4_4" alt width="100%" />
+        </van-col>
+      </van-row>
+    </van-row>
+    <van-row class="text-align-center text-color-yellow pd2">
+      <img :src="images.text5" alt width="50px;" />
+      <div>
+        “第二届国际大米节金奖”、“中国国家地理标志产品”、“中国十大好吃米饭”、被《舌尖上的中国》评为“中国最好的稻米”。
       </div>
-    </div>
-    <div class="footer">
-      <div class="text-center red-color">北纬45º世界黄金水稻带</div>
-      <van-image :src="map" class="map" />
-      <div class="mt">
-        <div class="title text-color-blue">稀缺资源</div>
-        <div class="small-text yellow-text-color">五常稻田235万亩</div>
-        <div class="small-text yellow-text-color">核心产区仅40万亩</div>
-      </div>
-      <div class="mt">
-        <div class="small-text yellow-text-color">阿里科技 手机可视</div>
-        <div class="small-text yellow-text-color">从种子到餐桌8个环节99道工序</div>
-        <div class="title text-color-blue">全程可溯源</div>
-        <div class="small-text yellow-text-color">专属管家服务</div>
-        <div class="small-text yellow-text-color">每月一次鲜米配送</div>
-      </div>
-      <div class="mt">
-        <div class="title text-color-blue">咱家</div>
-        <div class="small-title text-color-blue">在东北那旮沓有块地</div>
-        <div class="small-text yellow-text-color">2分地产100斤</div>
-        <div class="small-text yellow-text-color">2分地为1单元 可成倍数认购</div>
-      </div>
-      <div class="mt">
-        <div class="small-title yellow-text-color">高端大气上档次</div>
-        <div class="title text-color-blue">送礼相当有面</div>
-      </div>
-      <div class="small-text text-color-blue mb mt">全国统一服务热线：400-1002753</div>
-    </div>
+    </van-row>
+    <!-- 尊贵礼遇 -->
+    <van-row>
+      <van-col class="pd1">
+        <img :src="images.title5" alt width="100%" />
+      </van-col>
+      <van-col>
+        <img :src="images.img5" alt width="100%" />
+      </van-col>
+    </van-row>
+    <van-row class="text-align-center">
+      <img :src="images.icon" alt />
+    </van-row>
   </div>
 </template>
+
 <script>
 import { Image, Row, Col, Dialog, Button, Icon } from "vant";
 import request from "@/utils/request.js";
@@ -81,11 +156,81 @@ import left from "@/assets/images/index/btn-buy1.png";
 import right from "@/assets/images/index/btn-buy2.png";
 import banner from "@/assets/images/index/banner.png";
 import mixin from "@/utils/mixin.js";
+
+import logo from "@/assets/images/new/LOGO.png";
+import video from "@/assets/images/new/video.png";
+import text_img from "@/assets/images/new/text-img.png";
+import text1 from "@/assets/images/new/text-1.png";
+import text2 from "@/assets/images/new/text-2.png";
+import text3_1 from "@/assets/images/new/text-3-1.png";
+import text3_2 from "@/assets/images/new/text-3-2.png";
+import text3_3 from "@/assets/images/new/text-3-3.png";
+import text3_4 from "@/assets/images/new/text-3-4.png";
+import text4 from "@/assets/images/new/text-4.png";
+import text5 from "@/assets/images/new/text-5.png";
+import title1 from "@/assets/images/new/title-1.png";
+import title2 from "@/assets/images/new/title-2.png";
+import title3 from "@/assets/images/new/title-3.png";
+import title4 from "@/assets/images/new/title-4.png";
+import title5 from "@/assets/images/new/title-5.png";
+import img1 from "@/assets/images/new/img-1.png";
+import img2 from "@/assets/images/new/img-2.png";
+import img3_1 from "@/assets/images/new/img-3-1.png";
+import img3_2 from "@/assets/images/new/img-3-2.png";
+import img3_3 from "@/assets/images/new/img-3-3.png";
+import img3_4 from "@/assets/images/new/img-3-4.png";
+import img4 from "@/assets/images/new/img-4.png";
+import img4_1 from "@/assets/images/new/img-4-1.png";
+import img4_2 from "@/assets/images/new/img-4-2.png";
+import img4_3 from "@/assets/images/new/img-4-3.png";
+import img4_4 from "@/assets/images/new/img-4-4.png";
+import img5 from "@/assets/images/new/img-5.png";
+import icon from "@/assets/images/new/bot-icon.png";
+import movie from "@/assets/images/new/movie.mp4";
+import poter from "@/assets/images/new/poter.png";
+import buy from "@/assets/images/new/buy.png";
+// import videojs from "video.js";
+// import "videojs-contrib-hls";
+// import "video.js/dist/video-js.css";
 export default {
   name: "Index",
   mixins: [mixin],
   data() {
     return {
+      images: {
+        logo,
+        video,
+        text_img,
+        text1,
+        text2,
+        text3_1,
+        text3_2,
+        text3_3,
+        text3_4,
+        text4,
+        text5,
+        title1,
+        title2,
+        title3,
+        title4,
+        title5,
+        img1,
+        img2,
+        img3_1,
+        img3_2,
+        img3_3,
+        img3_4,
+        img4,
+        img4_1,
+        img4_2,
+        img4_3,
+        img4_4,
+        img5,
+        icon,
+        movie,
+        poter,
+        buy
+      },
       show: true,
       active: 0,
       map,
@@ -175,9 +320,6 @@ export default {
       this.cmbcDescrypt();
     }
   },
-  mounted() {
-    this.initPage();
-  },
   components: {
     [Image.name]: Image,
     [Row.name]: Row,
@@ -188,124 +330,83 @@ export default {
   }
 };
 </script>
+
 <style scoped>
-.main {
-  overflow: auto;
+.bg-color {
   box-sizing: border-box;
+  overflow: hidden;
+  overflow-y: scroll;
+  background: url(../assets/images/new/bg.png) no-repeat;
+}
+.bg-long {
+  margin: 20px 0;
+  background: url(../assets/images/new/bg-2.png) no-repeat;
+  background-size: 100% auto;
 }
 .top {
-  height: 100%;
-  position: relative;
+  padding: 20px 15px;
 }
-
-.top .banner {
-  position: relative;
-  width: 100%;
-  height: auto;
+.font-size-12 {
+  font-size: 13px;
 }
-.top .bottom {
-  position: absolute;
-  bottom: -100%;
-  left: 0;
-  padding: 20% 0;
-  width: 100%;
-  background: url(../assets/images/index/top-BG.png) no-repeat;
-  background-size: 100% 100%;
+.nav {
+  display: inline-block;
+  margin: 0 0 0 5px;
 }
-.text {
-  position: absolute;
-  width: 30px;
-  text-align: center;
-  left: 0;
-  top: 0;
-  transform: translate(50%, 10%);
-  font-size: 16px;
-  padding: 10px 0 5px 0;
-  line-height: 20px;
-  color: rgba(254, 254, 254, 1);
-  background: url(../assets/images/index/text-bg.png) no-repeat;
+.pd {
+  padding: 0 15px;
 }
-.rice-text {
-  color: rgba(24, 62, 2, 1);
-  font-weight: bolder;
-  text-align: center;
-  font-size: 50px;
-  font-family: "ZhenyanGB-Regular";
-  width: 80%;
-  text-align: center;
-  margin: 0 auto;
+.pd1 {
+  padding: 50px 0 30px 0;
 }
-.text-bg {
+.pd2 {
   width: 80%;
   margin: 0 auto;
-  background: url(../assets/images/index/text.png) no-repeat center;
-  background-size: 100% 100%;
-  box-sizing: border-box;
 }
-.text-right {
-  padding-left: 30%;
+.pd3 {
+  padding: 80px 0;
 }
-.blue-text {
-  color: rgba(18, 60, 3, 1);
-  font-size: 18px;
-  letter-spacing: 10px;
-  font-weight: 800;
+.margin-top-5 {
+  display: inline-block;
+  margin-top: 10px;
 }
-.btn-margin {
-  margin-bottom: 10px;
+.img-flex {
+  display: flex;
+  justify-content: space-between;
 }
-.btn-buy {
-  background-size: 100% 100%;
-  overflow: hidden;
-  padding: 5px 3px;
-}
-.btn-buy .buy {
-  border-radius: 8px;
-  line-height: 40px;
-  background-color: #c71419;
-}
-.btn-left-right {
-  vertical-align: middle;
-  /* margin-right: 10px; */
-}
-.icon-width {
-  width: 20px;
-  margin: 0 5px;
-}
-.text-color-blue {
-  color: rgba(18, 60, 3, 1);
-}
-.font-size {
-  font-weight: 800;
+.text-color-yellow {
+  color: #ffdd95;
   font-size: 14px;
 }
-.footer {
-  padding-top: 90%;
-  background: url(../assets/images/index/bot-BG.png) no-repeat center;
-  background-size: 100% 100%;
+.text-align-center {
   text-align: center;
+  padding: 30px 0;
 }
-.footer .red-color {
-  color: rgba(199, 20, 25, 1);
+.margin-top-bottom {
+  margin: 15px 0;
+}
+.margin-top-20 {
   margin-top: 20px;
-  font-weight: 800;
 }
-.map {
-  width: 90%;
+.text-color-eee {
+  color: #666;
 }
-.title {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: 2px;
+.buy_btn {
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 20px;
+  align-items: center;
 }
-.small-title {
-  font-size: 16px;
-  font-weight: 800;
+.buy_btn .left {
+  background-color: red;
+  padding: 5px;
+  border-radius: 8px 0 0 8px;
 }
-.small-text {
-  font-size: 12px;
-}
-.yellow-text-color {
-  color: rgba(177, 136, 75, 1);
+.buy_btn .right {
+  background-color: yellow;
+  padding: 5px;
+  border-radius: 0px 8px 8px 0px;
 }
 </style>
