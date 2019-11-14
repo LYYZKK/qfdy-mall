@@ -6,7 +6,7 @@
       <van-col class="font-size-12">
         <span class="nav">首页</span>
         <span class="nav">定制稻田</span>
-        <span class="nav">现货抢购</span>
+        <span class="nav" @click="spotBuy">现货抢购</span>
       </van-col>
     </van-row>
     <!-- 视频 -->
@@ -149,6 +149,14 @@
 
 <script>
 import { Image, Row, Col, Dialog, Button, Icon } from "vant";
+import request from "@/utils/request.js";
+import map from "@/assets/images/index/map.png";
+import riceText from "@/assets/images/index/rice-text.png";
+import left from "@/assets/images/index/btn-buy1.png";
+import right from "@/assets/images/index/btn-buy2.png";
+import banner from "@/assets/images/index/banner.png";
+import mixin from "@/utils/mixin.js";
+
 import logo from "@/assets/images/new/LOGO.png";
 import video from "@/assets/images/new/video.png";
 import text_img from "@/assets/images/new/text-img.png";
@@ -185,6 +193,8 @@ import buy from "@/assets/images/new/buy.png";
 // import "videojs-contrib-hls";
 // import "video.js/dist/video-js.css";
 export default {
+  name: "Index",
+  mixins: [mixin],
   data() {
     return {
       images: {
@@ -220,6 +230,26 @@ export default {
         movie,
         poter,
         buy
+      },
+      show: true,
+      active: 0,
+      map,
+      riceText,
+      left,
+      right,
+      banner,
+      customerInfo: {
+        cid: 1,
+        cuserId: "",
+        phone: ""
+      },
+      // api
+      api: {
+        // 获取签名
+        getSignature: {
+          url: "/linked-mall/signature",
+          method: "post"
+        }
       }
     };
   },
