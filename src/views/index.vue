@@ -112,28 +112,25 @@ export default {
     // 获取签名
     getSign() {
       let isLogin = localStorage.getItem("isLogin");
-      console.log("isLogin===", isLogin);
       if (isLogin === "1") {
         let baseUrl = process.env.LINKED_MALL_BASE_URL;
         let extJson = {
           bizId: process.env.LINKED_MALL_bizId,
-          bizUid: process.env.bizUid,
+          bizUid: process.env.LINKED_MALL_bizUid,
           bankUserId: parseInt(localStorage.getItem("cuserId")),
           userId: parseInt(localStorage.getItem("id")),
           isVip: parseInt(localStorage.getItem("isVip")),
           cid: this.customerInfo.cid,
           timestamp: new Date().getTime()
         };
-        let gotoUrl = encodeURIComponent(process.env.LINKED_MALL_GOTO_URL);
         const encodeURIData = {
           extJson: encodeURIComponent(JSON.stringify(extJson)),
-          gotoUrl: gotoUrl
+          gotoUrl: process.env.LINKED_MALL_GOTO_URL
         };
         request({
           ...this.api.getSignature,
           params: { extJson: JSON.stringify(extJson) }
         }).then(res => {
-          console.log("getSignature request with res =", res);
           if (res.data.success) {
             let signature = res.data.data;
             let openUrl =
@@ -144,7 +141,6 @@ export default {
               signature +
               "&gotoUrl=" +
               encodeURIData.gotoUrl;
-            console.log(openUrl);
             gotoShopUrl(openUrl);
           } else {
             console.log("获取签名失败");
