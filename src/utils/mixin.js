@@ -29,10 +29,23 @@ export default {
         param: this.$route.query.param
       };
       if (params.param !== undefined) {
-        localStorage.clear();
-        localStorage.setItem("isLogin", 1);
         request({ ...this.api.cmbcDescrypt, params }).then(res => {
           if (res.data.success) {
+            // 移除除现货购买的其他参数
+            if (
+              localStorage.getItem("isLogin") ||
+              localStorage.getItem("cuserId") ||
+              localStorage.getItem("isVip") ||
+              localStorage.getItem("id") ||
+              localStorage.getItem("phone")
+            ) {
+              localStorage.removeItem("isLogin");
+              localStorage.removeItem("cuserId");
+              localStorage.removeItem("isVip");
+              localStorage.removeItem("id");
+              localStorage.removeItem("phone");
+            }
+            localStorage.setItem("isLogin", 1);
             let info = res.data.data.split("|");
             localStorage.setItem("phone", info[0]);
             localStorage.setItem("cuserId", info[1]); // 银行客户id
@@ -47,13 +60,6 @@ export default {
         localStorage.setItem("isLogin", 0);
         this.checkCustomer();
       }
-
-      // console.log(this.flag, 1);
-      // if (this.flag) {
-      //   console.log(this.flag, 2);
-      //   console.log(this.flag);
-      //
-      // }
     },
     // 验证客户身份
     checkCustomer() {
@@ -69,8 +75,8 @@ export default {
           localStorage.setItem("isVip", res.data.data.isVip);
           localStorage.setItem("id", res.data.data.code); // 商城用户ID
         }
-        this.linkAdd(1);
       });
+      this.linkAdd(1);
     },
     // 访问次数增加(首页)type:1,(现货购买)type:2,(期货购买)type:3
     linkAdd(type) {

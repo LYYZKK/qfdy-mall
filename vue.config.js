@@ -1,5 +1,5 @@
 const envConfig = require("./src/config/env.config");
-const keys = require('lodash.keys')
+const keys = require("lodash.keys");
 
 module.exports = {
   /** 区分打包环境与开发环境
@@ -26,14 +26,16 @@ module.exports = {
   chainWebpack: config => {
     config.resolve.symlinks(true);
 
-    config.plugin('define').tap(args => {
+    config.plugin("define").tap(args => {
       keys(envConfig[process.env.mode]).forEach(key => {
-        args[0]['process.env'][key] = JSON.stringify(envConfig[process.env.mode][key])
-      })
-      return args
-    })
+        args[0]["process.env"][key] = JSON.stringify(
+          envConfig[process.env.mode][key]
+        );
+      });
+      return args;
+    });
   },
-  configureWebpack: () => { }, // CSS 相关选项
+  configureWebpack: () => {}, // CSS 相关选项
   css: {
     // 将组件内部的css提取到一个单独的css文件（只用在生产环境）
     // 也可以是传递给 extract-text-webpack-plugin 的选项对象
