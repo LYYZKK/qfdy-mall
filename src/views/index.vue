@@ -10,20 +10,15 @@
       </van-col>
     </van-row>
     <!-- 视频 -->
+    <div class="videoDemo">
+      <video-player
+        class="video-player vjs-custom-skin"
+        ref="videoPlayer"
+        :playsinline="true"
+        :options="playerOptions"
+      ></video-player>
+    </div>
     <van-row>
-      <!-- <video
-        id="video"
-        width="100%"
-        height="100%"
-        x5-video-player-fullscreen="true"
-        x5-playsinline
-        playsinline
-        webkit-playsinline
-        preload="auto"
-        :poster="images.video"
-        :src="images.movie"
-      ></video> -->
-      <img :src="images.video" alt width="100%" />
       <img :src="images.text_img" alt width="100%" />
     </van-row>
     <!-- main -->
@@ -41,19 +36,19 @@
         <img :src="images.text1" alt width="50%" />
       </van-col>
       <van-col :span="24" class="pd">
-        <img :src="images.poter" alt="" />
+        <img :src="images.poter" alt />
         <span class="margin-top-5">&nbsp;私享管家</span>
       </van-col>
       <van-col :span="24" class="pd">
-        <img :src="images.poter" alt="" />
+        <img :src="images.poter" alt />
         <span class="margin-top-5">&nbsp;仓储保险</span>
       </van-col>
       <van-col :span="24" class="pd">
-        <img :src="images.poter" alt="" />
+        <img :src="images.poter" alt />
         <span class="margin-top-5">&nbsp;每月一次鲜米免费配送服务</span>
       </van-col>
       <van-col :span="24" class="pd">
-        <img :src="images.poter" alt="" />
+        <img :src="images.poter" alt />
         <span class="margin-top-5">&nbsp;七天无理由退订</span>
       </van-col>
     </van-row>
@@ -62,7 +57,7 @@
         <div>点击预约</div>
       </van-col>
       <van-col class="right">
-        <img :src="images.buy" alt="" />
+        <img :src="images.buy" alt />
       </van-col>
     </van-row>
     <!-- 现货抢购 -->
@@ -83,7 +78,7 @@
         <span>&nbsp;采用世界领先恒温仓储技术</span>
       </van-col>
       <van-col :span="24" class="pd">
-        <img :src="images.poter" alt="" />
+        <img :src="images.poter" alt />
         <span class="margin-top-5">&nbsp;保持水分&nbsp;留住营养</span>
       </van-col>
     </van-row>
@@ -92,7 +87,7 @@
         <div>点击尝鲜</div>
       </van-col>
       <van-col class="right">
-        <img :src="images.buy" alt="" />
+        <img :src="images.buy" alt />
       </van-col>
     </van-row>
     <!-- 官方出品 -->
@@ -105,9 +100,7 @@
       </van-col>
       <van-row class="text-align-center text-color-yellow pd2 margin-bottom-20">
         <img :src="images.text4" width="50px;" />
-        <div>
-          民生银行联合五常市政府、阿里云推出了“五常大米专属定制稻田”项目。
-        </div>
+        <div>民生银行联合五常市政府、阿里云推出了“五常大米专属定制稻田”项目。</div>
       </van-row>
       <van-row gutter="10" class="pd">
         <van-col span="12">
@@ -128,9 +121,7 @@
     </van-row>
     <van-row class="text-align-center text-color-yellow pd2 margin-top-20">
       <img :src="images.text5" alt width="50px;" />
-      <div>
-        “第二届国际大米节金奖”、“中国国家地理标志产品”、“中国十大好吃米饭”、被《舌尖上的中国》评为“中国最好的稻米”。
-      </div>
+      <div>“第二届国际大米节金奖”、“中国国家地理标志产品”、“中国十大好吃米饭”、被《舌尖上的中国》评为“中国最好的稻米”。</div>
     </van-row>
     <!-- 尊贵礼遇 -->
     <van-row>
@@ -149,7 +140,6 @@
 
 <script>
 import { Image, Row, Col, Dialog, Button, Icon } from "vant";
-import request from "@/utils/request.js";
 import mixin from "@/utils/mixin.js";
 import logo from "@/assets/images/new/LOGO.png";
 import video from "@/assets/images/new/video.png";
@@ -218,7 +208,6 @@ export default {
         img4_4,
         img5,
         icon,
-        movie,
         poter,
         buy
       },
@@ -226,6 +215,31 @@ export default {
         cid: 1,
         cuserId: "",
         phone: ""
+      },
+      playerOptions: {
+        playbackRates: [0.5, 1.0, 1.5, 2.0],
+        autoplay: false,
+        muted: false,
+        loop: false,
+        preload: "auto",
+        language: "zh-CN",
+        aspectRatio: "16:9",
+        fluid: true,
+        sources: [
+          {
+            type: "video/mp4",
+            src: movie
+          }
+        ],
+        width: document.documentElement.clientWidth,
+        poster: video,
+        notSupportedMessage: "此视频暂无法播放，请稍后再试",
+        controlBar: {
+          timeDivider: true,
+          durationDisplay: true,
+          remainingTimeDisplay: false,
+          fullscreenToggle: false
+        }
       },
       // api
       api: {
@@ -238,65 +252,6 @@ export default {
     };
   },
   methods: {
-    // 跳转到linmall的公共方法
-    goToLinkMall() {
-      let baseUrl = process.env.LINKED_MALL_BASE_URL;
-      let extJson = {
-        bizId: process.env.LINKED_MALL_bizId,
-        bizUid: process.env.LINKED_MALL_bizUid,
-        bankUserId: parseInt(localStorage.getItem("cuserId")),
-        userId: parseInt(localStorage.getItem("id")),
-        isVip: parseInt(localStorage.getItem("isVip")),
-        cid: 1,
-        timestamp: new Date().getTime()
-      };
-      const encodeURIData = {
-        extJson: encodeURIComponent(JSON.stringify(extJson)),
-        gotoUrl: process.env.LINKED_MALL_GOTO_URL
-      };
-      request({
-        ...this.api.getSignature,
-        params: { extJson: JSON.stringify(extJson) }
-      }).then(res => {
-        if (res.data.success) {
-          let signature = res.data.data;
-          let openUrl =
-            baseUrl +
-            "extJson=" +
-            encodeURIData.extJson +
-            "&signature=" +
-            signature +
-            "&gotoUrl=" +
-            encodeURIData.gotoUrl;
-          // gotoShopUrl(openUrl);
-          window.open(openUrl);
-        } else {
-          console.log("获取签名失败");
-        }
-      });
-    },
-    // 获取签名
-    getSign() {
-      let isLogin = localStorage.getItem("isLogin");
-      if (isLogin === "1") {
-        this.goToLinkMall();
-      } else {
-        // 点击过现货购买的标志
-        localStorage.setItem("linkStatus", 1);
-        // eslint-disable-next-line no-undef
-        // 未登录跳转到银行登录页面
-        loginForComm(
-          window.location.protocol +
-            "//" +
-            window.location.host +
-            this.$route.path,
-          window.location.protocol +
-            "//" +
-            window.location.host +
-            this.$route.path
-        );
-      }
-    },
     // 预约购买
     prePurchase() {
       this.linkAdd(2);
@@ -305,6 +260,8 @@ export default {
     // 现货购买
     spotBuy() {
       this.linkAdd(3);
+      // 点击过现货购买的标志
+      localStorage.setItem("linkStatus", "1");
       this.getSign();
     },
 
@@ -312,14 +269,11 @@ export default {
       this.cmbcDescrypt();
     }
   },
-  mounted() {
+  beforeMount() {
     this.initPage();
-    let isLogin = localStorage.getItem("isLogin");
-    let linkStatus = localStorage.getItem("linkStatus");
-    if (isLogin === "1" && linkStatus === "1") {
-      localStorage.removeItem("linkStatus");
-      this.goToLinkMall();
-    }
+  },
+  mounted() {
+    console.log(document.documentElement.clientWidth);
   },
   components: {
     [Image.name]: Image,
@@ -411,5 +365,20 @@ export default {
 }
 .margin-bottom-20 {
   margin-bottom: 20px;
+}
+.videoDemo {
+  display: block;
+  width: 100%;
+  height: auto;
+  text-align: center;
+}
+.video-js .vjs-icon-placeholder {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.vjs-custom-skin > .video-js .vjs-big-play-button {
+  font-size: 20px;
+  line-break: 20px;
 }
 </style>

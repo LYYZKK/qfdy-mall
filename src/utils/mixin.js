@@ -22,6 +22,62 @@ export default {
     };
   },
   methods: {
+    // 跳转到linmall的公共方法
+    goToLinkMall() {
+      let baseUrl = process.env.LINKED_MALL_BASE_URL;
+      let extJson = {
+        bizId: process.env.LINKED_MALL_bizId,
+        bizUid: process.env.LINKED_MALL_bizUid,
+        bankUserId: parseInt(localStorage.getItem("cuserId")),
+        userId: parseInt(localStorage.getItem("id")),
+        isVip: parseInt(localStorage.getItem("isVip")),
+        cid: 1,
+        timestamp: new Date().getTime()
+      };
+      const encodeURIData = {
+        extJson: encodeURIComponent(JSON.stringify(extJson)),
+        gotoUrl: process.env.LINKED_MALL_GOTO_URL
+      };
+      request({
+        ...this.api.getSignature,
+        params: { extJson: JSON.stringify(extJson) }
+      }).then(res => {
+        if (res.data.success) {
+          let signature = res.data.data;
+          let openUrl =
+            baseUrl +
+            "extJson=" +
+            encodeURIData.extJson +
+            "&signature=" +
+            signature +
+            "&gotoUrl=" +
+            encodeURIData.gotoUrl;
+          gotoShopUrl(openUrl);
+        } else {
+          console.log("获取签名失败");
+        }
+      });
+    },
+    // 获取签名
+    getSign() {
+      let isLogin = localStorage.getItem("isLogin");
+      if (isLogin === "1") {
+        this.goToLinkMall();
+      } else {
+        // eslint-disable-next-line no-undef
+        // 未登录跳转到银行登录页面
+        loginForComm(
+          window.location.protocol +
+            "//" +
+            window.location.host +
+            this.$route.path,
+          window.location.protocol +
+            "//" +
+            window.location.host +
+            this.$route.path
+        );
+      }
+    },
     // 解密从民生银行跳转的连接参数
     cmbcDescrypt() {
       console.log("民生银行param===", this.$route.query.param);
@@ -45,10 +101,18 @@ export default {
               localStorage.removeItem("id");
               localStorage.removeItem("phone");
             }
+
             localStorage.setItem("isLogin", 1);
             let info = res.data.data.split("|");
             localStorage.setItem("phone", info[0]);
             localStorage.setItem("cuserId", info[1]); // 银行客户id
+
+            let isLogin = localStorage.getItem("isLogin");
+            let linkStatus = localStorage.getItem("linkStatus");
+            if (isLogin === "1" && linkStatus === "1") {
+              localStorage.removeItem("linkStatus");
+              this.goToLinkMall();
+            }
           }
           this.checkCustomer();
         });
