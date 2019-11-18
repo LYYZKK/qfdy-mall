@@ -3,63 +3,49 @@
     <!-- 顶部 -->
     <van-row type="flex" justify="space-between" align="center" class="top">
       <van-image :src="images.logo" width="50%"></van-image>
-      <van-col class="font-size-12">
-        <span class="nav">首页</span>
-        <span class="nav">定制稻田</span>
-        <span class="nav" @click="spotBuy">现货抢购</span>
+      <van-col class="font-size-12 bg-blue" @click="spotBuy">
+        <img :src="images.fresh_icon" alt width="15px;" />
+        <span class="nav">现货抢购 >></span>
       </van-col>
     </van-row>
-    <!-- 视频 -->
-    <div class="videoDemo">
-      <video-player
-        class="video-player vjs-custom-skin"
-        ref="videoPlayer"
-        :playsinline="true"
-        :options="playerOptions"
-      ></video-player>
-    </div>
     <van-row>
+      <img :src="images.video" alt width="100%" />
       <img :src="images.text_img" alt width="100%" />
     </van-row>
     <!-- main -->
-    <!-- 定制专属稻田 -->
+    <!-- 尝鲜价限购 -->
     <van-row class="pd">
       <van-col class="pd1">
         <img :src="images.title1" alt width="100%" />
       </van-col>
-      <van-col>
-        <img :src="images.img1" alt width="100%" />
+    </van-row>
+    <van-row gutter="10" class="pd">
+      <van-col span="12">
+        <img :src="images.img1_1" alt width="100%" />
+      </van-col>
+      <van-col span="12">
+        <img :src="images.img1_2" alt width="100%" />
       </van-col>
     </van-row>
     <van-row class="text-color-yellow pd">
-      <van-col class="margin-top-20 pd">
+      <van-col class="margin-top-20">
         <img :src="images.text1" alt width="50%" />
       </van-col>
-      <van-col :span="24" class="pd">
-        <img :src="images.poter" alt />
-        <span class="margin-top-5">&nbsp;私享管家</span>
-      </van-col>
-      <van-col :span="24" class="pd">
-        <img :src="images.poter" alt />
-        <span class="margin-top-5">&nbsp;仓储保险</span>
-      </van-col>
-      <van-col :span="24" class="pd">
-        <img :src="images.poter" alt />
-        <span class="margin-top-5">&nbsp;每月一次鲜米免费配送服务</span>
-      </van-col>
-      <van-col :span="24" class="pd">
-        <img :src="images.poter" alt />
-        <span class="margin-top-5">&nbsp;七天无理由退订</span>
+      <van-col :span="24" class="font-size-12">
+        <img :src="images.poter" alt width="10px" />
+        <span class="margin-top-5">&nbsp;为让您第一时间吃到五常核心产区鲜米，现开通现货购买渠道</span>
       </van-col>
     </van-row>
-    <van-row class="buy_btn">
-      <van-col class="left">
-        <div>点击预约</div>
-      </van-col>
+    <van-row class="text-align-center margin-bottom-20 margin-top-20">
+      <img :src="images.fresh" alt width="80%" />
+    </van-row>
+    <van-row class="buy_btn" @click="spotBuy">
+      <van-col class="left">点击尝鲜 >></van-col>
       <van-col class="right">
         <img :src="images.buy" alt />
       </van-col>
     </van-row>
+
     <!-- 现货抢购 -->
     <van-row class="pd">
       <van-col class="pd1">
@@ -70,36 +56,38 @@
       </van-col>
     </van-row>
     <van-row class="text-color-yellow pd">
-      <van-col class="margin-top-bottom pd">
+      <van-col class="margin-top-bottom">
         <img :src="images.text2" alt width="50%" />
       </van-col>
-      <van-col :span="24" class="pd">
-        <img :src="images.poter" />
+      <van-col :span="24" class="font-size-12">
+        <img :src="images.poter" width="10px" />
         <span>&nbsp;采用世界领先恒温仓储技术</span>
       </van-col>
-      <van-col :span="24" class="pd">
-        <img :src="images.poter" alt />
+      <van-col :span="24" class="font-size-12">
+        <img :src="images.poter" alt width="10px" />
         <span class="margin-top-5">&nbsp;保持水分&nbsp;留住营养</span>
+      </van-col>
+      <van-col :span="24" class="font-size-12">
+        <img :src="images.poter" alt width="10px" />
+        <span class="margin-top-5">&nbsp;一年一季稻</span>
       </van-col>
     </van-row>
     <van-row class="buy_btn" @click="spotBuy">
-      <van-col class="left">
-        <div>点击尝鲜</div>
-      </van-col>
+      <van-col class="left">现货购买 >></van-col>
       <van-col class="right">
         <img :src="images.buy" alt />
       </van-col>
     </van-row>
     <!-- 官方出品 -->
     <van-row>
-      <van-col class="pd1">
-        <img :src="images.title4" alt width="100%" />
+      <van-col class="pd1 text-align-center">
+        <img :src="images.title4" alt width="70%" class />
       </van-col>
       <van-col class="margin-bottom-20">
         <img :src="images.img4" alt width="100%" />
       </van-col>
       <van-row class="text-align-center text-color-yellow pd2 margin-bottom-20">
-        <img :src="images.text4" width="50px;" />
+        <img :src="images.text4" width="40px" class="margin-bottom-10" />
         <div>民生银行联合五常市政府、阿里云推出了“五常大米专属定制稻田”项目。</div>
       </van-row>
       <van-row gutter="10" class="pd">
@@ -120,26 +108,32 @@
       </van-row>
     </van-row>
     <van-row class="text-align-center text-color-yellow pd2 margin-top-20">
-      <img :src="images.text5" alt width="50px;" />
+      <img :src="images.text5" alt width="40px;" class="margin-bottom-10" />
       <div>“第二届国际大米节金奖”、“中国国家地理标志产品”、“中国十大好吃米饭”、被《舌尖上的中国》评为“中国最好的稻米”。</div>
     </van-row>
     <!-- 尊贵礼遇 -->
     <van-row>
-      <van-col class="pd1">
-        <img :src="images.title5" alt width="100%" />
+      <van-col class="pd1 text-align-center">
+        <img :src="images.title5" alt width="80%" />
       </van-col>
       <van-col>
         <img :src="images.img5" alt width="100%" />
       </van-col>
     </van-row>
-    <van-row class="text-align-center pd1">
-      <img :src="images.icon" alt />
+    <van-row class="buy_btn" @click="spotBuy">
+      <van-col class="left">现货购买 >></van-col>
+      <van-col class="right">
+        <img :src="images.buy" alt />
+      </van-col>
+    </van-row>
+    <van-row class="text-align-center margin-bottom-20">
+      <img :src="images.icon" alt style="width:30px" />
     </van-row>
   </div>
 </template>
 
 <script>
-import { Image, Row, Col, Dialog, Button, Icon } from "vant";
+import { Image, Row, Col, Dialog, Button, Icon, Toast } from "vant";
 import mixin from "@/utils/mixin.js";
 import logo from "@/assets/images/new/LOGO.png";
 import video from "@/assets/images/new/video.png";
@@ -157,7 +151,8 @@ import title2 from "@/assets/images/new/title-2.png";
 import title3 from "@/assets/images/new/title-3.png";
 import title4 from "@/assets/images/new/title-4.png";
 import title5 from "@/assets/images/new/title-5.png";
-import img1 from "@/assets/images/new/img-1.png";
+import img1_1 from "@/assets/images/new/img-1-1.png";
+import img1_2 from "@/assets/images/new/img-1-2.png";
 import img2 from "@/assets/images/new/img-2.png";
 import img3_1 from "@/assets/images/new/img-3-1.png";
 import img3_2 from "@/assets/images/new/img-3-2.png";
@@ -173,6 +168,8 @@ import icon from "@/assets/images/new/bot-icon.png";
 import movie from "@/assets/images/new/movie.mp4";
 import poter from "@/assets/images/new/poter.png";
 import buy from "@/assets/images/new/buy.png";
+import fresh from "@/assets/images/new/fresh.png";
+import fresh_icon from "@/assets/images/new/fresh-icon.png";
 export default {
   name: "Index",
   mixins: [mixin],
@@ -195,7 +192,8 @@ export default {
         title3,
         title4,
         title5,
-        img1,
+        img1_1,
+        img1_2,
         img2,
         img3_1,
         img3_2,
@@ -209,7 +207,9 @@ export default {
         img5,
         icon,
         poter,
-        buy
+        buy,
+        fresh,
+        fresh_icon
       },
       customerInfo: {
         cid: 1,
@@ -252,10 +252,20 @@ export default {
     };
   },
   methods: {
+    // 视频处理
+    onPlayerFullScreenchange(player) {
+      // 强制退出全屏，恢复正常大小
+      player.exitFullscreen();
+      this.videoDialogVisible = true;
+    },
     // 预约购买
     prePurchase() {
+      Toast({
+        message: "敬请期待...",
+        icon: "like-o"
+      });
       this.linkAdd(2);
-      this.$router.push({ path: "/home" });
+      // this.$router.push({ path: "/home" });
     },
     // 现货购买
     spotBuy() {
@@ -281,6 +291,7 @@ export default {
     [Col.name]: Col,
     [Button.name]: Button,
     [Icon.name]: Icon,
+    [Toast.name]: Toast,
     [Dialog.Component.name]: Dialog.Component
   }
 };
@@ -302,20 +313,20 @@ export default {
   padding: 20px 15px;
 }
 .font-size-12 {
-  font-size: 14px;
+  font-size: 12px;
 }
 .nav {
   display: inline-block;
   margin: 0 0 0 5px;
 }
 .pd {
-  padding: 0 15px;
+  padding: 0 10px;
 }
 .pd1 {
   padding: 50px 0 30px 0;
 }
 .pd2 {
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
 }
 .pd3 {
@@ -326,8 +337,10 @@ export default {
   margin-top: 10px;
 }
 .img-flex {
-  display: flex;
-  justify-content: space-between;
+  img {
+    width: 50%;
+    height: auto;
+  }
 }
 .text-color-yellow {
   color: #ffdd95;
@@ -346,21 +359,31 @@ export default {
   color: #666;
 }
 .buy_btn {
+  width: 40%;
+  margin: 20px auto;
   color: #fff;
-  font-size: 16px;
-  display: flex;
-  justify-content: flex-end;
-  margin-right: 20px;
-  align-items: center;
+  font-size: 13px;
+  position: relative;
+  background-color: red;
+  border-radius: 6px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  box-sizing: border-box;
   .left {
-    background-color: red;
-    padding: 5px;
-    border-radius: 8px 0 0 8px;
+    width: 100%;
   }
   .right {
-    background-color: yellow;
-    padding: 5px;
-    border-radius: 0px 8px 8px 0px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #dbab57;
+    border-radius: 0px 6px 6px 0px;
+    line-height: 30px;
+    padding: 0 5px;
+    & > img {
+      width: 15px;
+    }
   }
 }
 .margin-bottom-20 {
@@ -380,5 +403,29 @@ export default {
 .vjs-custom-skin > .video-js .vjs-big-play-button {
   font-size: 20px;
   line-break: 20px;
+}
+.font-size-30 {
+  font-size: 30px;
+  color: #ffdd95;
+}
+.letter-sapce-2 {
+  letter-spacing: 2px;
+  font-size: 12px;
+}
+.letter-sapce-15 {
+  letter-spacing: 11px;
+  font-size: 12px;
+}
+.bg-blue {
+  padding: 2px 10px;
+  border-radius: 10px;
+
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 104, 183, 1);
+  color: #fff;
+}
+.margin-bottom-10 {
+  margin-bottom: 10px;
 }
 </style>

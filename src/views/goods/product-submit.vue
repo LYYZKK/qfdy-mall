@@ -2,20 +2,35 @@
   <div>
     <NavBar :title="title" />
     <div class="mainContent">
-      <van-row type="flex" justify="space-around" align="center" class="border">
-        <van-col span="2">
-          <div class="round bg-color">
-            <van-icon name="phone" color="#fff" />
-          </div>
+      <div class="border">
+        <van-row type="flex" justify="space-around" align="center">
+          <van-col span="2">
+            <div class="round bg-color">
+              <van-icon name="location-o" color="#fff" />
+            </div>
+          </van-col>
+          <!-- 默认用户信息 -->
+          <van-col span="18">
+            <div>
+              <van-row>
+                <van-col>
+                  <span>{{ customerInfo.name }}</span>
+                  <span class="text-color-999">{{ customerInfo.phone }}</span>
+                </van-col>
+              </van-row>
+
+              <div>{{ customerInfo.address }}</div>
+            </div>
+          </van-col>
+          <van-col @click="userShow=true">
+            <van-icon name="edit" color="rgba(255, 66, 0, 1)" />
+          </van-col>
+        </van-row>
+        <van-col span="24">
+          <div>准备完善的收件人信息方便后期为您更好的服务</div>
         </van-col>
-        <van-col span="20">
-          <div>
-            {{ customerInfo.name }}
-            <span class="text-color-999">{{ customerInfo.phone }}</span>
-            <div>{{ customerInfo.address }}</div>
-          </div>
-        </van-col>
-      </van-row>
+      </div>
+
       <van-row class="border">
         <van-col span="24">
           <van-icon name="shop-collect" />&nbsp;乔府商城
@@ -50,12 +65,7 @@
         </van-col>
       </van-row>
     </div>
-    <van-submit-bar
-      :price="totalPrice"
-      button-text="提交订单"
-      @submit="onSubmit"
-      safe-area-inset-bottom
-    >
+    <van-submit-bar :price="totalPrice" button-text="提交" @submit="onSubmit" safe-area-inset-bottom>
       <span slot="default" class="ml">
         共计
         <span>{{ order.count }}</span>件
@@ -64,6 +74,18 @@
     <van-dialog v-model="show" title="确认付款" show-cancel-button @confirm="submit" @cancel="cancel">
       <h1 class="text-center">￥{{ totalPrice/100 }}</h1>
     </van-dialog>
+    <!-- 修改当前订单的客户信息 -->
+    <van-action-sheet v-model="userShow">
+      <van-cell-group>
+        <van-field v-model="customerInfo.name" label="姓名" left-icon="contact" />
+        <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o">
+          <!-- <van-button slot="button" size="small" type="primary">发送验证码</van-button> -->
+        </van-field>
+        <!-- <van-field v-model="customerInfo.code" label="验证码" left-icon="phone-o" /> -->
+        <van-field v-model="customerInfo.address" label="地址" left-icon="location-o" />
+      </van-cell-group>
+      <van-button @click="save" size="large" color="red" text="保存"></van-button>
+    </van-action-sheet>
   </div>
 </template>
 
@@ -91,6 +113,7 @@ import request from "@/utils/request.js";
 export default {
   data() {
     return {
+      userShow: false,
       show: false,
       checked: true,
       title: "确认订单",
@@ -175,18 +198,28 @@ export default {
     },
     // 提交生成订单
     onSubmit() {
-      let params = {
-        customerId: parseInt(localStorage.getItem("id")),
-        totalAmount: this.totalPrice / 100,
-        orderProducts: [{ productId: 1, productNum: this.order.count }]
-      };
-
-      request({ ...this.api.addOrder, params }).then(res => {
-        if (res.data.success) {
-          this.show = true;
-          this.orderId = res.data.data.id;
-        }
-      });
+      if (this.customerInfo.phone !== "") {
+        let params = {
+          customerId: parseInt(localStorage.getItem("id")),
+          totalAmount: this.totalPrice / 100,
+          orderProducts: [{ productId: 1, productNum: this.order.count }],
+          orderAddresses: this.customerInfo
+        };
+        request({ ...this.api.addOrder, params }).then(res => {
+          if (res.data.success) {
+            this.orderId = res.data.data.id;
+            // 生成订单跳转到订单详情页
+            this.$router.push({
+              name: "OrderDetail",
+              query: { id: this.orderId }
+            });
+            // 打开支付
+            // this.show = true;
+          }
+        });
+      } else {
+        alert("请完善用户信息");
+      }
     },
     // 确定支付
     submit() {
@@ -226,6 +259,10 @@ export default {
       this.order.price = info.sku.price;
       this.order.count = info.goods.selectedNum;
       this.getGoodById();
+    },
+    // 保存当前订单客户信息不一定是默认信息
+    save() {
+      this.userShow = false;
     }
   },
   computed: {

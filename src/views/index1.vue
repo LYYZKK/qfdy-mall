@@ -12,56 +12,33 @@
         <div class="text-right text-color-white text-bg">民生银行客户尊享</div>
         <div class="text-center blue-text mt mb">核/心/产/区/稻/田</div>
         <van-row type="flex" justify="space-around" class="btn-margin">
-          <van-col
-            span="10"
-            class="btn-buy text-center text-color-white"
-            @click="spotBuy"
-          >
+          <van-col span="10" class="btn-buy text-center text-color-white" @click="spotBuy">
             <van-row class="buy" type="flex" justify="center" align="center">
               <van-image :src="left" class="btn-left-right icon-width" />
-              <van-col class="font-size" style="letter-spacing:2px;"
-                >大米现货</van-col
-              >
+              <van-col class="font-size" style="letter-spacing:2px;">大米现货</van-col>
               <van-icon name="arrow" class="icon-width" />
             </van-row>
           </van-col>
           <van-col span="10" class="btn-buy text-center text-color-white">
             <van-row class="buy" type="flex" justify="center" align="center">
               <van-image :src="right" class="btn-left-right icon-width" />
-              <van-col class="font-size" style="letter-spacing:2px;"
-                >稻田预购</van-col
-              >
+              <van-col class="font-size" style="letter-spacing:2px;">稻田预购</van-col>
               <van-icon name="arrow" class="icon-width" />
             </van-row>
           </van-col>
         </van-row>
         <van-row type="flex" justify="center">
           <van-col span="4" class="text-center text-color-blue"></van-col>
-          <van-col span="4" class="text-center text-color-blue font-size"
-            >天然</van-col
-          >
-          <van-col span="4" class="text-center text-color-blue font-size"
-            >绿色</van-col
-          >
-          <van-col span="4" class="text-center text-color-blue font-size"
-            >原生态</van-col
-          >
+          <van-col span="4" class="text-center text-color-blue font-size">天然</van-col>
+          <van-col span="4" class="text-center text-color-blue font-size">绿色</van-col>
+          <van-col span="4" class="text-center text-color-blue font-size">原生态</van-col>
           <van-col span="4" class="text-center text-color-blue"></van-col>
         </van-row>
         <van-row type="flex" justify="center">
-          <van-col
-            span="4"
-            class="text-center text-color-blue font-size"
-          ></van-col>
-          <van-col span="4" class="text-center text-color-blue font-size"
-            >新鲜</van-col
-          >
-          <van-col span="4" class="text-center text-color-blue font-size"
-            >活米</van-col
-          >
-          <van-col span="4" class="text-center text-color-blue font-size"
-            >人人爱</van-col
-          >
+          <van-col span="4" class="text-center text-color-blue font-size"></van-col>
+          <van-col span="4" class="text-center text-color-blue font-size">新鲜</van-col>
+          <van-col span="4" class="text-center text-color-blue font-size">活米</van-col>
+          <van-col span="4" class="text-center text-color-blue font-size">人人爱</van-col>
           <van-col span="4" class="text-center text-color-blue"></van-col>
         </van-row>
       </div>
@@ -76,9 +53,7 @@
       </div>
       <div class="mt">
         <div class="small-text yellow-text-color">阿里科技 手机可视</div>
-        <div class="small-text yellow-text-color">
-          从种子到餐桌8个环节99道工序
-        </div>
+        <div class="small-text yellow-text-color">从种子到餐桌8个环节99道工序</div>
         <div class="title text-color-blue">全程可溯源</div>
         <div class="small-text yellow-text-color">专属管家服务</div>
         <div class="small-text yellow-text-color">每月一次鲜米配送</div>
@@ -87,17 +62,13 @@
         <div class="title text-color-blue">咱家</div>
         <div class="small-title text-color-blue">在东北那旮沓有块地</div>
         <div class="small-text yellow-text-color">2分地产100斤</div>
-        <div class="small-text yellow-text-color">
-          2分地为1单元 可成倍数认购
-        </div>
+        <div class="small-text yellow-text-color">2分地为1单元 可成倍数认购</div>
       </div>
       <div class="mt">
         <div class="small-title yellow-text-color">高端大气上档次</div>
         <div class="title text-color-blue">送礼相当有面</div>
       </div>
-      <div class="small-text text-color-blue mb mt">
-        全国统一服务热线：400-1002753
-      </div>
+      <div class="small-text text-color-blue mb mt">全国统一服务热线：400-1002753</div>
     </div>
   </div>
 </template>
@@ -394,3 +365,13 @@ export default {
         </van-col>
       </van-row> -->
 <!-- </van-row> -->
+    <!-- 视频 -->
+    <!-- <div class="videoDemo">
+      <video-player
+        class="video-player vjs-custom-skin"
+        ref="videoPlayer"
+        :playsinline="true"
+        :options="playerOptions"
+        @fullscreenchange="onPlayerFullScreenchange($event)"
+      ></video-player>
+    </div>-->

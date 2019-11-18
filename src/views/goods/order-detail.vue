@@ -21,7 +21,7 @@
         <van-cell title="付款时间" :value="order.payTime"></van-cell>
         <van-cell title="备注" :value="order.mark"></van-cell>
       </van-cell-group>
-      <div class="mt">
+      <!-- <div class="mt">
         <van-row gutter="20">
           <van-col
             v-if="order.orderStatus===0||order.orderStatus===1"
@@ -33,7 +33,7 @@
             <van-button size="large" color="red" @click="show=true">立即付款</van-button>
           </van-col>
         </van-row>
-      </div>
+      </div>-->
     </div>
     <van-dialog
       v-model="show"

@@ -11,13 +11,14 @@
       color="linear-gradient(to right,
     rgba(255, 66, 0, 0.5),
     rgba(255, 66, 0, 1))"
-    >购买</van-button>
+    >预定</van-button>
     <van-sku
       v-model="show"
       :sku="sku"
       :goods="goods"
       :goods-id="goods.id"
       :show-add-cart-btn="false"
+      :buy-text="'立即预定'"
       @buy-clicked="onBuyClicked"
       safe-area-inset-bottom
     />
@@ -64,7 +65,6 @@ export default {
     // 点击购买判断用户是否登录
     purchase() {
       let isLogin = parseInt(localStorage.getItem("isLogin"));
-      console.log(typeof isLogin);
       if (isLogin === 1) {
         this.show = true;
       } else {

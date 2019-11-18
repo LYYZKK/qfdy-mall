@@ -29,7 +29,7 @@ export default {
         bizId: process.env.LINKED_MALL_bizId,
         bizUid: process.env.LINKED_MALL_bizUid,
         bankUserId: parseInt(localStorage.getItem("cuserId")),
-        userId: parseInt(localStorage.getItem("id")),
+        userId: parseInt(localStorage.getItem("userCode")),
         isVip: parseInt(localStorage.getItem("isVip")),
         cid: 1,
         timestamp: new Date().getTime()
@@ -93,13 +93,15 @@ export default {
               localStorage.getItem("cuserId") ||
               localStorage.getItem("isVip") ||
               localStorage.getItem("id") ||
-              localStorage.getItem("phone")
+              localStorage.getItem("phone") ||
+              localStorage.getItem("userCode")
             ) {
               localStorage.removeItem("isLogin");
               localStorage.removeItem("cuserId");
               localStorage.removeItem("isVip");
               localStorage.removeItem("id");
               localStorage.removeItem("phone");
+              localStorage.removeItem("userCode");
             }
 
             localStorage.setItem("isLogin", 1);
@@ -137,7 +139,8 @@ export default {
         if (res.data.success) {
           console.log(res.data.data);
           localStorage.setItem("isVip", res.data.data.isVip);
-          localStorage.setItem("id", res.data.data.code); // 商城用户ID
+          localStorage.setItem("id", res.data.data.id); // 商城用户ID
+          localStorage.setItem("userCode", res.data.data.code);
         }
       });
       this.linkAdd(1);
