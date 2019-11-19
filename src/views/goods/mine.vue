@@ -83,7 +83,10 @@ export default {
         request({ ...this.api.modifyCustomerInfo, params }).then(res => {
           if (res.data.success) {
             this.disabled = !this.disabled;
-            Notify("修改成功");
+            Notify({
+              message: "修改成功",
+              type: "success"
+            });
             localStorage.removeItem("phone");
             localStorage.setItem("phone", res.data.data.phone);
           } else {

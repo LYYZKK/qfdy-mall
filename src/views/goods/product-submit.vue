@@ -20,17 +20,14 @@
               </van-row>
 
               <div>{{ customerInfo.address }}</div>
+              <div class="text-color-yellow">完善的信息方便后期接收快递</div>
             </div>
           </van-col>
           <van-col @click="userShow=true">
             <van-icon name="edit" color="rgba(255, 66, 0, 1)" />
           </van-col>
         </van-row>
-        <van-col span="24">
-          <div>准备完善的收件人信息方便后期为您更好的服务</div>
-        </van-col>
       </div>
-
       <van-row class="border">
         <van-col span="24">
           <van-icon name="shop-collect" />&nbsp;乔府商城
@@ -38,7 +35,7 @@
         <van-col span="24">
           <van-card
             :centered="centered"
-            :thumb="good.img"
+            :thumb="imgBaseUrl+good.img"
             :title="good.name"
             :num="good.count"
             tag="预购"
@@ -78,7 +75,7 @@
     <van-action-sheet v-model="userShow">
       <van-cell-group>
         <van-field v-model="customerInfo.name" label="姓名" left-icon="contact" />
-        <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o">
+        <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o" disabled>
           <!-- <van-button slot="button" size="small" type="primary">发送验证码</van-button> -->
         </van-field>
         <!-- <van-field v-model="customerInfo.code" label="验证码" left-icon="phone-o" /> -->
@@ -110,14 +107,15 @@ import {
 } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
+import mixin from "@/utils/mixin.js";
 export default {
+  mixins: [mixin],
   data() {
     return {
       userShow: false,
       show: false,
       checked: true,
       title: "确认订单",
-
       good: {
         img: "",
         name: "",
@@ -202,7 +200,12 @@ export default {
         let params = {
           customerId: parseInt(localStorage.getItem("id")),
           totalAmount: this.totalPrice / 100,
-          orderProducts: [{ productId: 1, productNum: this.order.count }],
+          orderProducts: [
+            {
+              productId: this.$route.params.goods.goodsId,
+              productNum: this.order.count
+            }
+          ],
           orderAddresses: this.customerInfo
         };
         request({ ...this.api.addOrder, params }).then(res => {
@@ -297,4 +300,8 @@ export default {
 </script>
 
 <style scoped>
+.text-color-yellow {
+  color: #ee0a24;
+  font-size: 13px;
+}
 </style>

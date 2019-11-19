@@ -2,7 +2,14 @@
   <div class="mainContent">
     <NavBar :title="title" />
     <div class="img-text">
-      <van-image :src="picture" />
+      <van-image :src="goods.picture" />
+    </div>
+    <van-row class="pd-left-right">
+      <van-col span="24" class="font-style margin-bottom-20">￥{{ sku.price }}</van-col>
+      <van-col span="24">{{ goods.description }}</van-col>
+    </van-row>
+    <div v-for="(item,index) in productImages" :key="index" class="img-text">
+      <van-image :src="item"></van-image>
     </div>
     <van-button
       class="fixed"
@@ -26,10 +33,11 @@
 </template>
 
 <script>
-import { Sku, Image, Button, Lazyload } from "vant";
+import { Sku, Image, Button, Lazyload, Row, Col } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
 import mixin from "@/utils/mixin.js";
+import ProductDetailConfig from "@/config/product-detail.config";
 export default {
   name: "ProductDetail",
   mixins: [mixin],
@@ -37,16 +45,18 @@ export default {
     return {
       show: false,
       title: "商品详情",
+      productId: "",
+      productImages: [],
       sku: {
         tree: [],
         list: [],
         price: "", // 默认价格（单位元）
         stock_num: "", // 商品总库存
         none_sku: false, // 是否无规格商品
-        hide_stock: false // 是否隐藏剩余库存
+        hide_stock: true // 是否隐藏剩余库存
       },
-      picture: "",
       goods: {
+        description: "",
         // 商品标题
         title: "",
         // 默认商品 sku 缩略图
@@ -95,6 +105,7 @@ export default {
       });
     },
     getProductById() {
+      this.productId = this.$route.params.id;
       if (this.$route.params.id) {
         request({
           ...this.api.getProductById,
@@ -102,12 +113,16 @@ export default {
             { substr: "{id}", replacement: this.$route.params.id }
           ]
         }).then(res => {
-          this.picture = res.data.data.img;
-          this.goods.picture = res.data.data.img;
+          // let url = "https://mall.wuchangdami.qiaofudayuan.net:8001";
+          // let url = window.location.host;
+          this.goods.picture = this.imgBaseUrl + res.data.data.img;
+          this.goods.description = res.data.data.description;
           this.goods.id = res.data.data.id;
           this.goods.title = res.data.data.name;
           this.sku.price = res.data.data.price;
-          this.sku.stock_num = res.data.data.count;
+          this.sku.stock_num = res.data.data.totalCount;
+          this.productImages = ProductDetailConfig[this.productId].images;
+          console.log(this.productImages);
         });
       }
     },
@@ -128,6 +143,8 @@ export default {
     [Image.name]: Image,
     [Button.name]: Button,
     [Lazyload.name]: Lazyload,
+    [Row.name]: Row,
+    [Col.name]: Col,
     NavBar
   }
 };
@@ -138,6 +155,17 @@ export default {
   position: fixed;
   bottom: 0;
   left: 0;
+}
+.pd-left-right {
+  background-color: #fff;
+  padding: 10px;
+}
+.font-style {
+  font-size: 18px;
+  color: rgb(255, 66, 0);
+}
+.margin-bottom-20 {
+  margin-bottom: 20px;
 }
 </style>>
 

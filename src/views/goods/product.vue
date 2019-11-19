@@ -2,8 +2,8 @@
   <div>
     <NavBar :title="title" />
     <van-swipe :autoplay="3000" indicator-color="white">
-      <van-swipe-item v-for="(item,index) in 4" :key="index">
-        <van-image src="https://img.yzcdn.cn/vant/cat.jpeg" />
+      <van-swipe-item v-for="(item,index) in list" :key="index">
+        <van-image :src="imgBaseUrl+item.img" />
       </van-swipe-item>
     </van-swipe>
     <!-- <div class="img-text">
@@ -13,7 +13,7 @@
       v-for="(item,index) in list"
       :key="index"
       :centered="centered"
-      :thumb="item.img"
+      :thumb="imgBaseUrl+item.img"
       :title="item.name"
       :num="item.count"
       tag="预购"
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import mixin from "@/utils/mixin.js";
 import {
   Image,
   Row,
@@ -40,6 +41,7 @@ import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
 export default {
   name: "Product",
+  mixins: [mixin],
   data() {
     return {
       list: [],

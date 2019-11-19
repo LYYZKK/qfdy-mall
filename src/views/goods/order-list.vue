@@ -34,7 +34,7 @@
             v-for="(a,i) in item.orderProducts"
             :key="i"
             :centered="centered"
-            :thumb="a.product.img"
+            :thumb="imgBaseUrl+a.product.img"
             :title="a.product.mark"
             :num="a.productNum"
             :tag="a.product.payResult"
@@ -55,8 +55,10 @@
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
 import { Card, Icon, Button, Row, Col, Cell, CellGroup } from "vant";
+import mixin from "@/utils/mixin.js";
 export default {
   name: "OrderList",
+  mixins: [mixin],
   data() {
     return {
       title: "预购订单",

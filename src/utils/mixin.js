@@ -1,7 +1,9 @@
 import request from "@/utils/request.js";
+import { link } from "fs";
 export default {
   data() {
     return {
+      imgBaseUrl: "https://mall.wuchangdami.qiaofudayuan.net:8001",
       flag: false,
       api: {
         // 民生银行参数解密
@@ -84,31 +86,21 @@ export default {
       let params = {
         param: this.$route.query.param
       };
+      let linkStatus = localStorage.getItem("linkStatus");
+      console.log(linkStatus);
+      if (linkStatus !== null) {
+        localStorage.clear();
+        localStorage.setItem("linkStatus", linkStatus);
+      } else {
+        localStorage.clear();
+      }
       if (params.param !== undefined) {
         request({ ...this.api.cmbcDescrypt, params }).then(res => {
           if (res.data.success) {
-            // 移除除现货购买的其他参数
-            if (
-              localStorage.getItem("isLogin") ||
-              localStorage.getItem("cuserId") ||
-              localStorage.getItem("isVip") ||
-              localStorage.getItem("id") ||
-              localStorage.getItem("phone") ||
-              localStorage.getItem("userCode")
-            ) {
-              localStorage.removeItem("isLogin");
-              localStorage.removeItem("cuserId");
-              localStorage.removeItem("isVip");
-              localStorage.removeItem("id");
-              localStorage.removeItem("phone");
-              localStorage.removeItem("userCode");
-            }
-
             localStorage.setItem("isLogin", 1);
             let info = res.data.data.split("|");
             localStorage.setItem("phone", info[0]);
             localStorage.setItem("cuserId", info[1]); // 银行客户id
-
             let isLogin = localStorage.getItem("isLogin");
             let linkStatus = localStorage.getItem("linkStatus");
             if (isLogin === "1" && linkStatus === "1") {

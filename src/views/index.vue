@@ -271,8 +271,13 @@ export default {
     spotBuy() {
       this.linkAdd(3);
       // 点击过现货购买的标志
-      localStorage.setItem("linkStatus", "1");
-      this.getSign();
+      let isLogin = localStorage.getItem("isLogin");
+      if (isLogin === "1") {
+        this.getSign();
+      } else {
+        localStorage.setItem("linkStatus", "1");
+        this.getSign();
+      }
     },
 
     initPage() {
@@ -281,9 +286,6 @@ export default {
   },
   beforeMount() {
     this.initPage();
-  },
-  mounted() {
-    console.log(document.documentElement.clientWidth);
   },
   components: {
     [Image.name]: Image,

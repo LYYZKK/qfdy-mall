@@ -6,7 +6,7 @@
         <van-col span="24" v-for="(item,index) in order.orderProducts" :key="index">
           <van-card
             :centered="centered"
-            :thumb="item.product.img"
+            :thumb="imgBaseUrl+item.product.img"
             :title="item.product.name"
             :num="item.productNum"
             tag="预购"
@@ -62,8 +62,10 @@ import {
 } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
+import mixin from "@/utils/mixin.js";
 export default {
   name: "ProductDetail",
+  mixins: [mixin],
   data() {
     return {
       show: false,
