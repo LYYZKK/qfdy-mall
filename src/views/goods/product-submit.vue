@@ -204,7 +204,7 @@ export default {
               productNum: this.order.count
             }
           ],
-          orderAddresses: this.customerInfo
+          orderAddressee: this.customerInfo
         };
         request({ ...this.api.addOrder, params }).then(res => {
           if (res.success) {
