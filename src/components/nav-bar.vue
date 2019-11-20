@@ -1,6 +1,6 @@
 <template>
   <div class="bar">
-    <van-nav-bar :title="title" left-text="返回" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar :title="title" left-text="返回" :left-arrow="left" @click-left="onClickLeft" />
   </div>
 </template>
 
@@ -11,6 +11,10 @@ export default {
   components: {
     [NavBar.name]: NavBar
   },
+  data() {
+    return {};
+  },
+
   methods: {
     onClickLeft() {
       if (this.$route.name === "Product") {
@@ -28,6 +32,12 @@ export default {
     title: {
       type: String,
       default: ""
+    },
+    left: {
+      type: Boolean,
+      default() {
+        return true;
+      }
     }
   }
 };

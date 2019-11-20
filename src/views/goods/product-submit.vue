@@ -103,7 +103,8 @@ import {
   Stepper,
   Field,
   Cell,
-  CellGroup
+  CellGroup,
+  Toast
 } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
@@ -204,11 +205,16 @@ export default {
               productNum: this.order.count
             }
           ],
+          mark: this.good.mark,
           orderAddressee: this.customerInfo
         };
         request({ ...this.api.addOrder, params }).then(res => {
           if (res.success) {
             this.orderId = res.data.id;
+            Toast({
+              message: "恭喜您预定成功!请等待联系付款。",
+              icon: "like-o"
+            });
             // 生成订单跳转到订单详情页
             this.$router.push({
               name: "OrderDetail",
@@ -292,6 +298,7 @@ export default {
     [Field.name]: Field,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
+    [Toast.name]: Toast,
     NavBar
   }
 };

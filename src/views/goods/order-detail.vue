@@ -1,6 +1,6 @@
 <template>
   <div class="mainContent">
-    <NavBar :title="title" />
+    <NavBar :title="title" :left="false" />
     <div>
       <van-row>
         <van-col span="24" v-for="(item,index) in order.orderProducts" :key="index">
@@ -34,6 +34,11 @@
           </van-col>
         </van-row>
       </div>-->
+      <div calss="mt">
+        <van-col span="24">
+          <van-button size="large" color="red" @click="gotoList">查看我的订单</van-button>
+        </van-col>
+      </div>
     </div>
     <van-dialog
       v-model="show"
@@ -90,6 +95,9 @@ export default {
     };
   },
   methods: {
+    gotoList() {
+      this.$router.push({ name: "OrderList" });
+    },
     submit() {
       request({
         ...this.api.payOrder,
