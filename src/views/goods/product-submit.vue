@@ -132,8 +132,7 @@ export default {
       customerInfo: {
         name: "",
         phone: "",
-        address: "",
-        id: ""
+        address: ""
       },
       api: {
         getGoodById: {
@@ -164,7 +163,6 @@ export default {
   methods: {
     getCustomerInfo() {
       this.customerInfo.phone = localStorage.getItem("phone");
-      this.customerInfo.id = localStorage.getItem("id");
       let id = localStorage.getItem("id");
       if (id) {
         request({

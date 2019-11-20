@@ -8,17 +8,24 @@
       <van-col span="24" class="font-style margin-bottom-20">￥{{ sku.price }}</van-col>
       <van-col span="24">{{ goods.description }}</van-col>
     </van-row>
+    <van-divider
+      :style="{ color: 'rgba(0,0,0,.5)', borderColor: 'rgba(0,0,0,.5)', padding: '0px 20px',margin:'5px 0' }"
+    >产品详情</van-divider>
     <div v-for="(item,index) in productImages" :key="index" class="img-text">
       <van-image :src="item"></van-image>
     </div>
-    <van-button
-      class="fixed"
-      size="large"
-      @click="purchase"
-      color="linear-gradient(to right,
-    rgba(255, 66, 0, 0.5),
-    rgba(255, 66, 0, 1))"
-    >预定</van-button>
+    <van-row class="fixed">
+      <van-col span="12">
+        <van-button
+          size="large"
+          @click="purchase"
+          color="rgba(255, 66, 0, 1)"
+        >实时库存：{{ sku.stock_num }}</van-button>
+      </van-col>
+      <van-col span="12">
+        <van-button size="large" @click="purchase" color="rgba(255, 66, 0, 1)">立即预定</van-button>
+      </van-col>
+    </van-row>
     <van-sku
       v-model="show"
       :sku="sku"
@@ -33,7 +40,7 @@
 </template>
 
 <script>
-import { Sku, Image, Button, Lazyload, Row, Col } from "vant";
+import { Sku, Image, Button, Lazyload, Row, Col, Divider } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
 import mixin from "@/utils/mixin.js";
@@ -85,6 +92,7 @@ export default {
             window.location.host +
             this.$route.fullPath
         );
+        localStorage.setItem("purchaseStatus", this.$route.params.id);
         // eslint-disable-next-line no-undef
         loginForComm(
           window.location.protocol +
@@ -104,22 +112,32 @@ export default {
         params: { sku: this.sku, goods: value }
       });
     },
+    fun() {
+      request({
+        ...this.api.getProductById,
+        urlReplacements: [
+          { substr: "{id}", replacement: this.$route.params.id }
+        ]
+      }).then(res => {
+        this.goods.picture = this.imgBaseUrl + res.data.img;
+        this.goods.description = res.data.description;
+        this.goods.id = res.data.id;
+        this.goods.title = res.data.name;
+        this.sku.price = res.data.price;
+        this.sku.stock_num = res.data.totalCount;
+        this.productImages = ProductDetailConfig[this.productId].images;
+      });
+    },
     getProductById() {
+      console.log(this.$route.params.id);
       this.productId = this.$route.params.id;
       if (this.$route.params.id) {
-        request({
-          ...this.api.getProductById,
-          urlReplacements: [
-            { substr: "{id}", replacement: this.$route.params.id }
-          ]
-        }).then(res => {
-          this.goods.picture = this.imgBaseUrl + res.data.img;
-          this.goods.description = res.data.description;
-          this.goods.id = res.data.id;
-          this.goods.title = res.data.name;
-          this.sku.price = res.data.price;
-          this.sku.stock_num = res.data.totalCount;
-          this.productImages = ProductDetailConfig[this.productId].images;
+        this.fun();
+        const timer = setInterval(() => {
+          this.fun();
+        }, 5000);
+        this.$once("hook:beforeDestroy", () => {
+          clearInterval(timer);
         });
       }
     },
@@ -142,6 +160,7 @@ export default {
     [Lazyload.name]: Lazyload,
     [Row.name]: Row,
     [Col.name]: Col,
+    [Divider.name]: Divider,
     NavBar
   }
 };
@@ -149,6 +168,7 @@ export default {
 
 <style scoped>
 .fixed {
+  width: 100%;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -163,6 +183,13 @@ export default {
 }
 .margin-bottom-20 {
   margin-bottom: 20px;
+}
+.bg-block {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 5px;
+}
+.text-align-center {
+  text-align: center;
 }
 </style>>
 

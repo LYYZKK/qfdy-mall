@@ -15,12 +15,13 @@
       :centered="centered"
       :thumb="imgBaseUrl+item.img"
       :title="item.name"
-      :num="item.count"
-      tag="预购"
+      tag="预售"
       :price="item.price"
       :desc="item.description"
       @click="getProductById(item.id)"
-    ></van-card>
+    >
+      <div slot="footer">库存：{{ item.totalCount }}</div>
+    </van-card>
   </div>
 </template>
 
