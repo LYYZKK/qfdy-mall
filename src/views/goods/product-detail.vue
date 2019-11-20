@@ -14,19 +14,25 @@
     <div v-for="(item,index) in productImages" :key="index" class="img-text">
       <van-image :src="item"></van-image>
     </div>
-    <van-row class="fixed">
-      <van-col span="12">
-        <van-button
-          size="large"
-          @click="purchase"
-          color="rgba(255, 66, 0, 1)"
-        >实时库存：{{ sku.stock_num }}</van-button>
-      </van-col>
-      <van-col span="12">
-        <van-button size="large" @click="purchase" color="rgba(255, 66, 0, 1)">立即预定</van-button>
-      </van-col>
-    </van-row>
+    <van-tabbar v-model="active" safe-area-inset-bottom>
+      <van-tabbar-item icon="home-o">
+        <van-row class="fixed">
+          <van-col span="12">
+            <van-button
+              size="large"
+              @click="purchase"
+              color="rgba(255, 66, 0, 1)"
+            >实时库存：{{ sku.stock_num }}</van-button>
+          </van-col>
+          <van-col span="12">
+            <van-button size="large" @click="purchase" color="rgba(255, 66, 0, 1)">立即预定</van-button>
+          </van-col>
+        </van-row>
+      </van-tabbar-item>
+    </van-tabbar>
+
     <van-sku
+      close-on-click-overlay="true"
       v-model="show"
       :sku="sku"
       :goods="goods"
@@ -40,7 +46,17 @@
 </template>
 
 <script>
-import { Sku, Image, Button, Lazyload, Row, Col, Divider } from "vant";
+import {
+  Sku,
+  Image,
+  Button,
+  Lazyload,
+  Row,
+  Col,
+  Divider,
+  Tabbar,
+  TabbarItem
+} from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
 import mixin from "@/utils/mixin.js";
@@ -161,6 +177,8 @@ export default {
     [Row.name]: Row,
     [Col.name]: Col,
     [Divider.name]: Divider,
+    [Tabbar.name]: Tabbar,
+    [TabbarItem.name]: TabbarItem,
     NavBar
   }
 };

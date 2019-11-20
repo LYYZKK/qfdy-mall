@@ -18,7 +18,6 @@
                   <span class="text-color-999">{{ customerInfo.phone }}</span>
                 </van-col>
               </van-row>
-
               <div>{{ customerInfo.address }}</div>
               <div class="text-color-yellow">完善的信息方便后期接收快递</div>
             </div>
@@ -72,7 +71,7 @@
       <h1 class="text-center">￥{{ totalPrice/100 }}</h1>
     </van-dialog>
     <!-- 修改当前订单的客户信息 -->
-    <van-action-sheet v-model="userShow">
+    <van-action-sheet v-model="userShow" safe-area-inset-bottom @closed="refresh">
       <van-cell-group>
         <van-field v-model="customerInfo.name" label="姓名" left-icon="contact" />
         <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o" disabled>
@@ -270,7 +269,8 @@ export default {
     // 保存当前订单客户信息不一定是默认信息
     save() {
       this.userShow = false;
-    }
+    },
+    refresh() {}
   },
   computed: {
     totalPrice() {

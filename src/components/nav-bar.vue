@@ -1,6 +1,6 @@
 <template>
   <div class="bar">
-    <van-nav-bar :title="title" left-text="返回" :left-arrow="left" @click-left="onClickLeft" />
+    <van-nav-bar :title="title" :left-text="text" :left-arrow="left" @click-left="onClickLeft" />
   </div>
 </template>
 
@@ -38,6 +38,10 @@ export default {
       default() {
         return true;
       }
+    },
+    text: {
+      type: String,
+      default: "返回"
     }
   }
 };
