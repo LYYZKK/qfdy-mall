@@ -113,16 +113,13 @@ export default {
             { substr: "{id}", replacement: this.$route.params.id }
           ]
         }).then(res => {
-          // let url = "https://mall.wuchangdami.qiaofudayuan.net:8001";
-          // let url = window.location.host;
-          this.goods.picture = this.imgBaseUrl + res.data.data.img;
-          this.goods.description = res.data.data.description;
-          this.goods.id = res.data.data.id;
-          this.goods.title = res.data.data.name;
-          this.sku.price = res.data.data.price;
-          this.sku.stock_num = res.data.data.totalCount;
+          this.goods.picture = this.imgBaseUrl + res.data.img;
+          this.goods.description = res.data.description;
+          this.goods.id = res.data.id;
+          this.goods.title = res.data.name;
+          this.sku.price = res.data.price;
+          this.sku.stock_num = res.data.totalCount;
           this.productImages = ProductDetailConfig[this.productId].images;
-          console.log(this.productImages);
         });
       }
     },

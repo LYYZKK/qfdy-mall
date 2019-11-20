@@ -44,8 +44,8 @@ export default {
         ...this.api.getSignature,
         params: { extJson: JSON.stringify(extJson) }
       }).then(res => {
-        if (res.data.success) {
-          let signature = res.data.data;
+        if (res.success) {
+          let signature = res.data;
           let openUrl =
             baseUrl +
             "extJson=" +
@@ -96,9 +96,9 @@ export default {
       }
       if (params.param !== undefined) {
         request({ ...this.api.cmbcDescrypt, params }).then(res => {
-          if (res.data.success) {
+          if (res.success) {
             localStorage.setItem("isLogin", 1);
-            let info = res.data.data.split("|");
+            let info = res.data.split("|");
             localStorage.setItem("phone", info[0]);
             localStorage.setItem("cuserId", info[1]); // 银行客户id
             let isLogin = localStorage.getItem("isLogin");
@@ -128,11 +128,11 @@ export default {
         phone: localStorage.getItem("phone") || null
       };
       request({ ...this.api.checkCustomer, params }).then(res => {
-        if (res.data.success) {
-          console.log(res.data.data);
-          localStorage.setItem("isVip", res.data.data.isVip);
-          localStorage.setItem("id", res.data.data.id); // 商城用户ID
-          localStorage.setItem("userCode", res.data.data.code);
+        if (res.success) {
+          console.log(res.data);
+          localStorage.setItem("isVip", res.data.isVip);
+          localStorage.setItem("id", res.data.id); // 商城用户ID
+          localStorage.setItem("userCode", res.data.code);
         }
       });
       this.linkAdd(1);
@@ -146,7 +146,7 @@ export default {
         customerCode: localStorage.getItem("id") || null
       };
       request({ ...this.api.linkAdd, params }).then(res => {
-        if (res.data.success) {
+        if (res.success) {
           console.log("访问次数加一成功");
         }
       });

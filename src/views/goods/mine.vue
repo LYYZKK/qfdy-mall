@@ -68,9 +68,9 @@ export default {
           ...this.api.getCustomerInfo,
           urlReplacements: [{ substr: "{id}", replacement: id }]
         }).then(res => {
-          if (res.data.success) {
-            this.customerInfo.name = res.data.data.name;
-            this.customerInfo.address = res.data.data.address;
+          if (res.success) {
+            this.customerInfo.name = res.data.name;
+            this.customerInfo.address = res.data.address;
           }
         });
       }
@@ -81,16 +81,16 @@ export default {
       } else {
         let params = this.customerInfo;
         request({ ...this.api.modifyCustomerInfo, params }).then(res => {
-          if (res.data.success) {
+          if (res.success) {
             this.disabled = !this.disabled;
             Notify({
               message: "修改成功",
               type: "success"
             });
             localStorage.removeItem("phone");
-            localStorage.setItem("phone", res.data.data.phone);
+            localStorage.setItem("phone", res.data.phone);
           } else {
-            Notify(res.data.message);
+            Notify(res.message);
           }
         });
       }

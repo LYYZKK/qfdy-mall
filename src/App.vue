@@ -89,7 +89,7 @@ img {
   padding-bottom: 50px;
 }
 .mainContent {
-  padding: 46px 0;
+  padding: 46px 0 50px 0;
 }
 .border {
   margin: 10px;

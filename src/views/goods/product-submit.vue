@@ -171,9 +171,9 @@ export default {
           ...this.api.getCustomerInfo,
           urlReplacements: [{ substr: "{id}", replacement: id }]
         }).then(res => {
-          if (res.data.success) {
-            this.customerInfo.name = res.data.data.name;
-            this.customerInfo.address = res.data.data.address;
+          if (res.success) {
+            this.customerInfo.name = res.data.name;
+            this.customerInfo.address = res.data.address;
           }
         });
       }
@@ -187,10 +187,10 @@ export default {
             { substr: "{id}", replacement: this.$route.params.goods.goodsId }
           ]
         }).then(res => {
-          this.good.img = res.data.data.img;
-          this.good.name = res.data.data.name;
-          this.good.price = res.data.data.price;
-          this.good.description = res.data.data.description;
+          this.good.img = res.data.img;
+          this.good.name = res.data.name;
+          this.good.price = res.data.price;
+          this.good.description = res.data.description;
         });
       }
     },
@@ -209,8 +209,8 @@ export default {
           orderAddresses: this.customerInfo
         };
         request({ ...this.api.addOrder, params }).then(res => {
-          if (res.data.success) {
-            this.orderId = res.data.data.id;
+          if (res.success) {
+            this.orderId = res.data.id;
             // 生成订单跳转到订单详情页
             this.$router.push({
               name: "OrderDetail",
@@ -231,7 +231,7 @@ export default {
         ...this.api.payOrder,
         urlReplacements: [{ substr: "{id}", replacement: this.orderId }]
       }).then(res => {
-        if (res.data.success) {
+        if (res.success) {
           this.$router.push({
             name: "OrderDetail",
             query: { id: this.orderId }
@@ -245,7 +245,7 @@ export default {
         ...this.api.cancelOrder,
         urlReplacements: [{ substr: "{id}", replacement: this.orderId }]
       }).then(res => {
-        if (res.data.success) {
+        if (res.success) {
           this.$router.push({
             name: "OrderDetail",
             query: { id: this.orderId }

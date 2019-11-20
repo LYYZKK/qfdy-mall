@@ -95,7 +95,7 @@ export default {
         ...this.api.payOrder,
         urlReplacements: [{ substr: "{id}", replacement: this.$route.query.id }]
       }).then(res => {
-        if (res.data.success) {
+        if (res.success) {
           this.$router.push({
             name: "OrderList",
             params: { customerId: this.customerId }
@@ -108,7 +108,7 @@ export default {
         ...this.api.cancelOrder,
         urlReplacements: [{ substr: "{id}", replacement: this.$route.query.id }]
       }).then(res => {
-        if (res.data.success) {
+        if (res.success) {
           this.$router.push({
             name: "OrderList",
             params: { customerId: this.customerId }
@@ -131,9 +131,9 @@ export default {
             { substr: "{id}", replacement: this.$route.query.id }
           ]
         }).then(res => {
-          this.order = res.data.data;
+          this.order = res.data;
           this.customerId = parseInt(localStorage.getItem("id"));
-          console.log(res.data.data);
+          console.log(res.data);
         });
       }
     }

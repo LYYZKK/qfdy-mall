@@ -84,8 +84,8 @@ export default {
         customerId: cuserId
       };
       request({ ...this.api.getOrders, params }).then(res => {
-        if (res.data.success) {
-          this.orderList = res.data.data;
+        if (res.success) {
+          this.orderList = res.data;
         }
       });
     }

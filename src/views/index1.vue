@@ -135,8 +135,8 @@ export default {
           params: { extJson: JSON.stringify(extJson) }
         }).then(res => {
           console.log("getSignature request with res =", res);
-          if (res.data.success) {
-            let signature = res.data.data;
+          if (res.success) {
+            let signature = res.data;
             let openUrl =
               baseUrl +
               "extJson=" +
