@@ -22,14 +22,23 @@
     >
       <div slot="footer">库存：{{ item.totalCount }}</div>
     </van-card>
+    {{ copyText }}
     <van-row>
-      <van-col :data-clipboard-text="item" @click="copy" class="copyItem">复制这一段文字</van-col>
+      <van-col span="24">
+        <van-button
+          :data-clipboard-text="copyText"
+          @click="copy"
+          class="copyItem"
+          type="primary"
+        >复制这一段文字</van-button>
+      </van-col>
     </van-row>
   </div>
 </template>
 
 <script>
 import mixin from "@/utils/mixin.js";
+import Clipboard from "clipboard";
 import {
   Image,
   Row,
@@ -48,6 +57,7 @@ export default {
   mixins: [mixin],
   data() {
     return {
+      copyText: "今天天气真好呀!",
       list: [],
       title: "商品列表",
       centered: true,
