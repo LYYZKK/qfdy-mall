@@ -294,7 +294,7 @@ export default {
       };
       setTimeout(() => {
         setTitleBar(jsonParam);
-      }, 2000);
+      }, 1000);
     },
     initPage() {
       this.setTitle();
