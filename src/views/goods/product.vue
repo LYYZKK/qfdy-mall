@@ -22,6 +22,9 @@
     >
       <div slot="footer">库存：{{ item.totalCount }}</div>
     </van-card>
+    <van-row>
+      <van-col :data-clipboard-text="item" @click="copy" class="copyItem">复制这一段文字</van-col>
+    </van-row>
   </div>
 </template>
 
@@ -65,6 +68,9 @@ export default {
         this.list = res.data;
         console.log(this.list);
       });
+    },
+    copy() {
+      var clipboard = new Clipboard(".tag-read");
     }
   },
   mounted() {
