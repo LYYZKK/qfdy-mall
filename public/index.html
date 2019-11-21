@@ -80,9 +80,9 @@
       _locked = false;
     }
     /* 重复的方法
-    function getWebkitEventCode() {
-      return eventCode;
-    }*/
+ function getWebkitEventCode() {
+    return eventCode;
+}*/
     function getWebkitEvent() {
       return eventName;
     }
@@ -110,9 +110,9 @@
       return _mevents.length > 0 ? _mevents.shift() : "0";
     }
     /* 重复的方法
-    function getWebkitEvent() {
-      return "";
-    }*/
+  function getWebkitEvent() {
+    return "";
+}*/
 
     // 判断手机类型
     function getPhoneType() {
@@ -231,6 +231,7 @@
 
     // 设置标题栏内容和左右按钮的事件
     function setTitleBar(jsonParam) {
+      // console.log(123444, jsonParam);
       cmbcParams = jsonParam;
       setWebitEvent("setFuncParams()", "updateTitleInfo");
     }
@@ -269,18 +270,29 @@
       setWebitEvent("clientLogin(@)", "getLoginFlag");
     }
     /*//商户自己在页面写回调方法获取登录状态
-    function clientLogin(flag){
-    alert(flag);
-    }*/
+ function clientLogin(flag){
+ alert(flag);
+ }*/
 
     //小薇之家获取设备信息  安卓手机：设备IMEI\设备IMSI\ID变形\MAC地址  苹果手机：ID变形（单独生成，非绑定设备ID）和IDFA
     function getDeviceMessage() {
       setWebitEvent("deviceMessage(@)", "xiaoweihome");
     }
     /*//商户自己在页面写回调方法获取设备信息
-    function deviceMessage(message){
-    alert(message);
-    }*/
+ function deviceMessage(message){
+ alert(message);
+ }*/
+
+    // 商户联合登录，并跳转商户url
+    function loginForComm(beforeUrl, toUrl) {
+      // console.log(123, "login");
+      var p = {
+        beforeUrl: beforeUrl,
+        toUrl: toUrl
+      };
+      cmbcParams = p;
+      setWebitEvent("setFuncParams()", "loginForComm");
+    }
 
     // 跳转商户url
     function gotoShopUrl(toUrl) {
@@ -390,16 +402,6 @@
       setWebitEvent("setFuncParams()", "setInfo");
     }
 
-    // 商户联合登录，并跳转商户url
-    function loginForComm(beforeUrl, toUrl) {
-      var p = {
-        beforeUrl: beforeUrl,
-        toUrl: toUrl
-      };
-      cmbcParams = p;
-      setWebitEvent("setFuncParams()", "loginForComm");
-    }
-
     (function() {
       var cmbc = {};
       window.cmbc = cmbc;
@@ -409,6 +411,10 @@
       };
     })();
 
+    function getInfo(methodNameOrParam) {
+      cmbc.getStoredByBusi(methodNameOrParam);
+    }
+
     function loginForComm(beforeUrl, toUrl) {
       var p = {
         beforeUrl: beforeUrl,
@@ -416,10 +422,6 @@
       };
       cmbcParams = p;
       setWebitEvent("setFuncParams()", "loginForComm");
-    }
-
-    function getInfo(methodNameOrParam) {
-      cmbc.getStoredByBusi(methodNameOrParam);
     }
 
     //打开相册

@@ -1,5 +1,4 @@
 import request from "@/utils/request.js";
-import { link } from "fs";
 export default {
   data() {
     return {
