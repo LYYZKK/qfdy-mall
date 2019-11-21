@@ -260,12 +260,12 @@ export default {
     },
     // 预约购买
     prePurchase() {
-      Toast({
-        message: "敬请期待...",
-        icon: "like-o"
-      });
+      // Toast({
+      //   message: "敬请期待...",
+      //   icon: "like-o"
+      // });
       this.linkAdd(2);
-      // this.$router.push({ path: "/home" });
+      this.$router.push({ path: "/home" });
     },
     // 现货购买
     spotBuy() {
@@ -280,7 +280,7 @@ export default {
       }
     },
     setTitle() {
-      const jsonParam = JSON.stringify({
+      const jsonParam = {
         title: "五常大米现货",
         leftButton: {
           // 左按钮
@@ -291,17 +291,17 @@ export default {
         rightButton: {
           exist: "false" // 不显示右按钮
         }
-      });
-      console.log("setBefore" + jsonParam);
-      setTitleBar(jsonParam);
-      console.log("setAfter" + jsonParam);
+      };
+      setTimeout(() => {
+        setTitleBar(jsonParam);
+      }, 2000);
     },
     initPage() {
-      // this.setTitle();
+      this.setTitle();
       this.cmbcDescrypt();
     }
   },
-  beforeMount() {
+  mounted() {
     this.initPage();
   },
   components: {

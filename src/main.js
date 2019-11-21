@@ -2,6 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import VConsole from "vconsole";
+
 // 视频播放器
 import VideoPlayer from "vue-video-player";
 require("video.js/dist/video-js.css");
