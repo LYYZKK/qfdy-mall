@@ -2,23 +2,75 @@
   <div class="bg-color">
     <!-- 顶部 -->
     <van-row type="flex" justify="space-between" align="center" class="top">
-      <van-image :src="images.logo" width="50%"></van-image>
+      <van-image :src="images.logo" width="40%"></van-image>
+      <van-col class="font-size-12 bg-blue" @click="prePurchase">
+        <img :src="images.fresh_icon" alt width="12px;" />
+        <span class="nav">定制稻田</span>
+      </van-col>
       <van-col class="font-size-12 bg-blue" @click="spotBuy">
-        <img :src="images.fresh_icon" alt width="15px;" />
-        <span class="nav">现货抢购 >></span>
+        <img :src="images.fresh_icon" alt width="12px;" />
+        <span class="nav">现货抢购</span>
       </van-col>
     </van-row>
     <van-row>
-      <img :src="images.video" alt width="100%" />
+      <!-- 视频 -->
+      <div class="videoDemo">
+        <video-player
+          class="video-player vjs-custom-skin"
+          ref="videoPlayer"
+          :playsinline="true"
+          :options="playerOptions"
+          :events="events"
+          @fullscreenchange="onPlayerFullScreenchange($event)"
+        ></video-player>
+      </div>
+      <!-- <img :src="images.video" alt width="100%" /> -->
       <img :src="images.text_img" alt width="100%" />
     </van-row>
     <!-- main -->
+    <!-- 专属定制稻田 -->
+    <van-row class="pd">
+      <van-col class="pd1">
+        <img :src="images.title" alt width="100%" />
+      </van-col>
+      <van-col>
+        <img :src="images.img1" alt width="100%" />
+      </van-col>
+    </van-row>
+    <van-row class="text-color-yellow pd">
+      <van-col class="margin-top-20">
+        <img :src="images.dream" alt width="50%" />
+      </van-col>
+      <van-col :span="24" class="font-size-12">
+        <img :src="images.poter" alt width="10px" />
+        <span class="margin-top-5">&nbsp;私享管家</span>
+      </van-col>
+      <van-col :span="24" class="font-size-12">
+        <img :src="images.poter" alt width="10px" />
+        <span class="margin-top-5">&nbsp;仓储保鲜</span>
+      </van-col>
+      <van-col :span="24" class="font-size-12">
+        <img :src="images.poter" alt width="10px" />
+        <span class="margin-top-5">&nbsp;每月一次鲜米免费配送服务</span>
+      </van-col>
+      <van-col :span="24" class="font-size-12">
+        <img :src="images.poter" alt width="10px" />
+        <span class="margin-top-5">&nbsp;七天无理由退订</span>
+      </van-col>
+    </van-row>
+    <van-row class="buy_btn" @click="prePurchase">
+      <van-col class="left">点击预约 >></van-col>
+      <van-col class="right">
+        <img :src="images.buy" alt />
+      </van-col>
+    </van-row>
     <!-- 尝鲜价限购 -->
     <van-row class="pd">
       <van-col class="pd1">
         <img :src="images.title1" alt width="100%" />
       </van-col>
     </van-row>
+    <van-col></van-col>
     <van-row gutter="10" class="pd">
       <van-col span="12">
         <img :src="images.img1_1" alt width="100%" />
@@ -146,11 +198,14 @@ import text3_3 from "@/assets/images/new/text-3-3.png";
 import text3_4 from "@/assets/images/new/text-3-4.png";
 import text4 from "@/assets/images/new/text-4.png";
 import text5 from "@/assets/images/new/text-5.png";
+import title from "@/assets/images/new/title.png";
+import dream from "@/assets/images/new/dream.png";
 import title1 from "@/assets/images/new/title-1.png";
 import title2 from "@/assets/images/new/title-2.png";
 import title3 from "@/assets/images/new/title-3.png";
 import title4 from "@/assets/images/new/title-4.png";
 import title5 from "@/assets/images/new/title-5.png";
+import img1 from "@/assets/images/new/img-1.png";
 import img1_1 from "@/assets/images/new/img-1-1.png";
 import img1_2 from "@/assets/images/new/img-1-2.png";
 import img2 from "@/assets/images/new/img-2.png";
@@ -175,6 +230,8 @@ export default {
   mixins: [mixin],
   data() {
     return {
+      videoDialogVisible: false,
+      events: ["fullscreenchange"],
       images: {
         logo,
         video,
@@ -187,11 +244,14 @@ export default {
         text3_4,
         text4,
         text5,
+        title,
+        dream,
         title1,
         title2,
         title3,
         title4,
         title5,
+        img1,
         img1_1,
         img1_2,
         img2,
@@ -260,10 +320,11 @@ export default {
     },
     // 预约购买
     prePurchase() {
-      // Toast({
-      //   message: "敬请期待...",
-      //   icon: "like-o"
-      // });
+      let param = this.$route.query.param;
+      if (param !== null) {
+        localStorage.setItem("param", param);
+      }
+      console.log(param);
       this.linkAdd(2);
       this.$router.push({ path: "/home" });
     },
@@ -297,9 +358,11 @@ export default {
       }, 1000);
     },
     initPage() {
-      this.setTitle();
       this.cmbcDescrypt();
     }
+  },
+  beforeMount() {
+    this.setTitle();
   },
   mounted() {
     this.initPage();
@@ -322,6 +385,9 @@ export default {
   overflow: hidden;
   overflow-y: scroll;
   background: url(../assets/images/new/bg.png) no-repeat;
+  .vjs-custom-skin > .video-js .vjs-big-play-button {
+    font-size: 2em !important;
+  }
 }
 .bg-long {
   margin: 20px 0;
@@ -436,7 +502,7 @@ export default {
   font-size: 12px;
 }
 .bg-blue {
-  padding: 2px 10px;
+  padding: 2px 8px;
   border-radius: 10px;
 
   display: flex;

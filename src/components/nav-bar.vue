@@ -1,6 +1,6 @@
 <template>
   <div class="bar">
-    <van-nav-bar :title="title" left-text="返回" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar :title="title" :left-text="text" :left-arrow="left" @click-left="onClickLeft" />
   </div>
 </template>
 
@@ -11,10 +11,16 @@ export default {
   components: {
     [NavBar.name]: NavBar
   },
+  data() {
+    return {};
+  },
+
   methods: {
     onClickLeft() {
       if (this.$route.name === "Product") {
-        this.$router.push({ path: "/index" });
+        let param = localStorage.getItem("param");
+        console.log(param);
+        this.$router.push({ path: "/index", query: { param } });
       } else if (this.$route.name === "OrderDetail") {
         this.$router.push({ name: "OrderList" });
       } else if (this.$route.name === "OrderList") {
@@ -28,6 +34,16 @@ export default {
     title: {
       type: String,
       default: ""
+    },
+    left: {
+      type: Boolean,
+      default() {
+        return true;
+      }
+    },
+    text: {
+      type: String,
+      default: "返回"
     }
   }
 };

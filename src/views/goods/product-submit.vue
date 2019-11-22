@@ -18,7 +18,6 @@
                   <span class="text-color-999">{{ customerInfo.phone }}</span>
                 </van-col>
               </van-row>
-
               <div>{{ customerInfo.address }}</div>
               <div class="text-color-yellow">完善的信息方便后期接收快递</div>
             </div>
@@ -72,7 +71,7 @@
       <h1 class="text-center">￥{{ totalPrice/100 }}</h1>
     </van-dialog>
     <!-- 修改当前订单的客户信息 -->
-    <van-action-sheet v-model="userShow">
+    <van-action-sheet v-model="userShow" safe-area-inset-bottom @closed="refresh">
       <van-cell-group>
         <van-field v-model="customerInfo.name" label="姓名" left-icon="contact" />
         <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o" disabled>
@@ -103,7 +102,8 @@ import {
   Stepper,
   Field,
   Cell,
-  CellGroup
+  CellGroup,
+  Toast
 } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
@@ -132,8 +132,7 @@ export default {
       customerInfo: {
         name: "",
         phone: "",
-        address: "",
-        id: ""
+        address: ""
       },
       api: {
         getGoodById: {
@@ -164,7 +163,6 @@ export default {
   methods: {
     getCustomerInfo() {
       this.customerInfo.phone = localStorage.getItem("phone");
-      this.customerInfo.id = localStorage.getItem("id");
       let id = localStorage.getItem("id");
       if (id) {
         request({
@@ -206,11 +204,16 @@ export default {
               productNum: this.order.count
             }
           ],
-          orderAddresses: this.customerInfo
+          mark: this.good.mark,
+          orderAddressee: this.customerInfo
         };
         request({ ...this.api.addOrder, params }).then(res => {
           if (res.success) {
             this.orderId = res.data.id;
+            Toast({
+              message: "恭喜您预定成功!请等待联系付款。",
+              icon: "like-o"
+            });
             // 生成订单跳转到订单详情页
             this.$router.push({
               name: "OrderDetail",
@@ -266,7 +269,8 @@ export default {
     // 保存当前订单客户信息不一定是默认信息
     save() {
       this.userShow = false;
-    }
+    },
+    refresh() {}
   },
   computed: {
     totalPrice() {
@@ -294,6 +298,7 @@ export default {
     [Field.name]: Field,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
+    [Toast.name]: Toast,
     NavBar
   }
 };

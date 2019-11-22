@@ -2,25 +2,33 @@
   <div>
     <NavBar :title="title" />
     <van-swipe :autoplay="3000" indicator-color="white">
+      <van-swipe-item>
+        <van-image :src="imgBaseUrl+'/common/img/c_01.jpg'">
+          <template v-slot:loading>
+            <van-loading type="spinner" size="20" />
+          </template>
+        </van-image>
+      </van-swipe-item>
       <van-swipe-item v-for="(item,index) in list" :key="index">
         <van-image :src="imgBaseUrl+item.img" />
       </van-swipe-item>
     </van-swipe>
-    <!-- <div class="img-text">
-      <van-image src="https://img.yzcdn.cn/vant/cat.jpeg" />
-    </div>-->
     <van-card
       v-for="(item,index) in list"
       :key="index"
       :centered="centered"
       :thumb="imgBaseUrl+item.img"
       :title="item.name"
-      :num="item.count"
-      tag="预购"
+      tag="预售"
       :price="item.price"
       :desc="item.description"
       @click="getProductById(item.id)"
-    ></van-card>
+    >
+      <div slot="footer">库存：{{ item.totalCount }}</div>
+      <template v-slot:loading>
+        <van-loading type="spinner" size="20" />
+      </template>
+    </van-card>
   </div>
 </template>
 
@@ -35,7 +43,8 @@ import {
   Button,
   List,
   Swipe,
-  SwipeItem
+  SwipeItem,
+  Loading
 } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
@@ -44,6 +53,7 @@ export default {
   mixins: [mixin],
   data() {
     return {
+      copyText: "今天天气真好呀!",
       list: [],
       title: "商品列表",
       centered: true,
@@ -97,6 +107,7 @@ export default {
     [List.name]: List,
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
+    [Loading.name]: Loading,
     NavBar
   }
 };

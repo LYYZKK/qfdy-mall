@@ -4,6 +4,9 @@ export default {
     return {
       imgBaseUrl: "https://mall.wuchangdami.qiaofudayuan.net:8001",
       flag: false,
+      // 商品详情页路径
+      purchaseUrl:
+        "https://mall.wuchangdami.qiaofudayuan.net:8001/product-detail/",
       api: {
         // 民生银行参数解密
         cmbcDescrypt: {
@@ -14,6 +17,7 @@ export default {
           url: "/customers/check",
           method: "post"
         },
+
         // 访问次数增加
         linkAdd: {
           url: "/system/view-logs",
@@ -81,33 +85,48 @@ export default {
     },
     // 解密从民生银行跳转的连接参数
     cmbcDescrypt() {
+      // setTitleBar("乔府大院");
       console.log("民生银行param===", this.$route.query.param);
       let params = {
         param: this.$route.query.param
       };
       let linkStatus = localStorage.getItem("linkStatus");
+      let purchaseStatus = localStorage.getItem("purchaseStatus");
       console.log(linkStatus);
       if (linkStatus !== null) {
         localStorage.clear();
         localStorage.setItem("linkStatus", linkStatus);
       } else {
-        localStorage.clear();
+        if (purchaseStatus !== null) {
+          localStorage.clear();
+          localStorage.setItem("purchaseStatus", purchaseStatus);
+        } else {
+          localStorage.clear();
+        }
       }
       if (params.param !== undefined) {
+        let isLogin = localStorage.getItem("isLogin");
+        let purchaseStatus = localStorage.getItem("purchaseStatus");
+        let linkStatus = localStorage.getItem("linkStatus");
         request({ ...this.api.cmbcDescrypt, params }).then(res => {
           if (res.success) {
             localStorage.setItem("isLogin", 1);
             let info = res.data.split("|");
             localStorage.setItem("phone", info[0]);
             localStorage.setItem("cuserId", info[1]); // 银行客户id
-            let isLogin = localStorage.getItem("isLogin");
-            let linkStatus = localStorage.getItem("linkStatus");
-            if (isLogin === "1" && linkStatus === "1") {
-              localStorage.removeItem("linkStatus");
-              this.goToLinkMall();
-            }
           }
           this.checkCustomer();
+          // 登录成功后自动跳转到linkMall
+          if (isLogin === "1" && linkStatus === "1") {
+            localStorage.removeItem("linkStatus");
+            this.goToLinkMall();
+          }
+          // 登录成功后自动跳转到商品详情页
+          if (isLogin === "1" && purchaseStatus !== null) {
+            let purchaseId = parseInt(localStorage.getItem("purchaseStatus"));
+            localStorage.removeItem("purchaseStatus");
+            gotoShopUrl(this.purchaseUrl + purchaseId);
+          }
         });
       } else if (this.$route.query.bankUserId && this.$route.query.cid) {
         localStorage.removeItem("isLogin");
