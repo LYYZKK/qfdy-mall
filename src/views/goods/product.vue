@@ -94,7 +94,7 @@ export default {
     }
   },
   mounted() {
-    this.setTitle();
+    // this.setTitle();
     this.getProducts();
   },
   components: {

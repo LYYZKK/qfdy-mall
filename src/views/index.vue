@@ -369,7 +369,8 @@ export default {
     }
   },
   beforeMount() {
-    this.setTitle();
+    console.log('into setTitle')
+    // this.setTitle();
   },
   mounted() {
     this.initPage();
