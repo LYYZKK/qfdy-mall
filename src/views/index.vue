@@ -353,9 +353,16 @@ export default {
           exist: "false" // 不显示右按钮
         }
       };
-      setTimeout(() => {
-        setTitleBar(jsonParam);
-      }, 1000);
+      let timer = setInterval(() => {
+        console.log('into')
+        try {
+          console.log('into try')
+          setTitleBar(jsonParam);
+          clearInterval(timer);
+        } catch (error) {
+          console.log("set title bar failed.");
+        }
+      }, 300);
     },
     initPage() {
       this.cmbcDescrypt();
