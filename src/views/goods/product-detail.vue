@@ -142,7 +142,7 @@ export default {
           { substr: "{id}", replacement: this.$route.params.id }
         ]
       }).then(res => {
-        this.goods.picture = this.imgBaseUrl + res.data.img;
+        this.goods.picture = this.webBaseUrl + res.data.img;
         this.goods.description = res.data.description;
         this.goods.id = res.data.id;
         this.goods.title = res.data.name;

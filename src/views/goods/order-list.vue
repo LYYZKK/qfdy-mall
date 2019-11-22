@@ -35,7 +35,7 @@
             v-for="(a,i) in item.orderProducts"
             :key="i"
             :centered="centered"
-            :thumb="imgBaseUrl+a.product.img"
+            :thumb="webBaseUrl+a.product.img"
             :title="a.product.mark"
             :num="a.productNum"
             :tag="a.product.payResult"
@@ -80,21 +80,23 @@ export default {
       this.$router.push({ path: "/order-detail", query: { id: id } });
     },
     getOrders() {
-      let cuserId = parseInt(localStorage.getItem("id"));
-      let params = {
-        customerId: cuserId
-      };
-      this.show = true;
-      request({ ...this.api.getOrders, params }).then(res => {
-        if (res.success) {
-          if (res.data.length === 0) {
-            this.show = false;
-          } else {
-            this.show = false;
-            this.orderList = res.data;
+      let cuserId = localStorage.getItem('id')
+      if(cuserId!==null){
+        let params = {
+          customerId: cuserId
+        };
+        this.show = true;
+        request({ ...this.api.getOrders, params }).then(res => {
+          if (res.success) {
+            if (res.data.length === 0) {
+              this.show = false;
+            } else {
+              this.show = false;
+              this.orderList = res.data;
+            }
           }
-        }
-      });
+        });
+      }
     }
   },
   mounted() {

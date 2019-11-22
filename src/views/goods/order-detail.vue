@@ -6,7 +6,7 @@
         <van-col span="24" v-for="(item,index) in order.orderProducts" :key="index">
           <van-card
             :centered="centered"
-            :thumb="imgBaseUrl+item.product.img"
+            :thumb="webBaseUrl+item.product.img"
             :title="item.product.name"
             :num="item.productNum"
             tag="预购"

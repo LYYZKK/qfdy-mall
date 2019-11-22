@@ -34,7 +34,7 @@
         <van-col span="24">
           <van-card
             :centered="centered"
-            :thumb="imgBaseUrl+good.img"
+            :thumb="webBaseUrl+good.img"
             :title="good.name"
             :num="good.count"
             tag="预购"

@@ -3,21 +3,21 @@
     <NavBar :title="title" />
     <van-swipe :autoplay="3000" indicator-color="white">
       <van-swipe-item>
-        <van-image :src="imgBaseUrl+'/common/img/c_01.jpg'">
+        <van-image :src="webBaseUrl+'/common/img/c_01.jpg'">
           <template v-slot:loading>
             <van-loading type="spinner" size="20" />
           </template>
         </van-image>
       </van-swipe-item>
       <van-swipe-item v-for="(item,index) in list" :key="index">
-        <van-image :src="imgBaseUrl+item.img" />
+        <van-image :src="webBaseUrl+item.img" />
       </van-swipe-item>
     </van-swipe>
     <van-card
       v-for="(item,index) in list"
       :key="index"
       :centered="centered"
-      :thumb="imgBaseUrl+item.img"
+      :thumb="webBaseUrl+item.img"
       :title="item.name"
       tag="预售"
       :price="item.price"

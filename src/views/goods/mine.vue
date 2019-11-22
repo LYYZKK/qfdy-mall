@@ -44,7 +44,6 @@ export default {
         name: "",
         phone: "",
         address: "",
-        id: ""
       },
       api: {
         getCustomerInfo: {
@@ -60,19 +59,34 @@ export default {
   },
   methods: {
     getCustomerInfo() {
-      this.customerInfo.phone = localStorage.getItem("phone");
-      this.customerInfo.id = localStorage.getItem("id");
-      let id = localStorage.getItem("id");
-      if (id) {
-        request({
-          ...this.api.getCustomerInfo,
-          urlReplacements: [{ substr: "{id}", replacement: id }]
-        }).then(res => {
-          if (res.success) {
-            this.customerInfo.name = res.data.name;
-            this.customerInfo.address = res.data.address;
-          }
-        });
+      let isLogin = localStorage.getItem('isLogin')
+      if(isLogin==='1'){
+        this.customerInfo.phone = localStorage.getItem("phone");
+        let id = localStorage.getItem("id");
+        if (id!==null) {
+          request({
+            ...this.api.getCustomerInfo,
+            urlReplacements: [{ substr: "{id}", replacement: id }]
+          }).then(res => {
+            if (res.success) {
+              this.customerInfo.name = res.data.name;
+              this.customerInfo.address = res.data.address;
+            }
+          });
+        }
+      }else{
+        // 查看我的
+        localStorage.setItem('mineStatus',1)
+        loginForComm(
+          window.location.protocol +
+            "//" +
+            window.location.host +
+            this.$route.path,
+          window.location.protocol +
+            "//" +
+            window.location.host +
+            this.$route.path
+        );
       }
     },
     save() {
@@ -87,8 +101,6 @@ export default {
               message: "修改成功",
               type: "success"
             });
-            localStorage.removeItem("phone");
-            localStorage.setItem("phone", res.data.phone);
           } else {
             Notify(res.message);
           }
