@@ -45,7 +45,7 @@
         <van-col span="24">
           <van-cell-group>
             <van-cell title="购买数量" value="内容">
-              <van-stepper v-model="order.count" />
+              <van-stepper v-model="order.count" disable-input="true"/>
             </van-cell>
             <van-col span="24">
               <van-field
@@ -221,6 +221,11 @@ export default {
             });
             // 打开支付
             // this.show = true;
+          }else{
+            Toast({
+              message: "库存不足",
+              icon: "warning-o"
+            });
           }
         });
       } else {

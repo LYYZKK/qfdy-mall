@@ -44,7 +44,9 @@
       :goods="goods"
       :goods-id="goods.id"
       :show-add-cart-btn="false"
+      hide-selected-text
       :buy-text="'立即预定'"
+      disable-stepper-input
       @buy-clicked="onBuyClicked"
       safe-area-inset-bottom
     />
@@ -62,7 +64,8 @@ import {
   Divider,
   Tabbar,
   TabbarItem,
-  Loading
+  Loading,
+  Toast
 } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
@@ -131,9 +134,9 @@ export default {
     },
     onBuyClicked(value) {
       this.$router.push({
-        name: "ProductSubmit",
-        params: { sku: this.sku, goods: value }
-      });
+          name: "ProductSubmit",
+          params: { sku: this.sku, goods: value }
+        });
     },
     fun() {
       request({
@@ -183,6 +186,7 @@ export default {
     [Lazyload.name]: Lazyload,
     [Row.name]: Row,
     [Col.name]: Col,
+    [Toast.name]: Toast,
     [Divider.name]: Divider,
     [Tabbar.name]: Tabbar,
     [Loading.name]: Loading,
