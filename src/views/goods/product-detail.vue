@@ -21,17 +21,17 @@
       </van-image>
     </div>
     <van-tabbar safe-area-inset-bottom>
-      <van-tabbar-item icon="home-o">
+      <van-tabbar-item>
         <van-row class="fixed">
-          <van-col span="12">
+          <van-col span="12" v-if="sku.stock_num!==0">
             <van-button
               size="large"
               @click="purchase"
               color="rgba(255, 66, 0, 1)"
-            >实时库存：{{ sku.stock_num }}</van-button>
+            >库存状态：剩余{{ sku.stock_num }}份</van-button>
           </van-col>
-          <van-col span="12">
-            <van-button size="large" @click="purchase" color="rgba(255, 66, 0, 1)">立即预定</van-button>
+          <van-col :span="sku.stock_num===0?24:12">
+            <van-button size="large" @click="purchase" color="rgba(255, 66, 0, 1)" :disabled="sku.stock_num===0">{{ sku.stock_num===0?'已售罄':'立即预定' }}</van-button>
           </van-col>
         </van-row>
       </van-tabbar-item>
