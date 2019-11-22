@@ -2,13 +2,17 @@
   <div>
     <NavBar :title="title" />
     <van-swipe :autoplay="3000" indicator-color="white">
+      <van-swipe-item>
+        <van-image :src="imgBaseUrl+'/common/img/c_01.jpg'">
+          <template v-slot:loading>
+            <van-loading type="spinner" size="20" />
+          </template>
+        </van-image>
+      </van-swipe-item>
       <van-swipe-item v-for="(item,index) in list" :key="index">
         <van-image :src="imgBaseUrl+item.img" />
       </van-swipe-item>
     </van-swipe>
-    <!-- <div class="img-text">
-      <van-image src="https://img.yzcdn.cn/vant/cat.jpeg" />
-    </div>-->
     <van-card
       v-for="(item,index) in list"
       :key="index"
@@ -21,24 +25,15 @@
       @click="getProductById(item.id)"
     >
       <div slot="footer">库存：{{ item.totalCount }}</div>
+      <template v-slot:loading>
+        <van-loading type="spinner" size="20" />
+      </template>
     </van-card>
-    {{ copyText }}
-    <van-row>
-      <van-col span="24">
-        <van-button
-          :data-clipboard-text="copyText"
-          @click="copy"
-          class="copyItem"
-          type="primary"
-        >复制这一段文字</van-button>
-      </van-col>
-    </van-row>
   </div>
 </template>
 
 <script>
 import mixin from "@/utils/mixin.js";
-import Clipboard from "clipboard";
 import {
   Image,
   Row,
@@ -48,7 +43,8 @@ import {
   Button,
   List,
   Swipe,
-  SwipeItem
+  SwipeItem,
+  Loading
 } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
@@ -78,9 +74,6 @@ export default {
         this.list = res.data;
         console.log(this.list);
       });
-    },
-    copy() {
-      var clipboard = new Clipboard(".tag-read");
     }
   },
   mounted() {
@@ -96,6 +89,7 @@ export default {
     [List.name]: List,
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
+    [Loading.name]: Loading,
     NavBar
   }
 };

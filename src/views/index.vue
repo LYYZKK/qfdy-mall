@@ -320,10 +320,11 @@ export default {
     },
     // 预约购买
     prePurchase() {
-      // Toast({
-      //   message: "敬请期待...",
-      //   icon: "like-o"
-      // });
+      let param = this.$route.query.param;
+      if (param !== null) {
+        localStorage.setItem("param", param);
+      }
+      console.log(param);
       this.linkAdd(2);
       this.$router.push({ path: "/home" });
     },

@@ -375,3 +375,30 @@ export default {
         @fullscreenchange="onPlayerFullScreenchange($event)"
       ></video-player>
     </div>-->
+    {{ copyText }}
+    <van-row>
+      <van-col span="24">
+        <van-button
+          :data-clipboard-text="copyText"
+          @click="copy"
+          class="copyItem"
+          type="primary"
+        >复制这一段文字</van-button>
+      </van-col>
+    </van-row>
+    //  copy() {
+    //   var clipboard = new Clipboard(".copyItem");
+    //   clipboard.on("success", e => {
+    //     this.$toast("复制成功"); // 这里你如果引入了elementui的提示就可以用，没有就注释即可 // 释放内存
+
+    //     clipboard.destroy();
+    //   });
+
+    //   clipboard.on("error", e => {
+    //     // 不支持复制
+
+    //     this.$toast("该浏览器不支持自动复制"); // 释放内存
+
+    //     clipboard.destroy();
+    //   });
+    // }

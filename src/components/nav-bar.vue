@@ -18,7 +18,9 @@ export default {
   methods: {
     onClickLeft() {
       if (this.$route.name === "Product") {
-        this.$router.push({ path: "/index" });
+        let param = localStorage.getItem("param");
+        console.log(param);
+        this.$router.push({ path: "/index", query: { param } });
       } else if (this.$route.name === "OrderDetail") {
         this.$router.push({ name: "OrderList" });
       } else if (this.$route.name === "OrderList") {

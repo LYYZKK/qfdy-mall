@@ -2,19 +2,25 @@
   <div class="mainContent">
     <NavBar :title="title" />
     <div class="img-text">
-      <van-image :src="goods.picture" />
+      <van-image :src="goods.picture">
+        <template v-slot:loading>
+          <van-loading type="spinner" size="20" />
+        </template>
+      </van-image>
     </div>
     <van-row class="pd-left-right">
       <van-col span="24" class="font-style margin-bottom-20">￥{{ sku.price }}</van-col>
       <van-col span="24">{{ goods.description }}</van-col>
     </van-row>
-    <van-divider
-      :style="{ color: 'rgba(0,0,0,.5)', borderColor: 'rgba(0,0,0,.5)', padding: '0px 20px',margin:'5px 0' }"
-    >产品详情</van-divider>
+    <van-divider :style="{ color: 'rgba(0,0,0,1)',padding: '0px 20px',margin:'5px 0'}">产品详情</van-divider>
     <div v-for="(item,index) in productImages" :key="index" class="img-text">
-      <van-image :src="item"></van-image>
+      <van-image :src="item">
+        <template v-slot:loading>
+          <van-loading type="spinner" size="20" />
+        </template>
+      </van-image>
     </div>
-    <van-tabbar v-model="active" safe-area-inset-bottom>
+    <van-tabbar safe-area-inset-bottom>
       <van-tabbar-item icon="home-o">
         <van-row class="fixed">
           <van-col span="12">
@@ -32,7 +38,7 @@
     </van-tabbar>
 
     <van-sku
-      close-on-click-overlay="true"
+      :close-on-click-overlay="true"
       v-model="show"
       :sku="sku"
       :goods="goods"
@@ -55,7 +61,8 @@ import {
   Col,
   Divider,
   Tabbar,
-  TabbarItem
+  TabbarItem,
+  Loading
 } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
@@ -178,13 +185,14 @@ export default {
     [Col.name]: Col,
     [Divider.name]: Divider,
     [Tabbar.name]: Tabbar,
+    [Loading.name]: Loading,
     [TabbarItem.name]: TabbarItem,
     NavBar
   }
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .fixed {
   width: 100%;
   position: fixed;
@@ -208,6 +216,14 @@ export default {
 }
 .text-align-center {
   text-align: center;
+}
+.van-divider {
+  &::before {
+    border: 1px dashed rgb(207, 204, 204);
+  }
+  &::after {
+    border: 1px dashed rgb(207, 204, 204);
+  }
 }
 </style>>
 

@@ -1,7 +1,7 @@
 <template>
   <div class>
     <NavBar :title="title" />
-    <div class="mainContent text-center" v-if="orderList.length===0">
+    <div class="mainContent text-center" v-if="orderList.length===0&&!show">
       <div class="round bg-color">
         <van-icon name="shopping-cart" size="40" color="#fff" class="icon-cart" />
       </div>
@@ -14,7 +14,8 @@
         class="mt"
       >快去预定</van-button>
     </div>
-    <template v-else>
+    <van-loading type="spinner" v-show="show" color="#1989fa" class="loading" />
+    <template v-if="orderList.length>0">
       <van-row
         class="border"
         v-for="(item,index) in orderList"
@@ -54,7 +55,7 @@
 <script>
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
-import { Card, Icon, Button, Row, Col, Cell, CellGroup } from "vant";
+import { Card, Icon, Button, Row, Col, Cell, CellGroup, loading } from "vant";
 import mixin from "@/utils/mixin.js";
 export default {
   name: "OrderList",
@@ -63,7 +64,7 @@ export default {
     return {
       title: "预购订单",
       orderList: [],
-
+      show: false,
       centered: true,
       tag: "",
       api: {
@@ -83,9 +84,15 @@ export default {
       let params = {
         customerId: cuserId
       };
+      this.show = true;
       request({ ...this.api.getOrders, params }).then(res => {
         if (res.success) {
-          this.orderList = res.data;
+          if (res.data.length === 0) {
+            this.show = false;
+          } else {
+            this.show = false;
+            this.orderList = res.data;
+          }
         }
       });
     }
@@ -98,6 +105,7 @@ export default {
     [Card.name]: Card,
     [Icon.name]: Icon,
     [Button.name]: Button,
+    [loading.name]: loading,
     [Row.name]: Row,
     [Col.name]: Col,
     [Cell.name]: Cell,
@@ -122,5 +130,11 @@ export default {
 }
 .mt {
   margin-top: 30px;
+}
+.loading {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
