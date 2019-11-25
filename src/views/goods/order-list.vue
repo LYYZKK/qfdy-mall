@@ -16,36 +16,25 @@
     </div>
     <van-loading type="spinner" v-show="show" color="#1989fa" class="loading" />
     <template v-if="orderList.length>0">
-      <van-row
-        class="border"
-        v-for="(item,index) in orderList"
-        :key="index"
-        @click="getOrderById(item.id)"
-      >
-        <van-col span="12">
-          <van-icon name="shop-collect" />&nbsp;乔府商城
-        </van-col>
-        <van-col
-          span="12"
-          align="right"
-          class="text-color"
-        >{{ item.orderStatus===0?'待支付':item.orderStatus===1?'支付成功':item.orderStatus===2?'取消中':item.orderStatus===3?'已取消':'' }}</van-col>
+      <van-row>
+        <van-col span="24"></van-col>
         <van-col span="24">
-          <van-card
-            v-for="(a,i) in item.orderProducts"
-            :key="i"
-            :centered="centered"
-            :thumb="webBaseUrl+a.product.img"
-            :title="a.product.mark"
-            :num="a.productNum"
-            :tag="a.product.payResult"
-            :price="a.product.price"
-            :desc="a.product.description"
-          ></van-card>
-        </van-col>
-        <van-col span="24" align="right">
-          <span class="font-size-14">总金额:</span>
-          <span>￥{{ item.totalAmount }}</span>
+          <!-- <van-tabbar v-model="active" :fixed="false" active-color="#ee0a24" :border="false">
+            <van-tabbar-item info="3" icon="balance-list">待支付</van-tabbar-item>
+            <van-tabbar-item icon="send-gift" >已付款</van-tabbar-item>
+            <van-tabbar-item icon="setting-o">已取消</van-tabbar-item>
+          </van-tabbar>-->
+          <van-tabs v-model="active" title-active-color="#ee0a24" :border="false" :sticky="true">
+            <van-tab title="待支付">
+              <order-list-component :orderList="orderList" :orderStatus="0"></order-list-component>
+            </van-tab>
+            <van-tab title="已付款">
+              <order-list-component :orderList="orderList" :orderStatus="1"></order-list-component>
+            </van-tab>
+            <van-tab title="已取消">
+              <order-list-component :orderList="orderList" :orderStatus="3"></order-list-component>
+            </van-tab>
+          </van-tabs>
         </van-col>
       </van-row>
     </template>
@@ -55,7 +44,21 @@
 <script>
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
-import { Card, Icon, Button, Row, Col, Cell, CellGroup, loading } from "vant";
+import OrderListComponent from "@/components/order-list-component.vue";
+import {
+  Card,
+  Icon,
+  Button,
+  Row,
+  Col,
+  Cell,
+  CellGroup,
+  loading,
+  Tabbar,
+  TabbarItem,
+  Tab,
+  Tabs
+} from "vant";
 import mixin from "@/utils/mixin.js";
 export default {
   name: "OrderList",
@@ -67,6 +70,7 @@ export default {
       show: false,
       centered: true,
       tag: "",
+      active: 0,
       api: {
         getOrders: {
           url: "/orders",
@@ -80,8 +84,8 @@ export default {
       this.$router.push({ path: "/order-detail", query: { id: id } });
     },
     getOrders() {
-      let cuserId = localStorage.getItem('id')
-      if(cuserId!==null){
+      let cuserId = localStorage.getItem("id");
+      if (cuserId !== null) {
         let params = {
           customerId: cuserId
         };
@@ -104,6 +108,7 @@ export default {
   },
   components: {
     NavBar,
+    OrderListComponent,
     [Card.name]: Card,
     [Icon.name]: Icon,
     [Button.name]: Button,
@@ -111,6 +116,10 @@ export default {
     [Row.name]: Row,
     [Col.name]: Col,
     [Cell.name]: Cell,
+    [Tabbar.name]: Tabbar,
+    [TabbarItem.name]: TabbarItem,
+    [Tab.name]: Tab,
+    [Tabs.name]: Tabs,
     [CellGroup.name]: CellGroup
   }
 };
