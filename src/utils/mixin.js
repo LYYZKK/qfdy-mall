@@ -24,14 +24,15 @@ export default {
     };
   },
   methods: {
-    // 跳转到linmall的公共方法
+    // 跳转到linkmall的公共方法
     goToLinkMall() {
       let baseUrl = process.env.LINKED_MALL_BASE_URL;
       let extJson = {
         bizId: process.env.LINKED_MALL_bizId,
-        bizUid: process.env.LINKED_MALL_bizUid,
-        bankUserId: parseInt(localStorage.getItem("cuserId")),
-        userId: parseInt(localStorage.getItem("userCode")),
+        bizUid: localStorage.getItem("cuserId"),
+        subBizPage:this.webBaseUrl+'/index?bankUserId='+localStorage.getItem('cuserId')+'&cid=1',
+        bankUserId: localStorage.getItem("cuserId"),
+        userId: localStorage.getItem("userCode"),
         isVip: parseInt(localStorage.getItem("isVip")),
         cid: 1,
         timestamp: new Date().getTime()
@@ -87,23 +88,17 @@ export default {
       let params = {
         param: this.$route.query.param
       };
-
       let linkStatus = localStorage.getItem("linkStatus");
       let purchaseStatus = localStorage.getItem("purchaseStatus");
       let mineStatus = localStorage.getItem("mineStatus");
       if (linkStatus !== null) {
-        localStorage.clear();
         localStorage.setItem("linkStatus", linkStatus);
       } else {
         if (purchaseStatus !== null) {
-          localStorage.clear();
           localStorage.setItem("purchaseStatus", purchaseStatus);
         } else {
           if(mineStatus!==null){
-            localStorage.clear();
             localStorage.setItem("mineStatus", mineStatus);
-          }else{
-            localStorage.clear();
           }
         }
       }
@@ -138,12 +133,10 @@ export default {
           }
         });
       } else if (this.$route.query.bankUserId && this.$route.query.cid) {
-        localStorage.removeItem("isLogin");
         localStorage.setItem("isLogin", 1);
         this.checkCustomer();
       } else {
         localStorage.setItem("isLogin", 0);
-        this.checkCustomer();
       }
     },
     // 验证客户身份
@@ -151,7 +144,7 @@ export default {
       console.log(localStorage.getItem("cuserId"));
       let params = {
         cid: 1,
-        cuserId: parseInt(localStorage.getItem("cuserId")) || null,
+        cuserId: localStorage.getItem("cuserId") || null,
         phone: localStorage.getItem("phone") || null
       };
       request({ ...this.api.checkCustomer, params }).then(res => {
