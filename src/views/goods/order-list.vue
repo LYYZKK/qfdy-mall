@@ -15,24 +15,18 @@
       >快去预定</van-button>
     </div>
     <van-loading type="spinner" v-show="show" color="#1989fa" class="loading" />
-    <template v-if="orderList.length>0">
+    <template v-if="!show">
       <van-row>
-        <van-col span="24"></van-col>
         <van-col span="24">
-          <!-- <van-tabbar v-model="active" :fixed="false" active-color="#ee0a24" :border="false">
-            <van-tabbar-item info="3" icon="balance-list">待支付</van-tabbar-item>
-            <van-tabbar-item icon="send-gift" >已付款</van-tabbar-item>
-            <van-tabbar-item icon="setting-o">已取消</van-tabbar-item>
-          </van-tabbar>-->
           <van-tabs v-model="active" title-active-color="#ee0a24" :border="false" :sticky="true">
             <van-tab title="待支付">
-              <order-list-component :orderList="orderList" :orderStatus="0"></order-list-component>
+              <order-list-component :orderList="orderList.wait" :orderStatus="0"></order-list-component>
             </van-tab>
             <van-tab title="已付款">
-              <order-list-component :orderList="orderList" :orderStatus="1"></order-list-component>
+              <order-list-component :orderList="orderList.payed" :orderStatus="1"></order-list-component>
             </van-tab>
             <van-tab title="已取消">
-              <order-list-component :orderList="orderList" :orderStatus="3"></order-list-component>
+              <order-list-component :orderList="orderList.cancel" :orderStatus="3"></order-list-component>
             </van-tab>
           </van-tabs>
         </van-col>
@@ -66,9 +60,12 @@ export default {
   data() {
     return {
       title: "预购订单",
-      orderList: [],
+      orderList: {
+        wait: [],
+        payed: [],
+        cancel: []
+      },
       show: false,
-      centered: true,
       tag: "",
       active: 0,
       api: {
@@ -91,12 +88,27 @@ export default {
         };
         this.show = true;
         request({ ...this.api.getOrders, params }).then(res => {
+          this.orderList = {
+            wait: [],
+            payed: [],
+            cancel: []
+          };
           if (res.success) {
             if (res.data.length === 0) {
               this.show = false;
             } else {
               this.show = false;
-              this.orderList = res.data;
+              console.log(res.data);
+              res.data.forEach(element => {
+                if (element.orderStatus === 0) {
+                  this.orderList.wait.push(element);
+                } else if (element.orderStatus === 1) {
+                  this.orderList.payed.push(element);
+                } else if (element.orderStatus === 3) {
+                  this.orderList.cancel.push(element);
+                }
+              });
+              console.log(this.orderList);
             }
           }
         });

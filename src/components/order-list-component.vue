@@ -5,7 +5,6 @@
       v-for="(item,index) in orderList"
       :key="index"
       @click="getOrderById(item.id)"
-      v-show="orderStatus"
     >
       <van-col span="12">
         <van-icon name="shop-collect" />&nbsp;乔府商城
@@ -14,7 +13,7 @@
         span="12"
         align="right"
         class="text-color"
-      >{{ item.orderStatus===0?'待支付':item.orderStatus===1?'支付成功':item.orderStatuss===2?'取消中':item.orderStatuss===3?'已取消':'' }}</van-col>
+      >{{ item.orderStatus===0?'待支付':item.orderStatus===1?'支付成功':item.orderStatuss===3?'已取消':'' }}</van-col>
       <van-col span="24">
         <van-card
           v-for="(a,i) in item.orderProducts"
@@ -66,6 +65,11 @@ export default {
       type: Number,
       default: 0
     }
+  },
+  data() {
+    return {
+      centered: true
+    };
   },
   components: {
     [Card.name]: Card,
