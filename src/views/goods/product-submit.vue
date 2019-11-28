@@ -45,7 +45,7 @@
         <van-col span="24">
           <van-cell-group>
             <van-cell title="购买数量" value="内容">
-              <van-stepper v-model="order.count" disable-input="true"/>
+              <van-stepper v-model="order.count" disable-input="true" />
             </van-cell>
             <van-col span="24">
               <van-field
@@ -210,18 +210,18 @@ export default {
         request({ ...this.api.addOrder, params }).then(res => {
           if (res.success) {
             this.orderId = res.data.id;
-            Toast({
-              message: "恭喜您预定成功!请等待联系付款。",
-              icon: "like-o"
-            });
+            // Toast({
+            //   message: "恭喜您预定成功!请等待联系付款。",
+            //   icon: "like-o"
+            // });
             // 生成订单跳转到订单详情页
-            this.$router.push({
-              name: "OrderDetail",
-              query: { id: this.orderId }
-            });
+            // this.$router.push({
+            //   name: "OrderDetail",
+            //   query: { id: this.orderId }
+            // });
             // 打开支付
-            // this.show = true;
-          }else{
+            this.show = true;
+          } else {
             Toast({
               message: "库存不足",
               icon: "warning-o"
@@ -254,6 +254,10 @@ export default {
         urlReplacements: [{ substr: "{id}", replacement: this.orderId }]
       }).then(res => {
         if (res.success) {
+          Toast({
+            message: "恭喜您预定成功!请等待联系付款。",
+            icon: "like-o"
+          });
           this.$router.push({
             name: "OrderDetail",
             query: { id: this.orderId }
