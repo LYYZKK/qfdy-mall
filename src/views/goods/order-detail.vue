@@ -21,32 +21,22 @@
         <van-cell title="付款时间" :value="order.payTime"></van-cell>
         <van-cell title="备注" :value="order.mark"></van-cell>
       </van-cell-group>
-      <!-- <div class="mt">
+      <div class="mt">
         <van-row gutter="20">
-          <van-col
-            v-if="order.orderStatus===0||order.orderStatus===1"
-            :span="order.orderStatus===0?12:24"
-          >
-            <van-button size="large" @click="cancelOrder" type="default">取消订单</van-button>
+          <van-col :span="order.orderStatus===3?24:12">
+            <van-button size="large" color @click="gotoList">我的订单</van-button>
+          </van-col>
+          <van-col v-if="order.orderStatus===1" span="12">
+            <van-button size="large" @click="cancelOrder" color="red" type="default">取消订单</van-button>
           </van-col>
           <van-col span="12" v-if="order.orderStatus===0">
             <van-button size="large" color="red" @click="show=true">立即付款</van-button>
           </van-col>
         </van-row>
-      </div>-->
-      <div class="mt">
-        <van-col span="24">
-          <van-button size="large" color="red" @click="gotoList">查看我的订单</van-button>
-        </van-col>
       </div>
+      <div class="mt"></div>
     </div>
-    <van-dialog
-      v-model="show"
-      title="确认付款"
-      show-cancel-button
-      @confirm="submit"
-      @cancel="cancelOrder"
-    >
+    <van-dialog v-model="show" title="确认付款" show-cancel-button @confirm="submit" @cancel="cancel">
       <h1 class="text-center">￥{{ order.totalAmount }}</h1>
     </van-dialog>
   </div>
@@ -110,6 +100,9 @@ export default {
           });
         }
       });
+    },
+    cancel() {
+      this.show = false;
     },
     cancelOrder() {
       request({

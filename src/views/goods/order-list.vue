@@ -77,9 +77,6 @@ export default {
     };
   },
   methods: {
-    getOrderById(id) {
-      this.$router.push({ path: "/order-detail", query: { id: id } });
-    },
     getOrders() {
       let cuserId = localStorage.getItem("id");
       if (cuserId !== null) {

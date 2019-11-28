@@ -13,7 +13,7 @@
         span="12"
         align="right"
         class="text-color"
-      >{{ item.orderStatus===0?'待支付':item.orderStatus===1?'支付成功':item.orderStatuss===3?'已取消':'' }}</van-col>
+      >{{ item.orderStatus===0?'待支付':item.orderStatus===1?'支付成功':item.orderStatus===3?'已取消':'' }}</van-col>
       <van-col span="24">
         <van-card
           v-for="(a,i) in item.orderProducts"
@@ -70,6 +70,11 @@ export default {
     return {
       centered: true
     };
+  },
+  methods: {
+    getOrderById(id) {
+      this.$router.push({ path: "/order-detail", query: { id: id } });
+    }
   },
   components: {
     [Card.name]: Card,
