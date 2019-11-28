@@ -44,6 +44,7 @@ export default {
         name: "",
         phone: "",
         address: "",
+        id: parseInt(localStorage.getItem("id"))
       },
       api: {
         getCustomerInfo: {
@@ -59,11 +60,11 @@ export default {
   },
   methods: {
     getCustomerInfo() {
-      let isLogin = localStorage.getItem('isLogin')
-      if(isLogin==='1'){
+      let isLogin = localStorage.getItem("isLogin");
+      if (isLogin === "1") {
         this.customerInfo.phone = localStorage.getItem("phone");
         let id = localStorage.getItem("id");
-        if (id!==null) {
+        if (id !== null) {
           request({
             ...this.api.getCustomerInfo,
             urlReplacements: [{ substr: "{id}", replacement: id }]
@@ -74,9 +75,9 @@ export default {
             }
           });
         }
-      }else{
+      } else {
         // 查看我的
-        localStorage.setItem('mineStatus',1)
+        localStorage.setItem("mineStatus", 1);
         loginForComm(
           window.location.protocol +
             "//" +

@@ -31,7 +31,12 @@
             >库存状态：剩余{{ sku.stock_num }}份</van-button>
           </van-col>
           <van-col :span="sku.stock_num===0?24:12">
-            <van-button size="large" @click="purchase" color="rgba(255, 66, 0, 1)" :disabled="sku.stock_num===0">{{ sku.stock_num===0?'已售罄':'立即预定' }}</van-button>
+            <van-button
+              size="large"
+              @click="purchase"
+              color="rgba(255, 66, 0, 1)"
+              :disabled="sku.stock_num===0"
+            >{{ sku.stock_num===0?'已售罄':'立即预定' }}</van-button>
           </van-col>
         </van-row>
       </van-tabbar-item>
@@ -48,7 +53,7 @@
       :buy-text="'立即预定'"
       disable-stepper-input
       @buy-clicked="onBuyClicked"
-      safe-area-inset-bottom
+      safe-area-inset-bottom="true"
     />
   </div>
 </template>
@@ -134,9 +139,9 @@ export default {
     },
     onBuyClicked(value) {
       this.$router.push({
-          name: "ProductSubmit",
-          params: { sku: this.sku, goods: value }
-        });
+        name: "ProductSubmit",
+        params: { sku: this.sku, goods: value }
+      });
     },
     fun() {
       request({
