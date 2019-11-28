@@ -5,11 +5,11 @@
       <van-image :src="images.logo" width="40%"></van-image>
       <van-col class="font-size-12 bg-blue" @click="prePurchase">
         <img :src="images.pre_icon" alt width="12px;" />
-        <span class="nav">订制稻田</span>
+        <span class="nav">订制稻田 >></span>
       </van-col>
       <van-col class="font-size-12 bg-blue" @click="spotBuy">
         <img :src="images.fresh_icon" alt width="12px;" />
-        <span class="nav">现货抢购</span>
+        <span class="nav">现货抢购 >></span>
       </van-col>
     </van-row>
     <van-row>
@@ -105,9 +105,9 @@
       <van-col class="margin-bottom-20">
         <img :src="images.img4" alt width="100%" />
       </van-col>
-      <van-row class="text-align-center text-color-yellow pd margin-top-20">
+      <van-col class="text-align-center text-color-yellow pd margin-top-20">
         <div>民生银行联合五常市政府、阿里云推出了“五常大米专属订制稻田”项目。</div>
-      </van-row>
+      </van-col>
     </van-row>
     <!-- 舌尖上的中国 -->
     <van-row>
