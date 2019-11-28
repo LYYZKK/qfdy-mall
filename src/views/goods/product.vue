@@ -88,13 +88,22 @@ export default {
           exist: "false" // 不显示右按钮
         }
       };
-      console.log("setBefore" + jsonParam);
-      setTitleBar(jsonParam);
-      console.log("setAfter" + jsonParam);
+      let timer = setInterval(() => {
+        console.log("into");
+        try {
+          console.log("into try");
+          setTitleBar(jsonParam);
+          clearInterval(timer);
+        } catch (error) {
+          console.log("set title bar failed.");
+        }
+      }, 300);
     }
   },
+  beforeMount() {
+    this.setTitle();
+  },
   mounted() {
-    // this.setTitle();
     this.getProducts();
   },
   components: {
