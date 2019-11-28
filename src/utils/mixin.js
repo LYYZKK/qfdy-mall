@@ -147,15 +147,21 @@ export default {
         cuserId: localStorage.getItem("cuserId") || null,
         phone: localStorage.getItem("phone") || null
       };
-      request({ ...this.api.checkCustomer, params }).then(res => {
-        if (res.success) {
-          console.log(res.data);
-          localStorage.setItem("isVip", res.data.isVip);
-          localStorage.setItem("id", res.data.id); // 商城用户ID
-          localStorage.setItem("userCode", res.data.code);
-        }
-      });
+      const p = new Promise(resolve => {
+        request({ ...this.api.checkCustomer, params }).then(res => {
+          if (res.success) {
+            console.log('checkCustomer success with res =' + JSON.stringify(res.data))
+
+            localStorage.setItem('isVip', res.data.isVip)
+            localStorage.setItem('id', res.data.id) // 商城用户ID
+            localStorage.setItem('userCode', res.data.code)
+
+            resolve()
+          }
+        })
+      })
       this.linkAdd(1);
+      return p
     },
     // 访问次数增加(首页)type:1,(现货购买)type:2,(期货购买)type:3
     linkAdd(type) {
