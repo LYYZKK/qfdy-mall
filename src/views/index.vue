@@ -35,11 +35,11 @@
       </van-col>
       <van-col :span="24" class="font-size-12">
         <img :src="images.poter" alt width="8px" />
-        <span class="margin-top-5">&nbsp;全程溯源:阿里科技助力，每一粒米都有“身份证”</span>
+        <span class="margin-top-5">&nbsp;全程溯源：阿里科技助力，每一粒米都有“身份证”</span>
       </van-col>
       <van-col :span="24" class="font-size-12">
         <img :src="images.poter" alt width="8px" />
-        <span class="margin-top-5">&nbsp;私享管家:仓储锁鲜、个性配送</span>
+        <span class="margin-top-5">&nbsp;私享管家：仓储锁鲜、个性配送</span>
       </van-col>
       <van-col :span="24" class="font-size-12">
         <img :src="images.poter" alt width="8px" />
