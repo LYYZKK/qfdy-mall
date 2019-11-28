@@ -83,7 +83,6 @@ export default {
     },
     // 解密从民生银行跳转的连接参数
     cmbcDescrypt() {
-      // setTitleBar("乔府大院");
       console.log("民生银行param===", this.$route.query.param);
       let params = {
         param: this.$route.query.param
@@ -137,6 +136,7 @@ export default {
         this.checkCustomer();
       } else {
         localStorage.setItem("isLogin", 0);
+        this.linkAdd(1)
       }
     },
     // 验证客户身份
