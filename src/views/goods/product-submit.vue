@@ -240,7 +240,7 @@ export default {
       }).then(res => {
         if (res.success) {
           Toast({
-            message: "恭喜您预定成功!请等待联系付款。",
+            message: "恭喜您预定成功!",
             icon: "like-o"
           });
           this.$router.push({
