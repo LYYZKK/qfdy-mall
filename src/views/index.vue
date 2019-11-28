@@ -30,6 +30,7 @@
         <img :src="images.dream" alt width="50%" />
       </van-col>
       <van-col :span="24" class="font-size-12">
+        <img :src="images.poter" alt width="8px" />
         <span class="margin-top-5">&nbsp;专属定制：民生客户尊享，私家稻田证书，近万分之六中国人的私享</span>
       </van-col>
       <van-col :span="24" class="font-size-12">
@@ -393,7 +394,7 @@ export default {
   padding: 20px 15px;
 }
 .font-size-12 {
-  font-size: 11px;
+  font-size: 10px;
 }
 .nav {
   display: inline-block;
