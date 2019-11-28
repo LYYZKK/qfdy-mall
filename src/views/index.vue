@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-color">
+  <div class="bg-color" ref="bigBox">
     <!-- 顶部 -->
     <van-row type="flex" justify="space-between" align="center" class="top">
       <van-image :src="images.logo" width="40%"></van-image>
       <van-col class="font-size-12 bg-blue" @click="prePurchase">
-        <img :src="images.fresh_icon" alt width="12px;" />
-        <span class="nav">定制稻田</span>
+        <img :src="images.pre_icon" alt width="12px;" />
+        <span class="nav">订制稻田</span>
       </van-col>
       <van-col class="font-size-12 bg-blue" @click="spotBuy">
         <img :src="images.fresh_icon" alt width="12px;" />
@@ -13,18 +13,6 @@
       </van-col>
     </van-row>
     <van-row>
-      <!-- 视频 -->
-      <div class="videoDemo">
-        <video-player
-          class="video-player vjs-custom-skin"
-          ref="videoPlayer"
-          :playsinline="true"
-          :options="playerOptions"
-          :events="events"
-          @fullscreenchange="onPlayerFullScreenchange($event)"
-        ></video-player>
-      </div>
-      <!-- <img :src="images.video" alt width="100%" /> -->
       <img :src="images.text_img" alt width="100%" />
     </van-row>
     <!-- main -->
@@ -42,92 +30,70 @@
         <img :src="images.dream" alt width="50%" />
       </van-col>
       <van-col :span="24" class="font-size-12">
-        <img :src="images.poter" alt width="10px" />
-        <span class="margin-top-5">&nbsp;私享管家</span>
+        <span class="margin-top-5">&nbsp;专属定制：民生客户尊享，私家稻田证书，近万分之六中国人的私享</span>
       </van-col>
       <van-col :span="24" class="font-size-12">
-        <img :src="images.poter" alt width="10px" />
-        <span class="margin-top-5">&nbsp;仓储保鲜</span>
+        <img :src="images.poter" alt width="8px" />
+        <span class="margin-top-5">&nbsp;全程溯源:阿里科技助力，每一粒米都有“身份证”</span>
       </van-col>
       <van-col :span="24" class="font-size-12">
-        <img :src="images.poter" alt width="10px" />
-        <span class="margin-top-5">&nbsp;每月一次鲜米免费配送服务</span>
+        <img :src="images.poter" alt width="8px" />
+        <span class="margin-top-5">&nbsp;私享管家:仓储锁鲜、个性配送</span>
       </van-col>
       <van-col :span="24" class="font-size-12">
-        <img :src="images.poter" alt width="10px" />
+        <img :src="images.poter" alt width="8px" />
         <span class="margin-top-5">&nbsp;七天无理由退订</span>
       </van-col>
+      <van-col :span="24" class="margin-top-20">
+        <img :src="images.text1" alt width="100%" />
+      </van-col>
     </van-row>
-    <van-row class="buy_btn" @click="prePurchase">
-      <van-col class="left">点击预约 >></van-col>
-      <van-col class="right">
-        <img :src="images.buy" alt />
+    <van-row @click="prePurchase" class="text-align-center margin-top-20">
+      <van-col span="24">
+        <img :src="images.btn" alt width="40%" />
+        <div class="text-color-ccc font-size-12 font-size-12">点击跳转至详情页了解更多</div>
       </van-col>
     </van-row>
     <!-- 尝鲜价限购 -->
-    <van-row class="pd">
-      <van-col class="pd1">
-        <img :src="images.title1" alt width="100%" />
-      </van-col>
-    </van-row>
-    <van-col></van-col>
-    <van-row gutter="10" class="pd">
-      <van-col span="12">
-        <img :src="images.img1_1" alt width="100%" />
-      </van-col>
-      <van-col span="12">
-        <img :src="images.img1_2" alt width="100%" />
-      </van-col>
-    </van-row>
-    <van-row class="text-color-yellow pd">
-      <van-col class="margin-top-20">
-        <img :src="images.text1" alt width="50%" />
-      </van-col>
-      <van-col :span="24" class="font-size-12">
-        <img :src="images.poter" alt width="10px" />
-        <span class="margin-top-5">&nbsp;为让您第一时间吃到五常核心产区鲜米，现开通现货购买渠道</span>
-      </van-col>
-    </van-row>
-    <van-row class="text-align-center margin-bottom-20 margin-top-20">
-      <img :src="images.fresh" alt width="80%" />
-    </van-row>
-    <van-row class="buy_btn" @click="spotBuy">
-      <van-col class="left">点击尝鲜 >></van-col>
-      <van-col class="right">
-        <img :src="images.buy" alt />
-      </van-col>
-    </van-row>
-
     <!-- 现货抢购 -->
     <van-row class="pd">
       <van-col class="pd1">
         <img :src="images.title2" alt width="100%" />
       </van-col>
-      <van-col>
-        <img :src="images.img2" alt width="100%" />
+    </van-row>
+    <van-row class="pd" gutter="10">
+      <van-col span="12" class="text-align-center" @click="spotBuy">
+        <img :src="images.img2_1" alt width="100%" />
+        <img :src="images.btn1" alt width="80%" class="margin-top-20" />
+        <div class="text-color-ccc font-size-12">点击跳转至详情了解更多</div>
+      </van-col>
+      <van-col span="12" class="text-align-center" @click="spotBuy">
+        <img :src="images.img2_2" alt width="100%" />
+        <img :src="images.btn2" alt width="80%" class="margin-top-20" />
+        <div class="text-color-ccc font-size-12">点击跳转至详情了解更多</div>
       </van-col>
     </van-row>
-    <van-row class="text-color-yellow pd">
-      <van-col class="margin-top-bottom">
+    <van-row>
+      <van-col class="margin-top-bottom text-align-center">
         <img :src="images.text2" alt width="50%" />
       </van-col>
-      <van-col :span="24" class="font-size-12">
-        <img :src="images.poter" width="10px" />
+    </van-row>
+    <van-row class="pd2 text-color-yellow">
+      <van-col :span="10" class="font-size-12">
+        <img :src="images.poter" width="8px" />
+        <span>&nbsp;先进的留胚加工工艺</span>
+      </van-col>
+      <van-col :span="13" class="font-size-12">
+        <img :src="images.poter" width="8px" />
         <span>&nbsp;采用世界领先恒温仓储技术</span>
       </van-col>
-      <van-col :span="24" class="font-size-12">
-        <img :src="images.poter" alt width="10px" />
-        <span class="margin-top-5">&nbsp;保持水分&nbsp;留住营养</span>
+      <van-col :span="10" class="font-size-12">
+        <img :src="images.poter" alt width="8px" />
+        <span class="margin-top-5">&nbsp;现加工&nbsp;现邮寄</span>
       </van-col>
-      <van-col :span="24" class="font-size-12">
-        <img :src="images.poter" alt width="10px" />
-        <span class="margin-top-5">&nbsp;一年一季稻</span>
-      </van-col>
-    </van-row>
-    <van-row class="buy_btn" @click="spotBuy">
-      <van-col class="left">现货购买 >></van-col>
-      <van-col class="right">
-        <img :src="images.buy" alt />
+      <van-col :span="13" class="font-size-12">
+        <img :src="images.poter" alt width="8px" />
+        <span class="margin-top-5">&nbsp;9.9元限量尝鲜10000份五常大米</span>
       </van-col>
     </van-row>
     <!-- 官方出品 -->
@@ -138,10 +104,15 @@
       <van-col class="margin-bottom-20">
         <img :src="images.img4" alt width="100%" />
       </van-col>
-      <van-row class="text-align-center text-color-yellow pd2 margin-bottom-20">
-        <img :src="images.text4" width="40px" class="margin-bottom-10" />
-        <div>民生银行联合五常市政府、阿里云推出了“五常大米专属定制稻田”项目。</div>
+      <van-row class="text-align-center text-color-yellow pd margin-top-20">
+        <div>民生银行联合五常市政府、阿里云推出了“五常大米专属订制稻田”项目。</div>
       </van-row>
+    </van-row>
+    <!-- 舌尖上的中国 -->
+    <van-row>
+      <van-col class="pd1 text-align-center">
+        <img :src="images.title3" alt width="90%" />
+      </van-col>
       <van-row gutter="10" class="pd">
         <van-col span="12">
           <img :src="images.img4_1" alt width="100%" />
@@ -158,10 +129,9 @@
           <img :src="images.img4_4" alt width="100%" />
         </van-col>
       </van-row>
-    </van-row>
-    <van-row class="text-align-center text-color-yellow pd2 margin-top-20">
-      <img :src="images.text5" alt width="40px;" class="margin-bottom-10" />
-      <div>“第二届国际大米节金奖”、“中国国家地理标志产品”、“中国十大好吃米饭”、被《舌尖上的中国》评为“中国最好的稻米”。</div>
+      <van-row
+        class="pd text-align-center text-color-yellow margin-top-20"
+      >“第二届国际大米节金奖”、“中国国家地理标志产品”、“中国十大好吃米饭”</van-row>
     </van-row>
     <!-- 尊贵礼遇 -->
     <van-row>
@@ -172,14 +142,14 @@
         <img :src="images.img5" alt width="100%" />
       </van-col>
     </van-row>
-    <van-row class="buy_btn" @click="spotBuy">
-      <van-col class="left">现货购买 >></van-col>
-      <van-col class="right">
-        <img :src="images.buy" alt />
+    <van-row @click="spotBuy">
+      <van-col span="24" class="text-align-center margin-top-bottom">
+        <img :src="images.btn3" alt width="40%" />
+        <div class="text-color-ccc font-size-12">点击跳转至详情页了解更多</div>
       </van-col>
     </van-row>
-    <van-row class="text-align-center margin-bottom-20">
-      <img :src="images.icon" alt style="width:30px" />
+    <van-row class="text-align-center margin-bottom-20" @click="goTop">
+      <img :src="images.icon" alt width="40px" />
     </van-row>
   </div>
 </template>
@@ -202,13 +172,14 @@ import title from "@/assets/images/new/title.png";
 import dream from "@/assets/images/new/dream.png";
 import title1 from "@/assets/images/new/title-1.png";
 import title2 from "@/assets/images/new/title-2.png";
-import title3 from "@/assets/images/new/title-3.png";
+import title3 from "@/assets/images/new/title3.png";
 import title4 from "@/assets/images/new/title-4.png";
 import title5 from "@/assets/images/new/title-5.png";
 import img1 from "@/assets/images/new/img-1.png";
 import img1_1 from "@/assets/images/new/img-1-1.png";
 import img1_2 from "@/assets/images/new/img-1-2.png";
-import img2 from "@/assets/images/new/img-2.png";
+import img2_1 from "@/assets/images/new/img-2-1.png";
+import img2_2 from "@/assets/images/new/img-2-2.png";
 import img3_1 from "@/assets/images/new/img-3-1.png";
 import img3_2 from "@/assets/images/new/img-3-2.png";
 import img3_3 from "@/assets/images/new/img-3-3.png";
@@ -225,6 +196,11 @@ import poter from "@/assets/images/new/poter.png";
 import buy from "@/assets/images/new/buy.png";
 import fresh from "@/assets/images/new/fresh.png";
 import fresh_icon from "@/assets/images/new/fresh-icon.png";
+import pre_icon from "@/assets/images/new/pre-icon.png";
+import btn from "@/assets/images/new/button.png";
+import btn1 from "@/assets/images/new/button1.png";
+import btn2 from "@/assets/images/new/button2.png";
+import btn3 from "@/assets/images/new/button3.png";
 export default {
   name: "Index",
   mixins: [mixin],
@@ -254,7 +230,8 @@ export default {
         img1,
         img1_1,
         img1_2,
-        img2,
+        img2_1,
+        img2_2,
         img3_1,
         img3_2,
         img3_3,
@@ -269,7 +246,12 @@ export default {
         poter,
         buy,
         fresh,
-        fresh_icon
+        fresh_icon,
+        pre_icon,
+        btn,
+        btn1,
+        btn2,
+        btn3
       },
       customerInfo: {
         cid: 1,
@@ -328,6 +310,10 @@ export default {
       this.linkAdd(2);
       this.$router.push({ path: "/home" });
     },
+    goTop() {
+      this.$refs.bigBox.scrollTop = 0;
+      console.log(this.$refs.bigBox.scrollTop);
+    },
     // 现货购买
     spotBuy() {
       this.linkAdd(3);
@@ -354,9 +340,9 @@ export default {
         }
       };
       let timer = setInterval(() => {
-        console.log('into')
+        console.log("into");
         try {
-          console.log('into try')
+          console.log("into try");
           setTitleBar(jsonParam);
           clearInterval(timer);
         } catch (error) {
@@ -369,8 +355,8 @@ export default {
     }
   },
   beforeMount() {
-    console.log('into setTitle')
-    // this.setTitle();
+    console.log("into setTitle");
+    this.setTitle();
   },
   mounted() {
     this.initPage();
@@ -389,13 +375,13 @@ export default {
 
 <style scoped lang="less">
 .bg-color {
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
   overflow: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   background: url(../assets/images/new/bg.png) no-repeat;
-  .vjs-custom-skin > .video-js .vjs-big-play-button {
-    font-size: 2em !important;
-  }
+  background-size: 100% auto;
 }
 .bg-long {
   margin: 20px 0;
@@ -403,10 +389,11 @@ export default {
   background-size: 100% auto;
 }
 .top {
+  background-color: #fff;
   padding: 20px 15px;
 }
 .font-size-12 {
-  font-size: 12px;
+  font-size: 11px;
 }
 .nav {
   display: inline-block;
@@ -520,5 +507,8 @@ export default {
 }
 .margin-bottom-10 {
   margin-bottom: 10px;
+}
+.text-color-ccc {
+  color: #ccc;
 }
 </style>
