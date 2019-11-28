@@ -142,7 +142,6 @@ export default {
   mounted() {
     this.getProductById();
   },
-
   components: {
     [Sku.name]: Sku,
     [Image.name]: Image,

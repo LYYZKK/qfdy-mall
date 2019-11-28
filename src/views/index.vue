@@ -304,7 +304,7 @@ export default {
     // 预约购买
     prePurchase() {
       let param = this.$route.query.param;
-      if (param !== null) {
+      if (param) {
         localStorage.setItem("param", param);
       }
       console.log(param);

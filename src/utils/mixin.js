@@ -109,27 +109,29 @@ export default {
             localStorage.setItem("phone", info[0]);
             localStorage.setItem("cuserId", info[1]); // 银行客户id
           }
-          this.checkCustomer();
-          let isLogin = localStorage.getItem('isLogin')
-          // 登录成功后自动跳转到linkMall
-          if (isLogin === "1" && linkStatus === "1") {
-            console.log('登录成功即将跳转到linkMall')
-            localStorage.removeItem("linkStatus");
-            this.goToLinkMall();
-          }
-          // 登录成功后自动跳转到商品详情页
-          if (isLogin === "1" && purchaseStatus !== null) {
-            console.log('登录成功即将跳转到商品详情页')
-            let purchaseId = parseInt(localStorage.getItem("purchaseStatus"));
-            localStorage.removeItem("purchaseStatus");
-            gotoShopUrl(this.webBaseUrl +'/product-detail/'+ purchaseId);
-          }
-          // 登录后自动跳转到当前客户信息页面
-          if (isLogin === "1" && mineStatus === '1') {
-            console.log('登录成功即将跳转到客户信息详情页')
-            localStorage.removeItem("mineStatus");
-            gotoShopUrl(this.webBaseUrl+'/mine');
-          }
+          this.checkCustomer().then(()=>{
+            let isLogin = localStorage.getItem('isLogin')
+            // 登录成功后自动跳转到linkMall
+            if (isLogin === "1" && linkStatus === "1") {
+              console.log('登录成功即将跳转到linkMall')
+              localStorage.removeItem("linkStatus");
+              this.goToLinkMall();
+            }
+            // 登录成功后自动跳转到商品详情页
+            if (isLogin === "1" && purchaseStatus !== null) {
+              console.log('登录成功即将跳转到商品详情页')
+              let purchaseId = parseInt(localStorage.getItem("purchaseStatus"));
+              localStorage.removeItem("purchaseStatus");
+              gotoShopUrl(this.webBaseUrl +'/product-detail/'+ purchaseId);
+            }
+            // 登录后自动跳转到当前客户信息页面
+            if (isLogin === "1" && mineStatus === '1') {
+              console.log('登录成功即将跳转到客户信息详情页')
+              localStorage.removeItem("mineStatus");
+              gotoShopUrl(this.webBaseUrl+'/mine');
+            }
+          });
+
         });
       } else if (this.$route.query.bankUserId && this.$route.query.cid) {
         localStorage.setItem("isLogin", 1);
