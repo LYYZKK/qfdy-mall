@@ -234,43 +234,27 @@ export default {
     },
     // 确定支付
     submit() {
-      console.log("提交支付");
-      this.$router.push({
-        name: "OrderDetail",
-        query: { id: this.orderId }
-      });
-      // request({
-      //   ...this.api.payOrder,
-      //   urlReplacements: [{ substr: "{id}", replacement: this.orderId }]
-      // }).then(res => {
-      //   if (res.success) {
-      //     Toast({
-      //       message: "恭喜您预定成功!请等待联系付款。",
-      //       icon: "like-o"
-      //     });
-      //     this.$router.push({
-      //       name: "OrderDetail",
-      //       query: { id: this.orderId }
-      //     });
-      //   }
-      // });
-    },
-    // 取消支付
-    cancel() {
       request({
-        ...this.api.cancelOrder,
+        ...this.api.payOrder,
         urlReplacements: [{ substr: "{id}", replacement: this.orderId }]
       }).then(res => {
         if (res.success) {
-          // Toast({
-          //   message: "恭喜您预定成功!请等待联系付款。",
-          //   icon: "like-o"
-          // });
+          Toast({
+            message: "恭喜您预定成功!请等待联系付款。",
+            icon: "like-o"
+          });
           this.$router.push({
             name: "OrderDetail",
             query: { id: this.orderId }
           });
         }
+      });
+    },
+    // 取消支付
+    cancel() {
+      this.$router.push({
+        name: "OrderDetail",
+        query: { id: this.orderId }
       });
     },
     onClickButton() {
