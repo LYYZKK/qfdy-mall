@@ -34,8 +34,10 @@ import {
   Field,
   Notify
 } from "vant";
+import mixin from "@/utils/mixin.js";
 export default {
   name: "Mine",
+  mixins: [mixin],
   data() {
     return {
       title: "我的",
@@ -108,6 +110,9 @@ export default {
         });
       }
     }
+  },
+  beforeMount() {
+    this.setTitleBarName("个人中心");
   },
   mounted() {
     this.getCustomerInfo();

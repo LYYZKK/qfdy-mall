@@ -194,7 +194,11 @@ export default {
     },
     // 提交生成订单
     onSubmit() {
-      if (this.customerInfo.phone !== "") {
+      if (
+        this.customerInfo.phone !== "" &&
+        this.customerInfo.name !== "" &&
+        this.customerInfo.address !== ""
+      ) {
         let params = {
           customerId: parseInt(localStorage.getItem("id")),
           totalAmount: this.totalPrice / 100,
@@ -210,15 +214,6 @@ export default {
         request({ ...this.api.addOrder, params }).then(res => {
           if (res.success) {
             this.orderId = res.data.id;
-            // Toast({
-            //   message: "恭喜您预定成功!请等待联系付款。",
-            //   icon: "like-o"
-            // });
-            // 生成订单跳转到订单详情页
-            // this.$router.push({
-            //   name: "OrderDetail",
-            //   query: { id: this.orderId }
-            // });
             // 打开支付
             this.show = true;
           } else {
@@ -277,6 +272,9 @@ export default {
     totalPrice() {
       return this.order.price * this.order.count * 100;
     }
+  },
+  beforeMount() {
+    this.setTitleBarName("确认订单");
   },
   mounted() {
     this.getCustomerInfo();

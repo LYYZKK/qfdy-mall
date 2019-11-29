@@ -1,5 +1,5 @@
 <template>
-  <div class="bar">
+  <div class="bar" v-if="show">
     <van-nav-bar :title="title" :left-text="text" :left-arrow="left" @click-left="onClickLeft" />
   </div>
 </template>
@@ -34,6 +34,12 @@ export default {
     }
   },
   props: {
+    show: {
+      type: Boolean,
+      default() {
+        return false;
+      }
+    },
     title: {
       type: String,
       default: ""

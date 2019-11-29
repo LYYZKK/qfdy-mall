@@ -179,6 +179,9 @@ export default {
       }
     }
   },
+  beforeMount() {
+    this.setTitleBarName("商品详情");
+  },
   mounted() {
     this.initPage();
     this.getProductById();

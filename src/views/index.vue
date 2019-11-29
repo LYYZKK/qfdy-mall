@@ -327,37 +327,13 @@ export default {
         this.getSign();
       }
     },
-    setTitle() {
-      const jsonParam = {
-        title: "乔府大院",
-        leftButton: {
-          // 左按钮
-          exist: "true", // true:显示左按钮,false:也显示左按钮,客户端不调用左按钮的返回事件
-          name: "返回", //  按钮的说明
-          func: "goBack()" // 点击左按钮时,客户端回调服务器的方法
-        },
-        rightButton: {
-          exist: "false" // 不显示右按钮
-        }
-      };
-      let timer = setInterval(() => {
-        console.log("into");
-        try {
-          console.log("into try");
-          setTitleBar(jsonParam);
-          clearInterval(timer);
-        } catch (error) {
-          console.log("set title bar failed.");
-        }
-      }, 300);
-    },
+
     initPage() {
       this.cmbcDescrypt();
     }
   },
   beforeMount() {
-    console.log("into setTitle");
-    this.setTitle();
+    this.setTitleBarName("乔府大院");
   },
   mounted() {
     this.initPage();
