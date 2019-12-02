@@ -132,7 +132,7 @@
       </van-row>
       <van-row
         class="pd text-align-center text-color-yellow margin-top-20"
-      >“第二届国际大米节金奖”、“中国国家地理标志产品”、“中国十大好吃米饭”</van-row>
+      >“农业产业化国家重点龙头企业”、“中国国家地理标志产品”、“中国十大好吃米饭”</van-row>
     </van-row>
     <!-- 尊贵礼遇 -->
     <van-row>

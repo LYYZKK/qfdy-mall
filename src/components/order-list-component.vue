@@ -1,13 +1,13 @@
 <template>
   <div>
     <van-row
-      class="border"
+      class="border font-size-12"
       v-for="(item,index) in orderList"
       :key="index"
       @click="getOrderById(item.id)"
     >
-      <van-col span="12">
-        <van-icon name="shop-collect" />&nbsp;乔府商城
+      <van-col span="12" class="">
+        <!-- <van-icon name="shop-collect" />&nbsp;乔府商城 -->
       </van-col>
       <van-col
         span="12"
@@ -24,12 +24,13 @@
           :num="a.productNum"
           :tag="a.product.payResult"
           :price="a.product.price"
-          :desc="a.product.description"
-        ></van-card>
+        >
+          <div slot="desc">{{ a.product.description }}</div>
+        </van-card>
       </van-col>
-      <van-col span="24" align="right">
-        <span class="font-size-14">总金额:</span>
-        <span>￥{{ item.totalAmount }}</span>
+      <van-col span="24" align="right" >
+        <span class="font-size-14 ">总金额:</span>
+        <span class="van-card__price">￥{{ item.totalAmount }}</span>
       </van-col>
     </van-row>
   </div>
@@ -93,5 +94,8 @@ export default {
 };
 </script>
 
-<style>
+<style sloped>
+.font-size-12{
+  font-size:12px
+}
 </style>

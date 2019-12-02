@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavBar :title="title" />
-    <div>
+    <!-- <div>
       <van-cell-group>
         <van-field v-model="customerInfo.name" label="姓名" left-icon="contact" :disabled="disabled" />
         <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o" disabled />
@@ -15,7 +15,13 @@
     </div>
     <div class="mt">
       <van-button @click="save" size="large" color="red" :text="disabled?'编辑':'保存'"></van-button>
-    </div>
+    </div> -->
+    <van-address-edit
+      :address-info="addressInfo"
+      :area-list="areaList"
+      :area-columns-placeholder="['请选择', '请选择', '请选择']"
+      @save="save"
+    />
   </div>
 </template>
 
@@ -32,20 +38,29 @@ import {
   ContactList,
   ContactEdit,
   Field,
-  Notify
+  Notify,
+  AddressEdit
 } from "vant";
+import areaList from '@/utils/area.js'
 import mixin from "@/utils/mixin.js";
 export default {
   name: "Mine",
   mixins: [mixin],
   data() {
     return {
+      areaList,
       title: "我的",
       disabled: true,
       customerInfo: {
         name: "",
-        phone: "",
-        address: "",
+        tel: "",
+        address: {
+          province:'',
+          city:'',
+          country:'',
+          addressDetail:'',
+          areaCode:'',
+        },
         id: parseInt(localStorage.getItem("id"))
       },
       api: {
@@ -64,7 +79,7 @@ export default {
     getCustomerInfo() {
       let isLogin = localStorage.getItem("isLogin");
       if (isLogin === "1") {
-        this.customerInfo.phone = localStorage.getItem("phone");
+        this.customerInfo.tel = localStorage.getItem("phone");
         let id = localStorage.getItem("id");
         if (id !== null) {
           request({
@@ -72,8 +87,14 @@ export default {
             urlReplacements: [{ substr: "{id}", replacement: id }]
           }).then(res => {
             if (res.success) {
+              let address = JSON.parse(res.data.address)
+              console.log(address)
               this.customerInfo.name = res.data.name;
-              this.customerInfo.address = res.data.address;
+              this.customerInfo.address.province = address.province;
+              this.customerInfo.address.city = address.city;
+              this.customerInfo.address.county = address.county;
+              this.customerInfo.address.addressDetail = address.addressDetail;
+              this.customerInfo.address.areaCode = address.areaCode;
             }
           });
         }
@@ -92,11 +113,23 @@ export default {
         );
       }
     },
-    save() {
-      if (this.disabled) {
-        this.disabled = !this.disabled;
-      } else {
-        let params = this.customerInfo;
+    save(val) {
+      // if (this.disabled) {
+      //   this.disabled = !this.disabled;
+      // } else {
+        console.log(val)
+        let params = {
+          id:this.customerInfo.id,
+          name:this.customerInfo.name,
+          phone:this.customerInfo.tel,
+          address:JSON.stringify({
+            province:val.province,
+            city:val.city,
+            county:val.county,
+            addressDetail:val.addressDetail,
+            areaCode:val.areaCode
+          })
+        }
         request({ ...this.api.modifyCustomerInfo, params }).then(res => {
           if (res.success) {
             this.disabled = !this.disabled;
@@ -108,6 +141,20 @@ export default {
             Notify(res.message);
           }
         });
+      }
+    // }
+  },
+  computed:{
+    addressInfo(){
+      console.log(this.customerInfo.address)
+      return {
+        name:this.customerInfo.name,
+        tel:this.customerInfo.tel,
+        province:this.customerInfo.address.province,
+        city:this.customerInfo.address.city,
+        county:this.customerInfo.address.county,
+        addressDetail:this.customerInfo.address.addressDetail,
+        areaCode:this.customerInfo.address.areaCode,
       }
     }
   },
@@ -128,7 +175,8 @@ export default {
     [Field.name]: Field,
     [CellGroup.name]: CellGroup,
     [Cell.name]: Cell,
-    [Notify.name]: Notify
+    [Notify.name]: Notify,
+    [AddressEdit.name]: AddressEdit,
   }
 };
 </script>

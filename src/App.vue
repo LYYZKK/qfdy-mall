@@ -81,6 +81,9 @@ img {
 .text-color-999 {
   color: #999;
 }
+.text-color-ccc{
+  color:#ccc;
+}
 .text-color-white {
   color: #fff;
 }

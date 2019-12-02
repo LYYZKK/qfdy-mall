@@ -11,7 +11,15 @@
     <van-row class="pd-left-right">
       <van-col span="24" class="font-style margin-bottom-20">￥{{ sku.price }}</van-col>
       <van-col span="24">{{ goods.description }}</van-col>
+
     </van-row>
+    <van-notice-bar
+      color="#ccc"
+      background="#fff"
+      left-icon="info-o"
+    >
+      <van-col>温馨提示：七天无理由退订，客户已收现货需在认购金额中扣除{{ goods.id===1?'（2kg/199）':goods.id===2?'（3kg/299）':'' }}费用</van-col>
+    </van-notice-bar>
     <van-divider :style="{ color: 'rgba(0,0,0,1)',padding: '0px 20px',margin:'5px 0'}">产品详情</van-divider>
     <div v-for="(item,index) in productImages" :key="index" class="img-text">
       <van-image :src="item">
@@ -41,7 +49,6 @@
         </van-row>
       </van-tabbar-item>
     </van-tabbar>
-
     <van-sku
       :close-on-click-overlay="true"
       v-model="show"
@@ -53,8 +60,21 @@
       :buy-text="'立即预定'"
       disable-stepper-input
       @buy-clicked="onBuyClicked"
+      @stepper-change="totalNumber"
       safe-area-inset-bottom="true"
-    />
+    >
+      <div slot="sku-header-origin-price">{{ goods.title }}</div>
+      <div slot="sku-messages" class="van-sku__goods-price" style="padding:10px;" >
+        总价：{{ sku.price*PayNumber }}
+      </div>
+    </van-sku>
+    <van-dialog
+      v-model="dialogShow"
+      title="您确认预订吗？"
+      :message="message"
+      @confirm="dialogClose"
+    >
+    </van-dialog>
   </div>
 </template>
 
@@ -70,7 +90,9 @@ import {
   Tabbar,
   TabbarItem,
   Loading,
-  Toast
+  Toast,
+  NoticeBar,
+  Dialog
 } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
@@ -81,7 +103,11 @@ export default {
   mixins: [mixin],
   data() {
     return {
+      // 点击提交按钮时候自动获取的参数
+      getValue:{},
       show: false,
+      dialogShow:false,
+      PayNumber:1,
       title: "商品详情",
       productId: "",
       productImages: [],
@@ -137,10 +163,18 @@ export default {
         );
       }
     },
+    totalNumber(val){
+      this.PayNumber = val
+    },
     onBuyClicked(value) {
+      this.getValue = value
+      this.dialogShow = true
+
+    },
+    dialogClose(){
       this.$router.push({
         name: "ProductSubmit",
-        params: { sku: this.sku, goods: value }
+        params: { sku: this.sku, goods: this.getValue }
       });
     },
     fun() {
@@ -182,6 +216,12 @@ export default {
   beforeMount() {
     this.setTitleBarName("商品详情");
   },
+  computed:{
+    message(){
+      let msg = '七天无理由退订，客户已收现货需在认购金额中扣除'
+      return this.goods.id===1?msg+'（2kg/199）费用':this.goods.id===2?msg+'（3kg/299）费用':''
+    }
+  },
   mounted() {
     this.initPage();
     this.getProductById();
@@ -199,6 +239,8 @@ export default {
     [Tabbar.name]: Tabbar,
     [Loading.name]: Loading,
     [TabbarItem.name]: TabbarItem,
+    [NoticeBar.name]: NoticeBar,
+    [Dialog.Component.name]: Dialog.Component,
     NavBar
   }
 };
@@ -236,6 +278,10 @@ export default {
   &::after {
     border: 1px dashed rgb(207, 204, 204);
   }
+}
+.text-color-ccc{
+  color: #ccc;
+  font-size: 11px;
 }
 </style>>
 

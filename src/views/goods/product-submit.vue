@@ -18,7 +18,7 @@
                   <span class="text-color-999">{{ customerInfo.phone }}</span>
                 </van-col>
               </van-row>
-              <div>{{ customerInfo.address }}</div>
+              <div class="text-color-999 font-size-10">{{ customerInfo.address.province }}{{ customerInfo.address.city }}{{ customerInfo.address.county }}{{ customerInfo.address.addressDetail }}</div>
               <div class="text-color-yellow">完善的信息方便后期接收快递</div>
             </div>
           </van-col>
@@ -62,26 +62,32 @@
       </van-row>
     </div>
     <van-submit-bar :price="totalPrice" button-text="提交" @submit="onSubmit" safe-area-inset-bottom>
-      <span slot="default" class="ml">
-        共计
-        <span>{{ order.count }}</span>件
-      </span>
+      <div slot="default" class="ml text-color-ccc">
+        共计&nbsp;<span style="color:#000;">{{ order.count }}</span>&nbsp;件</div>
     </van-submit-bar>
     <van-dialog v-model="show" title="确认付款" show-cancel-button @confirm="submit" @cancel="cancel">
       <h1 class="text-center">￥{{ totalPrice/100 }}</h1>
     </van-dialog>
     <!-- 修改当前订单的客户信息 -->
-    <van-action-sheet v-model="userShow" safe-area-inset-bottom @closed="refresh">
+    <van-action-sheet v-model="userShow" safe-area-inset-bottom>
+      <van-address-edit
+        v-if="userShow"
+        :address-info="addressInfo"
+        :area-list="areaList"
+        :area-columns-placeholder="['请选择', '请选择', '请选择']"
+        @save="save"
+      />
+    </van-action-sheet>
+
+    <!-- <van-action-sheet v-model="userShow" >
       <van-cell-group>
-        <van-field v-model="customerInfo.name" label="姓名" left-icon="contact" />
+        <van-field v-model="customerInfo.name" label="收货人姓名" left-icon="contact" />
         <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o" disabled>
-          <!-- <van-button slot="button" size="small" type="primary">发送验证码</van-button> -->
         </van-field>
-        <!-- <van-field v-model="customerInfo.code" label="验证码" left-icon="phone-o" /> -->
-        <van-field v-model="customerInfo.address" label="地址" left-icon="location-o" />
+        <van-field v-model="customerInfo.address" label="收货人地址" left-icon="location-o" />
       </van-cell-group>
       <van-button @click="save" size="large" color="red" text="保存"></van-button>
-    </van-action-sheet>
+    </van-action-sheet> -->
   </div>
 </template>
 
@@ -103,15 +109,19 @@ import {
   Field,
   Cell,
   CellGroup,
-  Toast
+  Toast,
+  AddressEdit
 } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
 import mixin from "@/utils/mixin.js";
+import areaList from '@/utils/area.js'
 export default {
   mixins: [mixin],
   data() {
     return {
+      areaList,
+
       userShow: false,
       show: false,
       checked: true,
@@ -131,8 +141,14 @@ export default {
       orderId: "",
       customerInfo: {
         name: "",
-        phone: "",
-        address: ""
+        phone: localStorage.getItem('phone'),
+        address: {
+          province:'',
+          city:'',
+          county:'',
+          addressDetail:'',
+          areaCode:'',
+        }
       },
       api: {
         getGoodById: {
@@ -170,8 +186,13 @@ export default {
           urlReplacements: [{ substr: "{id}", replacement: id }]
         }).then(res => {
           if (res.success) {
+            let address = JSON.parse(res.data.address)
             this.customerInfo.name = res.data.name;
-            this.customerInfo.address = res.data.address;
+            this.customerInfo.address.province = address.province;
+            this.customerInfo.address.city = address.city;
+            this.customerInfo.address.contry = address.contry;
+            this.customerInfo.address.addressDetail = address.addressDetail;
+            this.customerInfo.address.areaCode = address.areaCode;
           }
         });
       }
@@ -197,7 +218,10 @@ export default {
       if (
         this.customerInfo.phone !== "" &&
         this.customerInfo.name !== "" &&
-        this.customerInfo.address !== ""
+        this.customerInfo.address.province !== ""&&
+        this.customerInfo.address.city !== ""&&
+        this.customerInfo.address.country !== ""&&
+        this.customerInfo.address.addressDetail !== ""
       ) {
         let params = {
           customerId: parseInt(localStorage.getItem("id")),
@@ -209,7 +233,11 @@ export default {
             }
           ],
           mark: this.good.mark,
-          orderAddressee: this.customerInfo
+          orderAddressee: {
+            address:JSON.stringify(this.customerInfo.address),
+            name:this.customerInfo.name,
+            phone:this.customerInfo.phone
+          }
         };
         request({ ...this.api.addOrder, params }).then(res => {
           if (res.success) {
@@ -263,14 +291,33 @@ export default {
       this.getGoodById();
     },
     // 保存当前订单客户信息不一定是默认信息
-    save() {
+    save(val) {
+      console.log(val)
+      this.customerInfo.name = val.name
+      this.customerInfo.phone = val.tel
+      this.customerInfo.address.province = val.province
+      this.customerInfo.address.city = val.city
+      this.customerInfo.address.county = val.county
+      this.customerInfo.address.addressDetail = val.addressDetail
+      this.customerInfo.address.areaCode = val.areaCode
       this.userShow = false;
+      console.log(this.customerInfo)
     },
-    refresh() {}
   },
   computed: {
     totalPrice() {
       return this.order.price * this.order.count * 100;
+    },
+    addressInfo(){
+      return {
+        name:this.customerInfo.name,
+        tel:this.customerInfo.phone,
+        province:this.customerInfo.address.province,
+        city:this.customerInfo.address.city,
+        county:this.customerInfo.address.county,
+        addressDetail:this.customerInfo.address.addressDetail,
+        areaCode:this.customerInfo.address.areaCode,
+      }
     }
   },
   beforeMount() {
@@ -298,6 +345,7 @@ export default {
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
     [Toast.name]: Toast,
+    [AddressEdit.name]: AddressEdit,
     NavBar
   }
 };
@@ -307,5 +355,11 @@ export default {
 .text-color-yellow {
   color: #ee0a24;
   font-size: 13px;
+}
+.font-size-10{
+  font-size:10px;
+}
+.text-color-ccc{
+  color: #ccc
 }
 </style>
