@@ -179,6 +179,25 @@ export default {
         }
       });
     },
+    // 根据路由判断调用客户端的返回事件还是自定义返回事件
+    onClickLeft() {
+      if (this.$route.name === "Product") {
+        let param = localStorage.getItem("param");
+        if (param) {
+          this.$router.push({ path: "/index", query: { param } });
+        } else {
+          this.$router.push({ path: "/index" });
+        }
+      } else if (this.$route.name === "OrderDetail") {
+        this.$router.push({ name: "OrderList" });
+      } else if (this.$route.name === "OrderList") {
+        this.$router.push({ name: "Product" });
+      } else if(this.$route.name === "Index"){
+        goBack()
+      }else{
+        this.$router.go(-1);
+      }
+    },
     // 修改银行标题的通用方法
     setTitleBarName(name){
       const jsonParam = {
@@ -187,7 +206,7 @@ export default {
           // 左按钮
           exist: "true", // true:显示左按钮,false:也显示左按钮,客户端不调用左按钮的返回事件
           name: "返回", //  按钮的说明
-          func: "goBack()" // 点击左按钮时,客户端回调服务器的方法
+          func: this.onClickLeft() // 点击左按钮时,客户端回调服务器的方法
         },
         rightButton: {
           exist: "false" // 不显示右按钮

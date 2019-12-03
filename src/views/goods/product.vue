@@ -72,7 +72,6 @@ export default {
     getProducts() {
       request({ ...this.api.getProducts }).then(res => {
         this.list = res.data;
-        console.log(this.list);
       });
     }
   },

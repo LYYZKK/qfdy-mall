@@ -174,7 +174,6 @@ export default {
     onBuyClicked(value) {
       this.getValue = value
       this.dialogShow = true
-
     },
     dialogClose(){
       this.$router.push({
