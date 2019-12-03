@@ -113,7 +113,7 @@ export default {
     }
   },
   beforeMount() {
-    // this.setTitleBarName("预购订单");
+    this.setTitleBarName();
   },
   mounted() {
     this.getOrders();

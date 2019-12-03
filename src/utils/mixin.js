@@ -179,5 +179,18 @@ export default {
         }
       });
     },
+    // 根据路由自定义返回事件
+    // 修改银行标题的通用方法
+    setTitleBarName(){
+      let timer = setInterval(() => {
+        try {
+          console.log("自定义顶部title");
+          hideClientTitleBar()
+          clearInterval(timer);
+        } catch (error) {
+          console.log("set title bar failed.");
+        }
+      }, 300);
+    }
   }
 };

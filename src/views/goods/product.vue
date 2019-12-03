@@ -76,7 +76,7 @@ export default {
     }
   },
   beforeMount() {
-    // this.setTitleBarName("预购商品");
+    this.setTitleBarName();
   },
   mounted() {
     this.getProducts();

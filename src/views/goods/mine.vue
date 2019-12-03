@@ -164,7 +164,7 @@ export default {
     }
   },
   beforeMount() {
-    // this.setTitleBarName("个人中心");
+    this.setTitleBarName();
   },
   mounted() {
     this.getCustomerInfo();
