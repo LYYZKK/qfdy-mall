@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mainContent">
     <NavBar :title="title" />
     <van-swipe :autoplay="3000" indicator-color="white">
       <van-swipe-item>

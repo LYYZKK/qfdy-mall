@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mainContent">
     <NavBar :title="title" />
     <div>
       <van-cell-group>

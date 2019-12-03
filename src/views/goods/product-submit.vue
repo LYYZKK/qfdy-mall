@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="mainContent">
     <NavBar :title="title" />
-    <div class="mainContent">
+    <div>
       <div class="border">
         <van-row type="flex" justify="space-around" align="center">
           <van-col span="2">
@@ -45,7 +45,7 @@
         <van-col span="24">
           <van-cell-group>
             <van-cell title="购买数量" value="内容">
-              <van-stepper v-model="order.count" disable-input="true" />
+              <van-stepper v-model="order.count" :disable-input="true" />
             </van-cell>
             <van-col span="24">
               <van-field
@@ -79,13 +79,13 @@
         <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o" disabled>
         </van-field>
         <van-field v-model="threeAddress" label="省市区选择" left-icon="location-o" @click="addressShow=true" disabled/>
-        <van-popup v-model="addressShow" position="bottom">
-          <van-area :area-list="areaList" @confirm="saveAddress" @cancel="cancelAddress"/>
-        </van-popup>
         <van-field v-model="customerInfo.address.addressDetail" label="收货人地址" left-icon="location-o" />
       </van-cell-group>
       <van-button @click="save" @cancel="cancelAddress" size="large" color="red" text="保存"></van-button>
     </van-action-sheet>
+    <van-popup v-model="addressShow" position="bottom" :overlay="true" round>
+      <van-area :area-list="areaList" @confirm="saveAddress" @cancel="cancelAddress"/>
+    </van-popup>
   </div>
 </template>
 

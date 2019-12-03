@@ -1,6 +1,6 @@
 <template>
   <div class="bar" v-if="show">
-    <van-nav-bar :title="title" :left-arrow="left" @click-left="onClickLeft" class="nav-bar" border="false"/>
+    <van-nav-bar :title="title" :left-arrow="left" @click-left="onClickLeft" class="nav-bar" :border="false"/>
   </div>
 </template>
 
@@ -61,14 +61,16 @@ export default {
 <style lang="less">
 .bar {
   width: 100%;
-  height: 50px;
+  height: 70px;
   background-color:#313c5c;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1;
   .nav-bar{
-    height: 100%;
+    height: 50px;
+    margin-top:20px;
+    line-height: 50px;
     background-color:#313c5c;
     color: #fff;
   }

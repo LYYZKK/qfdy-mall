@@ -1,37 +1,40 @@
 <template>
-  <div class>
+  <div>
     <NavBar :title="title" />
-    <div class="mainContent text-center" v-if="orderList.length===0&&!show">
-      <div class="round bg-color">
-        <van-icon name="shopping-cart" size="40" color="#fff" class="icon-cart" />
-      </div>
-      <div class="text-color-999 font-size-14">您还没有相关的订单</div>
-      <div class="text-color-999 font-size-14">可以去看看有哪些想买的</div>
-      <van-button
-        round
-        color="linear-gradient(to right,rgba(255, 66, 0, 0.5),rgba(255, 66, 0, 1))"
-        to="Home"
-        class="mt"
-      >快去预定</van-button>
+    <div class="mainContent box-sort" >
+      <van-loading type="spinner" v-show="show" color="#1989fa" class="loading" />
+      <template v-if="orderList.length===0&&!show" class="text-center">
+        <div class="round bg-color">
+          <van-icon name="shopping-cart" size="40" color="#fff" class="icon-cart" />
+        </div>
+        <div class="text-color-999 font-size-14">您还没有相关的订单</div>
+        <div class="text-color-999 font-size-14">可以去看看有哪些想买的</div>
+        <van-button
+          round
+          color="linear-gradient(to right,rgba(255, 66, 0, 0.5),rgba(255, 66, 0, 1))"
+          to="Home"
+          class="mt"
+        >快去预定</van-button>
+      </template>
+      <template v-if="!show" class="box-sort-content">
+        <van-row>
+          <van-col span="24">
+            <van-tabs v-model="active" title-active-color="#ee0a24" :border="false" :offset-top="70" sticky>
+              <van-tab title="待支付">
+                <order-list-component :orderList="orderList.wait" :orderStatus="0"></order-list-component>
+              </van-tab>
+              <van-tab title="已付款">
+                <order-list-component :orderList="orderList.payed" :orderStatus="1"></order-list-component>
+              </van-tab>
+              <van-tab title="已取消">
+                <order-list-component :orderList="orderList.cancel" :orderStatus="3"></order-list-component>
+              </van-tab>
+            </van-tabs>
+          </van-col>
+        </van-row>
+      </template>
     </div>
-    <van-loading type="spinner" v-show="show" color="#1989fa" class="loading" />
-    <template v-if="!show">
-      <van-row>
-        <van-col span="24">
-          <van-tabs v-model="active" title-active-color="#ee0a24" :border="false" :sticky="true">
-            <van-tab title="待支付">
-              <order-list-component :orderList="orderList.wait" :orderStatus="0"></order-list-component>
-            </van-tab>
-            <van-tab title="已付款">
-              <order-list-component :orderList="orderList.payed" :orderStatus="1"></order-list-component>
-            </van-tab>
-            <van-tab title="已取消">
-              <order-list-component :orderList="orderList.cancel" :orderStatus="3"></order-list-component>
-            </van-tab>
-          </van-tabs>
-        </van-col>
-      </van-row>
-    </template>
+
   </div>
 </template>
 
@@ -137,7 +140,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .round {
   width: 70px;
   height: 70px;
@@ -159,5 +162,18 @@ export default {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+.box-sort{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top:0;
+  left: 0;
+  .box-sort-content{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+  }
 }
 </style>

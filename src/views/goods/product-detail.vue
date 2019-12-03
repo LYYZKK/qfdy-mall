@@ -62,7 +62,7 @@
       disable-stepper-input
       @buy-clicked="onBuyClicked"
       @stepper-change="totalNumber"
-      safe-area-inset-bottom="true"
+      :safe-area-inset-bottom="true"
     >
       <div slot="sku-header-origin-price">{{ goods.title }}</div>
       <div slot="sku-messages">

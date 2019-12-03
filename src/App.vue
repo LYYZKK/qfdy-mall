@@ -91,11 +91,13 @@ img {
   padding-bottom: 50px;
 }
 .mainContent {
+  position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
   overflow-y: auto;
-  padding:50px 0;
+  margin:70px 0 0 0;
+  padding-bottom:50px;
 }
 .border {
   margin: 10px;
