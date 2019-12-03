@@ -80,7 +80,7 @@
         </van-field>
         <van-field v-model="threeAddress" label="省市区选择" left-icon="location-o" @click="addressShow=true" disabled/>
         <van-popup v-model="addressShow" position="bottom">
-          <van-area :area-list="areaList" @confirm="saveAddress"/>
+          <van-area :area-list="areaList" @confirm="saveAddress" @cancel="cancelAddress"/>
         </van-popup>
         <van-field v-model="customerInfo.address.addressDetail" label="收货人地址" left-icon="location-o" />
       </van-cell-group>
