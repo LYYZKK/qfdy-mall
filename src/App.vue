@@ -95,7 +95,7 @@ img {
   height: 100%;
   overflow: hidden;
   overflow-y: auto;
-  padding: 0 0 50px 0;
+  padding:50px 0;
 }
 .border {
   margin: 10px;

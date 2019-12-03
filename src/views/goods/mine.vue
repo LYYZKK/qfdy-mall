@@ -55,7 +55,7 @@ export default {
     return {
       areaList,
       addressShow:false,
-      title: "我的",
+      title: "个人中心",
       disabled: true,
       customerInfo: {
         name: "",
@@ -164,7 +164,7 @@ export default {
     }
   },
   beforeMount() {
-    this.setTitleBarName("个人中心");
+    // this.setTitleBarName("个人中心");
   },
   mounted() {
     this.getCustomerInfo();

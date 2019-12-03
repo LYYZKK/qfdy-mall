@@ -1,6 +1,6 @@
 <template>
   <div class="bar" v-if="show">
-    <van-nav-bar :title="title" :left-text="text" :left-arrow="left" @click-left="onClickLeft" />
+    <van-nav-bar :title="title" :left-arrow="left" @click-left="onClickLeft" class="nav-bar" border="false"/>
   </div>
 </template>
 
@@ -37,7 +37,7 @@ export default {
     show: {
       type: Boolean,
       default() {
-        return false;
+        return true;
       }
     },
     title: {
@@ -52,19 +52,33 @@ export default {
     },
     text: {
       type: String,
-      default: "返回"
+      default: ""
     }
   }
 };
 </script>
 
-<style>
+<style lang="less">
 .bar {
   width: 100%;
   height: 50px;
+  background-color:#313c5c;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1;
+  .nav-bar{
+    height: 100%;
+    background-color:#313c5c;
+    color: #fff;
+  }
+  .van-nav-bar__title{
+    color: rgba(255,255,255,.8);
+  }
+  .van-nav-bar {
+    .van-icon{
+      color: rgba(255,255,255,.8);
+    }
+  }
 }
 </style>

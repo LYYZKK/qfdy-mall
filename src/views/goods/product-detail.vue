@@ -218,7 +218,7 @@ export default {
     }
   },
   beforeMount() {
-    this.setTitleBarName("商品详情");
+    // this.setTitleBarName("商品详情");
   },
   computed:{
     message(){

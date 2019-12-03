@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <NavBar :title="title" /> -->
+    <NavBar :title="title" />
     <van-swipe :autoplay="3000" indicator-color="white">
       <van-swipe-item>
         <van-image :src="webBaseUrl+'/common/img/c_01.jpg'">
@@ -55,7 +55,7 @@ export default {
     return {
       copyText: "今天天气真好呀!",
       list: [],
-      title: "商品列表",
+      title: "预购商品",
       centered: true,
       api: {
         getProducts: {
@@ -76,7 +76,7 @@ export default {
     }
   },
   beforeMount() {
-    this.setTitleBarName("预购商品");
+    // this.setTitleBarName("预购商品");
   },
   mounted() {
     this.getProducts();

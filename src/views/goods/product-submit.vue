@@ -315,7 +315,7 @@ export default {
     },
   },
   beforeMount() {
-    this.setTitleBarName("确认订单");
+    // this.setTitleBarName("确认订单");
   },
   mounted() {
     this.getCustomerInfo();
