@@ -68,26 +68,24 @@
     <van-dialog v-model="show" title="确认付款" show-cancel-button @confirm="submit" @cancel="cancel">
       <h1 class="text-center">￥{{ totalPrice/100 }}</h1>
     </van-dialog>
+    <!-- 再次确认取消 -->
+    <van-dialog v-model="cancelShow" title="您确认取消吗？" show-cancel-button @confirm="canselSure" @cancel="cancelShow=false">
+      <h1 class="text-center">￥{{ totalPrice/100 }}</h1>
+    </van-dialog>
     <!-- 修改当前订单的客户信息 -->
-    <van-action-sheet v-model="userShow" safe-area-inset-bottom>
-      <van-address-edit
-        v-if="userShow"
-        :address-info="addressInfo"
-        :area-list="areaList"
-        :area-columns-placeholder="['请选择', '请选择', '请选择']"
-        @save="save"
-      />
-    </van-action-sheet>
-
-    <!-- <van-action-sheet v-model="userShow" >
+    <van-action-sheet v-model="userShow" >
       <van-cell-group>
         <van-field v-model="customerInfo.name" label="收货人姓名" left-icon="contact" />
         <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o" disabled>
         </van-field>
-        <van-field v-model="customerInfo.address" label="收货人地址" left-icon="location-o" />
+        <van-field v-model="threeAddress" label="省市区选择" left-icon="location-o" @click="addressShow=true" disabled/>
+        <van-popup v-model="addressShow" position="bottom">
+          <van-area :area-list="areaList" @confirm="saveAddress"/>
+        </van-popup>
+        <van-field v-model="customerInfo.address.addressDetail" label="收货人地址" left-icon="location-o" />
       </van-cell-group>
-      <van-button @click="save" size="large" color="red" text="保存"></van-button>
-    </van-action-sheet> -->
+      <van-button @click="save" @cancel="cancelAddress" size="large" color="red" text="保存"></van-button>
+    </van-action-sheet>
   </div>
 </template>
 
@@ -110,7 +108,9 @@ import {
   Cell,
   CellGroup,
   Toast,
-  AddressEdit
+  AddressEdit,
+   Area,
+  Popup
 } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
@@ -121,7 +121,9 @@ export default {
   data() {
     return {
       areaList,
-
+      threeAddress:'',
+      cancelShow:false,
+      addressShow:false,
       userShow: false,
       show: false,
       checked: true,
@@ -147,7 +149,6 @@ export default {
           city:'',
           county:'',
           addressDetail:'',
-          areaCode:'',
         }
       },
       api: {
@@ -177,6 +178,7 @@ export default {
     };
   },
   methods: {
+    // 获取用户详细信息
     getCustomerInfo() {
       this.customerInfo.phone = localStorage.getItem("phone");
       let id = localStorage.getItem("id");
@@ -192,13 +194,14 @@ export default {
             this.customerInfo.address.city = address.city;
             this.customerInfo.address.county = address.county;
             this.customerInfo.address.addressDetail = address.addressDetail;
-            this.customerInfo.address.areaCode = address.areaCode;
+            this.threeAddress=address.province+'/'+address.city+'/'+address.county
           }
         });
       }
     },
+    // 获取商品详情
     getGoodById() {
-      console.log(2222222);
+      console.log(this.$route.params)
       if (this.$route.params.goods.goodsId) {
         request({
           ...this.api.getGoodById,
@@ -212,6 +215,16 @@ export default {
           this.good.description = res.data.description;
         });
       }
+    },
+    saveAddress(val){
+      this.customerInfo.address.province = val[0].name
+      this.customerInfo.address.city = val[1].name
+      this.customerInfo.address.county = val[2].name
+      this.threeAddress = val[0].name+'/'+val[1].name+'/'+val[2].name
+      this.addressShow = false
+    },
+    cancelAddress(){
+      this.addressShow = false
     },
     // 提交生成订单
     onSubmit() {
@@ -275,50 +288,31 @@ export default {
     },
     // 取消支付
     cancel() {
+      this.cancelShow = true
+    },
+    // 再次确认取消支付
+    canselSure(){
       this.$router.push({
         name: "OrderDetail",
         query: { id: this.orderId }
       });
     },
-    onClickButton() {
-      Dialog({ message: "提交中。。。" });
-    },
+    //
     getOrder() {
       let info = this.$route.params;
-      console.log(info);
       this.order.price = info.sku.price;
       this.order.count = info.goods.selectedNum;
       this.getGoodById();
     },
     // 保存当前订单客户信息不一定是默认信息
-    save(val) {
-      console.log(val)
-      this.customerInfo.name = val.name
-      this.customerInfo.phone = val.tel
-      this.customerInfo.address.province = val.province
-      this.customerInfo.address.city = val.city
-      this.customerInfo.address.county = val.county
-      this.customerInfo.address.addressDetail = val.addressDetail
-      this.customerInfo.address.areaCode = val.areaCode
+    save() {
       this.userShow = false;
-      console.log(this.customerInfo)
     },
   },
   computed: {
     totalPrice() {
       return this.order.price * this.order.count * 100;
     },
-    addressInfo(){
-      return {
-        name:this.customerInfo.name,
-        tel:this.customerInfo.phone,
-        province:this.customerInfo.address.province,
-        city:this.customerInfo.address.city,
-        county:this.customerInfo.address.county,
-        addressDetail:this.customerInfo.address.addressDetail,
-        areaCode:this.customerInfo.address.areaCode,
-      }
-    }
   },
   beforeMount() {
     this.setTitleBarName("确认订单");
@@ -345,6 +339,8 @@ export default {
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
     [Toast.name]: Toast,
+    [Area.name]: Area,
+    [Popup.name]: Popup,
     [AddressEdit.name]: AddressEdit,
     NavBar
   }

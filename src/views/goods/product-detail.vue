@@ -14,11 +14,12 @@
 
     </van-row>
     <van-notice-bar
-      color="#ccc"
+      color="#1989fa"
       background="#fff"
-      left-icon="info-o"
+      :wrapable="true"
+      :scrollable="true"
     >
-      <van-col>温馨提示：七天无理由退订，客户已收现货需在认购金额中扣除{{ goods.id===1?'（2kg/199）':goods.id===2?'（3kg/299）':'' }}费用</van-col>
+      温馨提示：七天无理由退订，客户已收现货需在认购金额中扣除{{ goods.id===1?'（2kg/199）':goods.id===2?'（3kg/299）':'' }}费用
     </van-notice-bar>
     <van-divider :style="{ color: 'rgba(0,0,0,1)',padding: '0px 20px',margin:'5px 0'}">产品详情</van-divider>
     <div v-for="(item,index) in productImages" :key="index" class="img-text">
@@ -64,14 +65,18 @@
       safe-area-inset-bottom="true"
     >
       <div slot="sku-header-origin-price">{{ goods.title }}</div>
-      <div slot="sku-messages" class="van-sku__goods-price" style="padding:10px;" >
-        总价：{{ sku.price*PayNumber }}
+      <div slot="sku-messages">
+        <van-row type="flex" justify="space-between" align="center" style="width:100%;padding:0 12px;">
+          <van-col>总价</van-col>
+          <van-col class="van-sku__goods-price van-sku__price-num">￥{{ sku.price*PayNumber }}</van-col>
+        </van-row>
       </div>
     </van-sku>
     <van-dialog
       v-model="dialogShow"
-      title="您确认预订吗？"
+      title="温馨提示"
       :message="message"
+      confirmButtonText="知道了"
       @confirm="dialogClose"
     >
     </van-dialog>
