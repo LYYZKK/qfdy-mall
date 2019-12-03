@@ -190,7 +190,7 @@ export default {
             this.customerInfo.name = res.data.name;
             this.customerInfo.address.province = address.province;
             this.customerInfo.address.city = address.city;
-            this.customerInfo.address.contry = address.contry;
+            this.customerInfo.address.county = address.county;
             this.customerInfo.address.addressDetail = address.addressDetail;
             this.customerInfo.address.areaCode = address.areaCode;
           }
@@ -220,7 +220,7 @@ export default {
         this.customerInfo.name !== "" &&
         this.customerInfo.address.province !== ""&&
         this.customerInfo.address.city !== ""&&
-        this.customerInfo.address.country !== ""&&
+        this.customerInfo.address.county !== ""&&
         this.customerInfo.address.addressDetail !== ""
       ) {
         let params = {
