@@ -5,26 +5,26 @@
 </template>
 <script>
 export default {
-  name: "App",
+  name: 'App',
   data() {
     return {
       height: {
-        height: ""
+        height: ''
       }
-    };
+    }
   },
   methods: {
     appHeight() {
-      let appHeight = document.documentElement.clientHeight + "px";
+      let appHeight = document.documentElement.clientHeight + 'px'
       this.$nextTick(() => {
-        this.$refs.app.style.height = appHeight;
-      });
+        this.$refs.app.style.height = appHeight
+      })
     }
   },
   mounted() {
-    this.appHeight();
+    this.appHeight()
   }
-};
+}
 </script>
 
 <style>
@@ -34,7 +34,7 @@ body {
   width: 100%;
 }
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   background: #fff;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
@@ -50,11 +50,15 @@ body {
   border-radius: 7px;
   overflow: hidden;
 }
+.van-stepper__input[disabled] {
+  color: rgba(0, 0, 0, 1) !important;
+}
 .text-center {
   text-align: center;
 }
 .img-text {
   font-size: 0;
+  text-align: center;
 }
 img {
   vertical-align: middle;
@@ -69,11 +73,7 @@ img {
   margin-left: 20px;
 }
 .bg-color {
-  background-image: linear-gradient(
-    to right,
-    rgba(255, 66, 0, 0.5),
-    rgba(255, 66, 0, 1)
-  );
+  background-image: linear-gradient(to right, rgba(255, 66, 0, 0.5), rgba(255, 66, 0, 1));
 }
 .text-color {
   color: rgba(255, 66, 0, 1);

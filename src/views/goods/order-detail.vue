@@ -21,7 +21,7 @@
         <van-cell title="付款时间" :value="order.payTime"></van-cell>
         <van-cell title="备注" :value="order.mark"></van-cell>
       </van-cell-group>
-      <div class="mt">
+      <!-- <div class="mt">
         <van-row gutter="20">
           <van-col :span="order.orderStatus===3?24:12">
             <van-button size="large" color @click="gotoList">我的订单</van-button>
@@ -33,12 +33,11 @@
             <van-button size="large" color="red" @click="show=true">立即付款</van-button>
           </van-col>
         </van-row>
-      </div>
-      <div class="mt"></div>
+      </div>-->
     </div>
-    <van-dialog v-model="show" title="确认付款" show-cancel-button @confirm="submit" @cancel="cancel">
+    <!-- <van-dialog v-model="show" title="确认付款" show-cancel-button @confirm="submit" @cancel="cancel">
       <h1 class="text-center">￥{{ order.totalAmount }}</h1>
-    </van-dialog>
+    </van-dialog>-->
   </div>
 </template>
 
@@ -72,14 +71,6 @@ export default {
         getProductById: {
           url: "/orders/{id}",
           method: "get"
-        },
-        cancelOrder: {
-          url: "/orders/{id}/cancel",
-          method: "patch"
-        },
-        payOrder: {
-          url: "/orders/{id}/pay",
-          method: "patch"
         }
       }
     };
@@ -88,42 +79,7 @@ export default {
     gotoList() {
       this.$router.push({ name: "OrderList" });
     },
-    submit() {
-      request({
-        ...this.api.payOrder,
-        urlReplacements: [{ substr: "{id}", replacement: this.$route.query.id }]
-      }).then(res => {
-        if (res.success) {
-          this.$router.push({
-            name: "OrderList",
-            params: { customerId: this.customerId }
-          });
-        }
-      });
-    },
-    cancel() {
-      this.show = false;
-    },
-    cancelOrder() {
-      request({
-        ...this.api.cancelOrder,
-        urlReplacements: [{ substr: "{id}", replacement: this.$route.query.id }]
-      }).then(res => {
-        if (res.success) {
-          this.$router.push({
-            name: "OrderList",
-            params: { customerId: this.customerId }
-          });
-          console.log("订单取消成功");
-        }
-      });
-    },
-    onBuyClicked(value) {
-      this.$router.push({
-        name: "ProductSubmit",
-        params: { sku: this.sku, order: value }
-      });
-    },
+
     getProductById() {
       if (this.$route.query.id) {
         request({

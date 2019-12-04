@@ -2,7 +2,7 @@ module.exports = {
   local: {
     VUE_APP_BASE_URL: 'http://dev.hkjindian.com:8900',
     LINKED_MALL_BASE_URL: 'https://pages.tmall.com/wow/wt/act/lm-partner-login?',
-
+    APPOINT_BUY: true,
     /**
      * 注: 此参数如自己做 urlencode 需要处理 %3D、%2F 为 %3d、%2f 等小写问题.
      * 原地址: https://pre-wormhole.tmall.com/wow/wt/act/qiaofudayuan?wh_biz=tm&env=wapa
