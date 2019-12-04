@@ -1,13 +1,19 @@
 <template>
   <div class="mainContent">
-    <NavBar :title="title" />
+    <!-- <NavBar :title="title" /> -->
     <div>
       <van-cell-group>
         <van-field v-model="customerInfo.name" label="姓名" left-icon="contact" />
         <van-field v-model="customerInfo.tel" label="手机号" left-icon="phone-o" disabled />
-        <van-field v-model="threeAddress" label="省市区选择" left-icon="location-o" @click="addressShow=true" disabled/>
+        <van-field
+          v-model="threeAddress"
+          label="省市区选择"
+          left-icon="location-o"
+          @click="addressShow=true"
+          disabled
+        />
         <van-popup v-model="addressShow" position="bottom">
-          <van-area :area-list="areaList" @confirm="saveAddress" @cancel="cancelAddress"/>
+          <van-area :area-list="areaList" @confirm="saveAddress" @cancel="cancelAddress" />
         </van-popup>
         <van-field
           v-model="customerInfo.address.addressDetail"
@@ -24,7 +30,7 @@
       :area-list="areaList"
       :area-columns-placeholder="['请选择', '请选择', '请选择']"
       @save="save"
-    /> -->
+    />-->
   </div>
 </template>
 
@@ -46,7 +52,7 @@ import {
   Area,
   Popup
 } from "vant";
-import areaList from '@/utils/area.js'
+import areaList from "@/utils/area.js";
 import mixin from "@/utils/mixin.js";
 export default {
   name: "Mine",
@@ -54,21 +60,21 @@ export default {
   data() {
     return {
       areaList,
-      addressShow:false,
+      addressShow: false,
       title: "个人中心",
       disabled: true,
       customerInfo: {
         name: "",
         tel: "",
         address: {
-          province:'',
-          city:'',
-          county:'',
-          addressDetail:'',
+          province: "",
+          city: "",
+          county: "",
+          addressDetail: ""
         },
         id: parseInt(localStorage.getItem("id"))
       },
-      threeAddress:'',
+      threeAddress: "",
       api: {
         getCustomerInfo: {
           url: "/customers/{id}",
@@ -93,8 +99,9 @@ export default {
             urlReplacements: [{ substr: "{id}", replacement: id }]
           }).then(res => {
             if (res.success) {
-              let address = JSON.parse(res.data.address)
-              this.threeAddress=address.province+'/'+address.city+'/'+address.county
+              let address = JSON.parse(res.data.address);
+              this.threeAddress =
+                address.province + "/" + address.city + "/" + address.county;
               this.customerInfo.name = res.data.name;
               this.customerInfo.address.province = address.province;
               this.customerInfo.address.city = address.city;
@@ -118,53 +125,53 @@ export default {
         );
       }
     },
-    saveAddress(val){
-      this.customerInfo.address.province = val[0].name
-      this.customerInfo.address.city = val[1].name
-      this.customerInfo.address.county = val[2].name
-      this.threeAddress = val[0].name+'/'+val[1].name+'/'+val[2].name
-      this.addressShow = false
+    saveAddress(val) {
+      this.customerInfo.address.province = val[0].name;
+      this.customerInfo.address.city = val[1].name;
+      this.customerInfo.address.county = val[2].name;
+      this.threeAddress = val[0].name + "/" + val[1].name + "/" + val[2].name;
+      this.addressShow = false;
     },
-    cancelAddress(){
-      this.addressShow = false
+    cancelAddress() {
+      this.addressShow = false;
     },
     save() {
-        let params = {
-          id:this.customerInfo.id,
-          name:this.customerInfo.name,
-          phone:this.customerInfo.tel,
-          address:JSON.stringify(this.customerInfo.address)
+      let params = {
+        id: this.customerInfo.id,
+        name: this.customerInfo.name,
+        phone: this.customerInfo.tel,
+        address: JSON.stringify(this.customerInfo.address)
+      };
+      console.log(params);
+      request({ ...this.api.modifyCustomerInfo, params }).then(res => {
+        if (res.success) {
+          this.disabled = !this.disabled;
+          Notify({
+            message: "修改成功",
+            type: "success"
+          });
+        } else {
+          Notify(res.message);
         }
-        console.log(params)
-        request({ ...this.api.modifyCustomerInfo, params }).then(res => {
-          if (res.success) {
-            this.disabled = !this.disabled;
-            Notify({
-              message: "修改成功",
-              type: "success"
-            });
-          } else {
-            Notify(res.message);
-          }
-        });
-      }
+      });
+    }
   },
-  computed:{
-    addressInfo(){
-      console.log(this.customerInfo.address)
+  computed: {
+    addressInfo() {
+      console.log(this.customerInfo.address);
       return {
-        name:this.customerInfo.name,
-        tel:this.customerInfo.tel,
-        province:this.customerInfo.address.province,
-        city:this.customerInfo.address.city,
-        county:this.customerInfo.address.county,
-        addressDetail:this.customerInfo.address.addressDetail,
-        areaCode:this.customerInfo.address.areaCode,
-      }
+        name: this.customerInfo.name,
+        tel: this.customerInfo.tel,
+        province: this.customerInfo.address.province,
+        city: this.customerInfo.address.city,
+        county: this.customerInfo.address.county,
+        addressDetail: this.customerInfo.address.addressDetail,
+        areaCode: this.customerInfo.address.areaCode
+      };
     }
   },
   beforeMount() {
-    this.setTitleBarName();
+    this.setTitleBar("个人中心");
   },
   mounted() {
     this.getCustomerInfo();
@@ -183,7 +190,7 @@ export default {
     [Notify.name]: Notify,
     [Area.name]: Area,
     [Popup.name]: Popup,
-    [AddressEdit.name]: AddressEdit,
+    [AddressEdit.name]: AddressEdit
   }
 };
 </script>

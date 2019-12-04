@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <NavBar :title="title" />
-    <div class="mainContent box-sort" >
+  <div class="mainContent">
+    <!-- <NavBar :title="title" /> -->
+    <div class>
       <van-loading type="spinner" v-show="show" color="#1989fa" class="loading" />
       <template v-if="orderList.length===0&&!show" class="text-center">
         <div class="round bg-color">
@@ -16,10 +16,10 @@
           class="mt"
         >快去预定</van-button>
       </template>
-      <template v-if="!show" class="box-sort-content">
+      <template v-if="!show" class>
         <van-row>
           <van-col span="24">
-            <van-tabs v-model="active" title-active-color="#ee0a24" :border="false" :offset-top="70" sticky>
+            <van-tabs v-model="active" title-active-color="#ee0a24" :border="false" sticky>
               <van-tab title="待支付">
                 <order-list-component :orderList="orderList.wait" :orderStatus="0"></order-list-component>
               </van-tab>
@@ -34,7 +34,6 @@
         </van-row>
       </template>
     </div>
-
   </div>
 </template>
 
@@ -116,7 +115,7 @@ export default {
     }
   },
   beforeMount() {
-    this.setTitleBarName();
+    this.setTitleBar("预购订单");
   },
   mounted() {
     this.getOrders();
@@ -162,18 +161,5 @@ export default {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-}
-.box-sort{
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top:0;
-  left: 0;
-  .box-sort-content{
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    overflow-y: auto;
-  }
 }
 </style>

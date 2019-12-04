@@ -81,8 +81,8 @@ img {
 .text-color-999 {
   color: #999;
 }
-.text-color-ccc{
-  color:#ccc;
+.text-color-ccc {
+  color: #ccc;
 }
 .text-color-white {
   color: #fff;
@@ -96,8 +96,7 @@ img {
   height: 100%;
   overflow: hidden;
   overflow-y: auto;
-  margin:70px 0 0 0;
-  padding-bottom:50px;
+  padding: 0 0 50px 0;
 }
 .border {
   margin: 10px;

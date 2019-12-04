@@ -1,6 +1,6 @@
 <template>
   <div class="mainContent">
-    <NavBar :title="title" />
+    <!-- <NavBar :title="title" /> -->
     <div class="img-text">
       <van-image :src="goods.picture">
         <template v-slot:loading>
@@ -11,16 +11,13 @@
     <van-row class="pd-left-right">
       <van-col span="24" class="font-style margin-bottom-20">￥{{ sku.price }}</van-col>
       <van-col span="24">{{ goods.description }}</van-col>
-
     </van-row>
     <van-notice-bar
       color="#1989fa"
       background="#fff"
       :wrapable="true"
       :scrollable="true"
-    >
-      温馨提示：七天无理由退订，客户已收现货需在认购金额中扣除{{ goods.id===1?'（2kg/199）':goods.id===2?'（3kg/299）':'' }}费用
-    </van-notice-bar>
+    >温馨提示：七天无理由退订，客户已收现货需在认购金额中扣除{{ goods.id===1?'（2kg/199）':goods.id===2?'（3kg/299）':'' }}费用</van-notice-bar>
     <van-divider :style="{ color: 'rgba(0,0,0,1)',padding: '0px 20px',margin:'5px 0'}">产品详情</van-divider>
     <div v-for="(item,index) in productImages" :key="index" class="img-text">
       <van-image :src="item">
@@ -66,7 +63,12 @@
     >
       <div slot="sku-header-origin-price">{{ goods.title }}</div>
       <div slot="sku-messages">
-        <van-row type="flex" justify="space-between" align="center" style="width:100%;padding:0 12px;">
+        <van-row
+          type="flex"
+          justify="space-between"
+          align="center"
+          style="width:100%;padding:0 12px;"
+        >
           <van-col>总价</van-col>
           <van-col class="van-sku__goods-price van-sku__price-num">￥{{ sku.price*PayNumber }}</van-col>
         </van-row>
@@ -78,8 +80,7 @@
       :message="message"
       confirmButtonText="知道了"
       @confirm="dialogClose"
-    >
-    </van-dialog>
+    ></van-dialog>
   </div>
 </template>
 
@@ -109,10 +110,10 @@ export default {
   data() {
     return {
       // 点击提交按钮时候自动获取的参数
-      getValue:{},
+      getValue: {},
       show: false,
-      dialogShow:false,
-      PayNumber:1,
+      dialogShow: false,
+      PayNumber: 1,
       title: "商品详情",
       productId: "",
       productImages: [],
@@ -168,14 +169,14 @@ export default {
         );
       }
     },
-    totalNumber(val){
-      this.PayNumber = val
+    totalNumber(val) {
+      this.PayNumber = val;
     },
     onBuyClicked(value) {
-      this.getValue = value
-      this.dialogShow = true
+      this.getValue = value;
+      this.dialogShow = true;
     },
-    dialogClose(){
+    dialogClose() {
       this.$router.push({
         name: "ProductSubmit",
         params: { sku: this.sku, goods: this.getValue }
@@ -218,12 +219,16 @@ export default {
     }
   },
   beforeMount() {
-    this.setTitleBarName();
+    this.setTitleBar("商品详情");
   },
-  computed:{
-    message(){
-      let msg = '七天无理由退订，客户已收现货需在认购金额中扣除'
-      return this.goods.id===1?msg+'（2kg/199）费用':this.goods.id===2?msg+'（3kg/299）费用':''
+  computed: {
+    message() {
+      let msg = "七天无理由退订，客户已收现货需在认购金额中扣除";
+      return this.goods.id === 1
+        ? msg + "（2kg/199）费用"
+        : this.goods.id === 2
+        ? msg + "（3kg/299）费用"
+        : "";
     }
   },
   mounted() {
@@ -253,7 +258,7 @@ export default {
 <style scoped lang="less">
 .fixed {
   width: 100%;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
 }
@@ -283,7 +288,7 @@ export default {
     border: 1px dashed rgb(207, 204, 204);
   }
 }
-.text-color-ccc{
+.text-color-ccc {
   color: #ccc;
   font-size: 11px;
 }

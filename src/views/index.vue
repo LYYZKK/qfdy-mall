@@ -330,9 +330,9 @@ export default {
     initPage() {
       this.cmbcDescrypt();
     },
-    setIndexTitleBar(){
+    setIndexTitleBar() {
       const jsonParam = {
-        title: '乔府大院',
+        title: "乔府大院",
         leftButton: {
           // 左按钮
           exist: "true", // true:显示左按钮,false:也显示左按钮,客户端不调用左按钮的返回事件
@@ -355,7 +355,7 @@ export default {
     }
   },
   beforeMount() {
-    this.setIndexTitleBar("乔府大院");
+    this.setIndexTitleBar();
   },
   mounted() {
     this.initPage();

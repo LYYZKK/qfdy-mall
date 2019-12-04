@@ -179,18 +179,29 @@ export default {
         }
       });
     },
-    // 根据路由自定义返回事件
     // 修改银行标题的通用方法
-    setTitleBarName(){
+    setTitleBar(titleName) {
+      const jsonParam = {
+        title: titleName,
+        leftButton: {
+          // 左按钮
+          exist: "true", // true:显示左按钮,false:也显示左按钮,客户端不调用左按钮的返回事件
+          name: "返回", //  按钮的说明
+          func: "diyGoBack()" // 点击左按钮时,客户端回调服务器的方法
+        },
+        rightButton: {
+          exist: "false" // 不显示右按钮
+        }
+      };
       let timer = setInterval(() => {
         try {
-          console.log("自定义顶部title");
-          hideClientTitleBar()
+          console.log("into try");
+          setTitleBar(jsonParam);
           clearInterval(timer);
         } catch (error) {
           console.log("set title bar failed.");
         }
       }, 300);
-    }
+    },
   }
 };

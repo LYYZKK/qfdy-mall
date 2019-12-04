@@ -1,6 +1,6 @@
 <template>
   <div class="mainContent">
-    <NavBar :title="title" />
+    <!-- <NavBar :title="title" /> -->
     <div>
       <div class="border">
         <van-row type="flex" justify="space-around" align="center">
@@ -18,7 +18,9 @@
                   <span class="text-color-999">{{ customerInfo.phone }}</span>
                 </van-col>
               </van-row>
-              <div class="text-color-999 font-size-10">{{ customerInfo.address.province }}{{ customerInfo.address.city }}{{ customerInfo.address.county }}{{ customerInfo.address.addressDetail }}</div>
+              <div
+                class="text-color-999 font-size-10"
+              >{{ customerInfo.address.province }}{{ customerInfo.address.city }}{{ customerInfo.address.county }}{{ customerInfo.address.addressDetail }}</div>
               <div class="text-color-yellow">完善的信息方便后期接收快递</div>
             </div>
           </van-col>
@@ -63,28 +65,45 @@
     </div>
     <van-submit-bar :price="totalPrice" button-text="提交" @submit="onSubmit" safe-area-inset-bottom>
       <div slot="default" class="ml text-color-ccc">
-        共计&nbsp;<span style="color:#000;">{{ order.count }}</span>&nbsp;件</div>
+        共计&nbsp;
+        <span style="color:#000;">{{ order.count }}</span>&nbsp;件
+      </div>
     </van-submit-bar>
     <van-dialog v-model="show" title="确认付款" show-cancel-button @confirm="submit" @cancel="cancel">
       <h1 class="text-center">￥{{ totalPrice/100 }}</h1>
     </van-dialog>
     <!-- 再次确认取消 -->
-    <van-dialog v-model="cancelShow" title="您确认取消吗？" show-cancel-button @confirm="canselSure" @cancel="cancelShow=false">
+    <van-dialog
+      v-model="cancelShow"
+      title="您确认取消吗？"
+      show-cancel-button
+      @confirm="canselSure"
+      @cancel="cancelShow=false"
+    >
       <h1 class="text-center">￥{{ totalPrice/100 }}</h1>
     </van-dialog>
     <!-- 修改当前订单的客户信息 -->
-    <van-action-sheet v-model="userShow" >
+    <van-action-sheet v-model="userShow">
       <van-cell-group>
         <van-field v-model="customerInfo.name" label="收货人姓名" left-icon="contact" />
-        <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o" disabled>
-        </van-field>
-        <van-field v-model="threeAddress" label="省市区选择" left-icon="location-o" @click="addressShow=true" disabled/>
-        <van-field v-model="customerInfo.address.addressDetail" label="收货人地址" left-icon="location-o" />
+        <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o" disabled></van-field>
+        <van-field
+          v-model="threeAddress"
+          label="省市区选择"
+          left-icon="location-o"
+          @click="addressShow=true"
+          disabled
+        />
+        <van-field
+          v-model="customerInfo.address.addressDetail"
+          label="收货人地址"
+          left-icon="location-o"
+        />
       </van-cell-group>
       <van-button @click="save" @cancel="cancelAddress" size="large" color="red" text="保存"></van-button>
     </van-action-sheet>
     <van-popup v-model="addressShow" position="bottom" :overlay="true" round>
-      <van-area :area-list="areaList" @confirm="saveAddress" @cancel="cancelAddress"/>
+      <van-area :area-list="areaList" @confirm="saveAddress" @cancel="cancelAddress" />
     </van-popup>
   </div>
 </template>
@@ -109,21 +128,21 @@ import {
   CellGroup,
   Toast,
   AddressEdit,
-   Area,
+  Area,
   Popup
 } from "vant";
 import NavBar from "@/components/nav-bar.vue";
 import request from "@/utils/request.js";
 import mixin from "@/utils/mixin.js";
-import areaList from '@/utils/area.js'
+import areaList from "@/utils/area.js";
 export default {
   mixins: [mixin],
   data() {
     return {
       areaList,
-      threeAddress:'',
-      cancelShow:false,
-      addressShow:false,
+      threeAddress: "",
+      cancelShow: false,
+      addressShow: false,
       userShow: false,
       show: false,
       checked: true,
@@ -143,12 +162,12 @@ export default {
       orderId: "",
       customerInfo: {
         name: "",
-        phone: localStorage.getItem('phone'),
+        phone: localStorage.getItem("phone"),
         address: {
-          province:'',
-          city:'',
-          county:'',
-          addressDetail:'',
+          province: "",
+          city: "",
+          county: "",
+          addressDetail: ""
         }
       },
       api: {
@@ -188,20 +207,21 @@ export default {
           urlReplacements: [{ substr: "{id}", replacement: id }]
         }).then(res => {
           if (res.success) {
-            let address = JSON.parse(res.data.address)
+            let address = JSON.parse(res.data.address);
             this.customerInfo.name = res.data.name;
             this.customerInfo.address.province = address.province;
             this.customerInfo.address.city = address.city;
             this.customerInfo.address.county = address.county;
             this.customerInfo.address.addressDetail = address.addressDetail;
-            this.threeAddress=address.province+'/'+address.city+'/'+address.county
+            this.threeAddress =
+              address.province + "/" + address.city + "/" + address.county;
           }
         });
       }
     },
     // 获取商品详情
     getGoodById() {
-      console.log(this.$route.params)
+      console.log(this.$route.params);
       if (this.$route.params.goods.goodsId) {
         request({
           ...this.api.getGoodById,
@@ -216,24 +236,24 @@ export default {
         });
       }
     },
-    saveAddress(val){
-      this.customerInfo.address.province = val[0].name
-      this.customerInfo.address.city = val[1].name
-      this.customerInfo.address.county = val[2].name
-      this.threeAddress = val[0].name+'/'+val[1].name+'/'+val[2].name
-      this.addressShow = false
+    saveAddress(val) {
+      this.customerInfo.address.province = val[0].name;
+      this.customerInfo.address.city = val[1].name;
+      this.customerInfo.address.county = val[2].name;
+      this.threeAddress = val[0].name + "/" + val[1].name + "/" + val[2].name;
+      this.addressShow = false;
     },
-    cancelAddress(){
-      this.addressShow = false
+    cancelAddress() {
+      this.addressShow = false;
     },
     // 提交生成订单
     onSubmit() {
       if (
         this.customerInfo.phone !== "" &&
         this.customerInfo.name !== "" &&
-        this.customerInfo.address.province !== ""&&
-        this.customerInfo.address.city !== ""&&
-        this.customerInfo.address.county !== ""&&
+        this.customerInfo.address.province !== "" &&
+        this.customerInfo.address.city !== "" &&
+        this.customerInfo.address.county !== "" &&
         this.customerInfo.address.addressDetail !== ""
       ) {
         let params = {
@@ -247,16 +267,20 @@ export default {
           ],
           mark: this.good.mark,
           orderAddressee: {
-            address:JSON.stringify(this.customerInfo.address),
-            name:this.customerInfo.name,
-            phone:this.customerInfo.phone
+            address: JSON.stringify(this.customerInfo.address),
+            name: this.customerInfo.name,
+            phone: this.customerInfo.phone
           }
         };
         request({ ...this.api.addOrder, params }).then(res => {
           if (res.success) {
             this.orderId = res.data.id;
+            // 提交订单接收加密的参数
+            let info = res.data.signAndEncryptOrder;
+            alert("即将调用圈存方法");
+            submitOrderForCashNew(info, "wuchang");
             // 打开支付
-            this.show = true;
+            // this.show = true;
           } else {
             Toast({
               message: "库存不足",
@@ -288,10 +312,10 @@ export default {
     },
     // 取消支付
     cancel() {
-      this.cancelShow = true
+      this.cancelShow = true;
     },
     // 再次确认取消支付
-    canselSure(){
+    canselSure() {
       this.$router.push({
         name: "OrderDetail",
         query: { id: this.orderId }
@@ -307,15 +331,15 @@ export default {
     // 保存当前订单客户信息不一定是默认信息
     save() {
       this.userShow = false;
-    },
+    }
   },
   computed: {
     totalPrice() {
       return this.order.price * this.order.count * 100;
-    },
+    }
   },
   beforeMount() {
-    this.setTitleBarName();
+    this.setTitleBar("确认订单");
   },
   mounted() {
     this.getCustomerInfo();
@@ -352,10 +376,10 @@ export default {
   color: #ee0a24;
   font-size: 13px;
 }
-.font-size-10{
-  font-size:10px;
+.font-size-10 {
+  font-size: 10px;
 }
-.text-color-ccc{
-  color: #ccc
+.text-color-ccc {
+  color: #ccc;
 }
 </style>

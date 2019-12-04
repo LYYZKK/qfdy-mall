@@ -1,6 +1,6 @@
 <template>
   <div class="mainContent">
-    <NavBar :title="title" :left="false" :text="''" />
+    <!-- <NavBar :title="title" :left="false" :text="''" /> -->
     <div>
       <van-row>
         <van-col span="24" v-for="(item,index) in order.orderProducts" :key="index">
@@ -140,7 +140,7 @@ export default {
     }
   },
   beforeMount() {
-    this.setTitleBarName();
+    this.setTitleBar("订单详情");
   },
   mounted() {
     this.getProductById();

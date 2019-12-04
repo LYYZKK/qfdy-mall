@@ -1,6 +1,6 @@
 <template>
   <div class="mainContent">
-    <NavBar :title="title" />
+    <!-- <NavBar :title="title" /> -->
     <van-swipe :autoplay="3000" indicator-color="white">
       <van-swipe-item>
         <van-image :src="webBaseUrl+'/common/img/c_01.jpg'">
@@ -73,10 +73,13 @@ export default {
       request({ ...this.api.getProducts }).then(res => {
         this.list = res.data;
       });
+    },
+    diyGobackTest() {
+      console.log("into diy goback 2");
     }
   },
   beforeMount() {
-    this.setTitleBarName();
+    this.setTitleBar("商品列表");
   },
   mounted() {
     this.getProducts();
