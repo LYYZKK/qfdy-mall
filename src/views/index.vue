@@ -130,9 +130,9 @@
           <img :src="images.img4_4" alt width="100%" />
         </van-col>
       </van-row>
-      <van-row
-        class="pd text-align-center text-color-yellow margin-top-20"
-      >“农业产业化国家重点龙头企业”、“中国国家地理标志产品”、“中国十大好吃米饭”</van-row>
+      <van-row class="pd text-align-center text-color-yellow margin-top-20">
+        “农业产业化国家重点龙头企业”、“中国国家地理标志产品”、“中国十大好吃米饭”
+      </van-row>
     </van-row>
     <!-- 尊贵礼遇 -->
     <van-row>
@@ -156,59 +156,59 @@
 </template>
 
 <script>
-import { Image, Row, Col, Dialog, Button, Icon, Toast } from "vant";
-import mixin from "@/utils/mixin.js";
-import logo from "@/assets/images/new/LOGO.png";
-import video from "@/assets/images/new/video.png";
-import text_img from "@/assets/images/new/text-img.png";
-import text1 from "@/assets/images/new/text-1.png";
-import text2 from "@/assets/images/new/text-2.png";
-import text3_1 from "@/assets/images/new/text-3-1.png";
-import text3_2 from "@/assets/images/new/text-3-2.png";
-import text3_3 from "@/assets/images/new/text-3-3.png";
-import text3_4 from "@/assets/images/new/text-3-4.png";
-import text4 from "@/assets/images/new/text-4.png";
-import text5 from "@/assets/images/new/text-5.png";
-import title from "@/assets/images/new/title.png";
-import dream from "@/assets/images/new/dream.png";
-import title1 from "@/assets/images/new/title-1.png";
-import title2 from "@/assets/images/new/title-2.png";
-import title3 from "@/assets/images/new/title3.png";
-import title4 from "@/assets/images/new/title-4.png";
-import title5 from "@/assets/images/new/title-5.png";
-import img1 from "@/assets/images/new/img-1.png";
-import img1_1 from "@/assets/images/new/img-1-1.png";
-import img1_2 from "@/assets/images/new/img-1-2.png";
-import img2_1 from "@/assets/images/new/img-2-1.png";
-import img2_2 from "@/assets/images/new/img-2-2.png";
-import img3_1 from "@/assets/images/new/img-3-1.png";
-import img3_2 from "@/assets/images/new/img-3-2.png";
-import img3_3 from "@/assets/images/new/img-3-3.png";
-import img3_4 from "@/assets/images/new/img-3-4.png";
-import img4 from "@/assets/images/new/img-4.png";
-import img4_1 from "@/assets/images/new/img-4-1.png";
-import img4_2 from "@/assets/images/new/img-4-2.png";
-import img4_3 from "@/assets/images/new/img-4-3.png";
-import img4_4 from "@/assets/images/new/img-4-4.png";
-import img5 from "@/assets/images/new/img-5.png";
-import icon from "@/assets/images/new/bot-icon.png";
-import movie from "@/assets/images/new/movie.mp4";
-import poter from "@/assets/images/new/poter.png";
-import buy from "@/assets/images/new/buy.png";
-import fresh from "@/assets/images/new/fresh.png";
-import fresh_icon from "@/assets/images/new/fresh-icon.png";
-import pre_icon from "@/assets/images/new/pre-icon.png";
-import btn from "@/assets/images/new/button.png";
-import btn1 from "@/assets/images/new/button1.png";
-import btn2 from "@/assets/images/new/button2.png";
-import btn3 from "@/assets/images/new/button3.png";
+import { Image, Row, Col, Dialog, Button, Icon, Toast } from 'vant'
+import mixin from '@/utils/mixin.js'
+import logo from '@/assets/images/new/LOGO.png'
+import video from '@/assets/images/new/video.png'
+import text_img from '@/assets/images/new/text-img.png'
+import text1 from '@/assets/images/new/text-1.png'
+import text2 from '@/assets/images/new/text-2.png'
+import text3_1 from '@/assets/images/new/text-3-1.png'
+import text3_2 from '@/assets/images/new/text-3-2.png'
+import text3_3 from '@/assets/images/new/text-3-3.png'
+import text3_4 from '@/assets/images/new/text-3-4.png'
+import text4 from '@/assets/images/new/text-4.png'
+import text5 from '@/assets/images/new/text-5.png'
+import title from '@/assets/images/new/title.png'
+import dream from '@/assets/images/new/dream.png'
+import title1 from '@/assets/images/new/title-1.png'
+import title2 from '@/assets/images/new/title-2.png'
+import title3 from '@/assets/images/new/title3.png'
+import title4 from '@/assets/images/new/title-4.png'
+import title5 from '@/assets/images/new/title-5.png'
+import img1 from '@/assets/images/new/img-1.png'
+import img1_1 from '@/assets/images/new/img-1-1.png'
+import img1_2 from '@/assets/images/new/img-1-2.png'
+import img2_1 from '@/assets/images/new/img-2-1.png'
+import img2_2 from '@/assets/images/new/img-2-2.png'
+import img3_1 from '@/assets/images/new/img-3-1.png'
+import img3_2 from '@/assets/images/new/img-3-2.png'
+import img3_3 from '@/assets/images/new/img-3-3.png'
+import img3_4 from '@/assets/images/new/img-3-4.png'
+import img4 from '@/assets/images/new/img-4.png'
+import img4_1 from '@/assets/images/new/img-4-1.png'
+import img4_2 from '@/assets/images/new/img-4-2.png'
+import img4_3 from '@/assets/images/new/img-4-3.png'
+import img4_4 from '@/assets/images/new/img-4-4.png'
+import img5 from '@/assets/images/new/img-5.png'
+import icon from '@/assets/images/new/bot-icon.png'
+import movie from '@/assets/images/new/movie.mp4'
+import poter from '@/assets/images/new/poter.png'
+import buy from '@/assets/images/new/buy.png'
+import fresh from '@/assets/images/new/fresh.png'
+import fresh_icon from '@/assets/images/new/fresh-icon.png'
+import pre_icon from '@/assets/images/new/pre-icon.png'
+import btn from '@/assets/images/new/button.png'
+import btn1 from '@/assets/images/new/button1.png'
+import btn2 from '@/assets/images/new/button2.png'
+import btn3 from '@/assets/images/new/button3.png'
 export default {
-  name: "Index",
+  name: 'Index',
   mixins: [mixin],
   data() {
     return {
       videoDialogVisible: false,
-      events: ["fullscreenchange"],
+      events: ['fullscreenchange'],
       images: {
         logo,
         video,
@@ -256,27 +256,27 @@ export default {
       },
       customerInfo: {
         cid: 1,
-        cuserId: "",
-        phone: ""
+        cuserId: '',
+        phone: ''
       },
       playerOptions: {
         playbackRates: [0.5, 1.0, 1.5, 2.0],
         autoplay: false,
         muted: false,
         loop: false,
-        preload: "auto",
-        language: "zh-CN",
-        aspectRatio: "16:9",
+        preload: 'auto',
+        language: 'zh-CN',
+        aspectRatio: '16:9',
         fluid: true,
         sources: [
           {
-            type: "video/mp4",
+            type: 'video/mp4',
             src: movie
           }
         ],
         width: document.documentElement.clientWidth,
         poster: video,
-        notSupportedMessage: "此视频暂无法播放，请稍后再试",
+        notSupportedMessage: '此视频暂无法播放，请稍后再试',
         controlBar: {
           timeDivider: true,
           durationDisplay: true,
@@ -288,77 +288,78 @@ export default {
       api: {
         // 获取签名
         getSignature: {
-          url: "/linked-mall/signature",
-          method: "post"
+          url: '/linked-mall/signature',
+          method: 'post'
         }
       }
-    };
+    }
   },
   methods: {
     // 视频处理
     onPlayerFullScreenchange(player) {
       // 强制退出全屏，恢复正常大小
-      player.exitFullscreen();
-      this.videoDialogVisible = true;
+      player.exitFullscreen()
+      this.videoDialogVisible = true
     },
     // 预约购买
     prePurchase() {
-      let param = this.$route.query.param;
+      let param = this.$route.query.param
       if (param) {
-        localStorage.setItem("param", param);
+        localStorage.setItem('param', param)
       }
-      console.log(param);
-      this.linkAdd(2);
-      this.$router.push({ path: "/home" });
+      console.log(param)
+      this.linkAdd(2)
+      this.$router.push({ path: '/home' })
     },
     goTop() {
-      this.$refs.bigBox.scrollTop = 0;
-      console.log(this.$refs.bigBox.scrollTop);
+      this.$refs.bigBox.scrollTop = 0
+      console.log(this.$refs.bigBox.scrollTop)
     },
     // 现货购买
     spotBuy() {
-      this.linkAdd(3);
+      this.linkAdd(3)
       // 点击过现货购买的标志
-      let isLogin = localStorage.getItem("isLogin");
-      if (isLogin === "1") {
-        this.getSign();
+      let isLogin = localStorage.getItem('isLogin')
+      if (isLogin === '1') {
+        this.getSign()
       } else {
-        localStorage.setItem("linkStatus", "1");
-        this.getSign();
+        localStorage.setItem('linkStatus', '1')
+        this.getSign()
       }
     },
     initPage() {
-      this.cmbcDescrypt();
+      this.cmbcDescrypt()
     },
     setIndexTitleBar() {
       const jsonParam = {
-        title: "乔府大院",
+        title: '乔府大院',
         leftButton: {
           // 左按钮
-          exist: "true", // true:显示左按钮,false:也显示左按钮,客户端不调用左按钮的返回事件
-          name: "返回", //  按钮的说明
-          func: "goBack()" // 点击左按钮时,客户端回调服务器的方法
+          exist: 'true', // true:显示左按钮,false:也显示左按钮,客户端不调用左按钮的返回事件
+          name: '返回', //  按钮的说明
+          func: 'goBack()' // 点击左按钮时,客户端回调服务器的方法
         },
         rightButton: {
-          exist: "false" // 不显示右按钮
+          exist: 'false' // 不显示右按钮
         }
-      };
+      }
       let timer = setInterval(() => {
         try {
-          console.log("into try");
-          setTitleBar(jsonParam);
-          clearInterval(timer);
+          console.log('into try')
+          setTitleBar(jsonParam)
+          clearInterval(timer)
         } catch (error) {
-          console.log("set title bar failed.");
+          console.log('set title bar failed.')
         }
-      }, 300);
+      }, 300)
     }
   },
   beforeMount() {
-    this.setIndexTitleBar();
+    this.setIndexTitleBar()
   },
   mounted() {
-    this.initPage();
+    console.log(new Date())
+    this.initPage()
   },
   components: {
     [Image.name]: Image,
@@ -369,7 +370,7 @@ export default {
     [Toast.name]: Toast,
     [Dialog.Component.name]: Dialog.Component
   }
-};
+}
 </script>
 
 <style scoped lang="less">

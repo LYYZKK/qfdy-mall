@@ -2,22 +2,22 @@
   <div class="mainContent">
     <!-- <NavBar :title="title" /> -->
     <van-swipe :autoplay="3000" indicator-color="white">
-      <van-swipe-item>
-        <van-image :src="webBaseUrl+'/common/img/c_01.jpg'">
+      <van-swipe-item style="min-height: 60%">
+        <van-image :src="webBaseUrl + '/common/img/c_01.jpg'">
           <template v-slot:loading>
             <van-loading type="spinner" size="20" />
           </template>
         </van-image>
       </van-swipe-item>
-      <van-swipe-item v-for="(item,index) in list" :key="index">
-        <van-image :src="webBaseUrl+item.img" />
+      <van-swipe-item v-for="(item, index) in list" :key="index">
+        <van-image :src="webBaseUrl + item.img" />
       </van-swipe-item>
     </van-swipe>
     <van-card
-      v-for="(item,index) in list"
+      v-for="(item, index) in list"
       :key="index"
       :centered="centered"
-      :thumb="webBaseUrl+item.img"
+      :thumb="webBaseUrl + item.img"
       :title="item.name"
       tag="预售"
       :price="item.price"
@@ -33,56 +33,49 @@
 </template>
 
 <script>
-import mixin from "@/utils/mixin.js";
-import {
-  Image,
-  Row,
-  Col,
-  Card,
-  Tag,
-  Button,
-  List,
-  Swipe,
-  SwipeItem,
-  Loading
-} from "vant";
-import NavBar from "@/components/nav-bar.vue";
-import request from "@/utils/request.js";
+import mixin from '@/utils/mixin.js'
+import { Image, Row, Col, Card, Tag, Button, List, Swipe, SwipeItem, Loading, Toast } from 'vant'
+import NavBar from '@/components/nav-bar.vue'
+import request from '@/utils/request.js'
 export default {
-  name: "Product",
+  name: 'Product',
   mixins: [mixin],
   data() {
     return {
-      copyText: "今天天气真好呀!",
+      copyText: '今天天气真好呀!',
       list: [],
-      title: "预购商品",
+      title: '预购商品',
       centered: true,
       api: {
         getProducts: {
-          url: "/products",
-          method: "get"
+          url: '/products',
+          method: 'get'
         }
       }
-    };
+    }
   },
+  //
   methods: {
+    // 点击商品查看详情
     getProductById(id) {
-      this.$router.push({ name: "ProductDetail", params: { id: id } });
+      this.$router.push({ name: 'ProductDetail', params: { id: id } })
     },
+    // 获取订单所有商品
     getProducts() {
       request({ ...this.api.getProducts }).then(res => {
-        this.list = res.data;
-      });
-    },
-    diyGobackTest() {
-      console.log("into diy goback 2");
+        if (res.success) {
+          this.list = res.data
+        } else {
+          Toast('即将上架，敬请期待！')
+        }
+      })
     }
   },
   beforeMount() {
-    this.setTitleBar("商品列表");
+    this.setTitleBar('商品列表')
   },
   mounted() {
-    this.getProducts();
+    this.getProducts()
   },
   components: {
     [Image.name]: Image,
@@ -95,10 +88,10 @@ export default {
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
     [Loading.name]: Loading,
+    [Toast.name]: Toast,
     NavBar
   }
-};
+}
 </script>
 
-<style>
-</style>
+<style></style>

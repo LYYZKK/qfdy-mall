@@ -24,7 +24,15 @@
         <span class="font-size-14">总金额:</span>
         <span class="van-card__price">￥{{ item.totalAmount }}</span>
       </van-col>
-      <van-col span="24" align="right" @click="clickBtn(item)" v-if="item.orderStatus === 0">
+      <van-col
+        span="24"
+        align="right"
+        @click="clickBtn(item)"
+        v-if="
+          item.orderStatus === 0 ||
+            (item.orderStatus === 1 && new Date().getTime() - new Date(item.orderTime).getTime() < cancelTime)
+        "
+      >
         <span class="border-box">{{
           item.orderStatus === 0
             ? '立即付款'
@@ -36,14 +44,17 @@
         }}</span>
       </van-col>
     </van-row>
-    <van-dialog
-      v-model="dialogShow"
-      title="确认付款"
-      show-cancel-button
-      @confirm="submit(goodId)"
-      @cancel="cancel(goodId)"
-    >
+    <van-dialog v-model="dialogShow" title="确认付款" show-cancel-button @confirm="submit(goodId)" @cancel="cancel">
       <h1 class="text-center">￥{{ totalAmount }}</h1>
+    </van-dialog>
+    <van-dialog
+      v-model="dialogCancelShow"
+      title="温馨提示"
+      show-cancel-button
+      @cancel="dialogCancelShow = false"
+      @confirm="cancelOrder(goodId)"
+    >
+      <div class="text-center">七天无理由退订，客户已收现货需在认购金额中扣除（2kg/199）费用</div>
     </van-dialog>
   </div>
 </template>
@@ -85,8 +96,10 @@ export default {
   data() {
     return {
       dialogShow: false,
+      dialogCancelShow: false,
       centered: true,
       totalAmount: '',
+      cancelTime: 1000 * 7 * 24 * 60 * 60,
       goodId: '',
       api: {
         cancelOrder: {
@@ -105,10 +118,13 @@ export default {
       this.$router.push({ path: '/order-detail', query: { id: id } })
     },
     clickBtn(val) {
-      console.log(val)
-      this.dialogShow = true
       this.goodId = val.id
       this.totalAmount = val.totalAmount
+      if (val.oederStatus === 0) {
+        this.dialogShow = true
+      } else if (val.orderStatus === 1) {
+        this.dialogCancelShow = true
+      }
     },
     submit(id) {
       request({
@@ -137,8 +153,11 @@ export default {
           //   name: "OrderList",
           //   params: { customerId: this.customerId }
           // });
-
-          console.log('订单取消成功')
+          Toast({
+            message: '取消成功，稍候将为您退款',
+            icon: 'like-o'
+          })
+          this.$router.go(0)
         }
       })
     }

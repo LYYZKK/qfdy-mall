@@ -3,10 +3,10 @@
     <!-- <NavBar :title="title" :left="false" :text="''" /> -->
     <div>
       <van-row>
-        <van-col span="24" v-for="(item,index) in order.orderProducts" :key="index">
+        <van-col span="24" v-for="(item, index) in order.orderProducts" :key="index">
           <van-card
             :centered="centered"
-            :thumb="webBaseUrl+item.product.img"
+            :thumb="webBaseUrl + item.product.img"
             :title="item.product.name"
             :num="item.productNum"
             tag="预购"
@@ -19,6 +19,7 @@
         <van-cell title="订单编号" :value="order.orderNo"></van-cell>
         <van-cell title="下单时间" :value="order.orderTime"></van-cell>
         <van-cell title="付款时间" :value="order.payTime"></van-cell>
+        <van-cell title="取消时间" :value="order.orderCancelTime"></van-cell>
         <van-cell title="备注" :value="order.mark"></van-cell>
       </van-cell-group>
       <!-- <div class="mt">
@@ -42,64 +43,51 @@
 </template>
 
 <script>
-import {
-  Sku,
-  Image,
-  Button,
-  Lazyload,
-  Card,
-  Row,
-  Col,
-  Cell,
-  CellGroup,
-  Dialog
-} from "vant";
-import NavBar from "@/components/nav-bar.vue";
-import request from "@/utils/request.js";
-import mixin from "@/utils/mixin.js";
+import { Sku, Image, Button, Lazyload, Card, Row, Col, Cell, CellGroup, Dialog } from 'vant'
+import NavBar from '@/components/nav-bar.vue'
+import request from '@/utils/request.js'
+import mixin from '@/utils/mixin.js'
 export default {
-  name: "ProductDetail",
+  name: 'ProductDetail',
   mixins: [mixin],
   data() {
     return {
       show: false,
       centered: true,
-      title: "订单详情",
+      title: '订单详情',
       order: {},
-      customerId: "",
+      customerId: '',
       api: {
         getProductById: {
-          url: "/orders/{id}",
-          method: "get"
+          url: '/orders/{id}',
+          method: 'get'
         }
       }
-    };
+    }
   },
   methods: {
     gotoList() {
-      this.$router.push({ name: "OrderList" });
+      this.$router.push({ name: 'OrderList' })
     },
 
     getProductById() {
       if (this.$route.query.id) {
         request({
           ...this.api.getProductById,
-          urlReplacements: [
-            { substr: "{id}", replacement: this.$route.query.id }
-          ]
+          urlReplacements: [{ substr: '{id}', replacement: this.$route.query.id }]
         }).then(res => {
-          this.order = res.data;
-          this.customerId = parseInt(localStorage.getItem("id"));
-          console.log(res.data);
-        });
+          this.order = res.data
+          this.customerId = parseInt(localStorage.getItem('id'))
+          console.log(res.data)
+        })
       }
     }
   },
   beforeMount() {
-    this.setTitleBar("订单详情");
+    this.setTitleBar('订单详情')
   },
   mounted() {
-    this.getProductById();
+    this.getProductById()
   },
   components: {
     [Sku.name]: Sku,
@@ -114,7 +102,7 @@ export default {
     [Dialog.Component.name]: Dialog.Component,
     NavBar
   }
-};
+}
 </script>
 
 <style scoped>
@@ -125,6 +113,5 @@ export default {
 }
 .mt {
   margin-top: 30px;
-}
-</style>>
-
+}</style
+>>

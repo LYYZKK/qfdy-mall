@@ -277,7 +277,7 @@ export default {
             let info = res.data.signAndEncryptOrder
             alert('即将调用圈存方法')
             console.log(info)
-            // submitOrderForCashNew(info, "wuchang");
+            submitOrderForCashNew(info, 'wuchang')
             // 打开支付
             // this.show = true;
           } else {
