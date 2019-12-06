@@ -38,18 +38,18 @@
             :thumb="webBaseUrl + good.img"
             :title="good.name"
             :num="good.count"
-            tag="预购"
+            :tag="appointBuyText"
             :price="good.price"
             :desc="good.description"
           ></van-card>
         </van-col>
         <van-col span="24">
           <van-cell-group>
-            <van-cell title="购买数量" value="内容">
+            <van-cell :title="appointBuyText + '数量'" value="内容">
               <van-stepper v-model="order.count" :disable-input="true" />
             </van-cell>
             <van-col span="24">
-              <van-field v-model="good.mark" rows="1" autosize label="备注" type="textarea" placeholder="请输入备注" />
+              <van-field v-model="good.mark" placeholder="请输入备注" rows="1" autosize label="备注" />
             </van-col>
           </van-cell-group>
         </van-col>
@@ -118,7 +118,8 @@ import {
   Toast,
   AddressEdit,
   Area,
-  Popup
+  Popup,
+  Notify
 } from 'vant'
 import NavBar from '@/components/nav-bar.vue'
 import request from '@/utils/request.js'
@@ -181,6 +182,11 @@ export default {
         payOrder: {
           url: '/orders/{id}/pay',
           method: 'patch'
+        },
+        // 保存客户地址信息
+        modifyCustomerInfo: {
+          url: '/customers',
+          method: 'patch'
         }
       }
     }
@@ -197,13 +203,20 @@ export default {
         }).then(res => {
           if (res.success) {
             this.customerInfo.name = res.data.name
-            if (res.data.address !== null) {
+            if (res.data.address !== '') {
               let address = JSON.parse(res.data.address)
               this.customerInfo.address.province = address.province
               this.customerInfo.address.city = address.city
               this.customerInfo.address.county = address.county
               this.customerInfo.address.addressDetail = address.addressDetail
-              this.threeAddress = address.province + '/' + address.city + '/' + address.county
+              this.threeAddress =
+                address.province === ''
+                  ? ''
+                  : address.province + '/' + address.city === ''
+                  ? ''
+                  : address.city + '/' + address.county === ''
+                  ? ''
+                  : address.county
             }
             if (
               this.customerInfo.phone === '' ||
@@ -218,6 +231,7 @@ export default {
           }
         })
       }
+      console.log('userShouw', this.userShow)
     },
     // 获取商品详情
     getGoodById() {
@@ -270,14 +284,37 @@ export default {
             phone: this.customerInfo.phone
           }
         }
+        // 修改客户信息
+        let customerAddress = {
+          id: parseInt(localStorage.getItem('id')),
+          name: this.customerInfo.name,
+          phone: this.customerInfo.phone,
+          address: JSON.stringify(this.customerInfo.address)
+        }
+        request({ ...this.api.modifyCustomerInfo, params: customerAddress }).then(res => {
+          if (res.success) {
+            console.log('客户信息保存成功')
+          }
+        })
         request({ ...this.api.addOrder, params }).then(res => {
           if (res.success) {
             this.orderId = res.data.id
             // 提交订单接收加密的参数
             let info = res.data.signAndEncryptOrder
-            alert('即将调用圈存方法')
-            console.log(info)
-            submitOrderForCashNew(info, 'wuchang')
+            if (process.env.APPOINT_BUY) {
+              alert('即将调用圈存方法')
+              console.log(info)
+              submitOrderForCashNew(info, 'wuchang')
+            } else {
+              Toast({
+                message: '恭喜您预约成功，等待联系付款',
+                icon: 'like-o'
+              })
+              this.$router.push({
+                name: 'OrderDetail',
+                query: { id: this.orderId }
+              })
+            }
             // 打开支付
             // this.show = true;
           } else {
@@ -365,6 +402,7 @@ export default {
     [Area.name]: Area,
     [Popup.name]: Popup,
     [AddressEdit.name]: AddressEdit,
+    [Notify.name]: Notify,
     NavBar
   }
 }

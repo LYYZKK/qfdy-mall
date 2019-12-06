@@ -1,36 +1,63 @@
 <template>
   <div class="mainContent">
     <!-- <NavBar :title="title" /> -->
-    <div class="bigContent">
-      <div class="img-text min-height">
-        <van-image :src="goods.picture" width="100%" height="auto">
-          <template v-slot:loading>
-            <van-loading type="spinner" size="20" />
-          </template>
-        </van-image>
-      </div>
-      <van-row class="pd-left-right">
-        <van-col span="24" class="font-style margin-bottom-20">￥{{ sku.price }}</van-col>
-        <van-col span="24">{{ goods.description }}</van-col>
-      </van-row>
-      <van-notice-bar color="#1989fa" background="#fff" :wrapable="true" :scrollable="true">
-        温馨提示：七天无理由退订，客户已收现货需在认购金额中扣除
-        {{ goods.id === 1 ? '（2kg/199）' : goods.id === 2 ? '（3kg/299）' : '' }}费用
-      </van-notice-bar>
-      <van-divider :style="{ color: 'rgba(0,0,0,1)', padding: '0px 20px', margin: '5px 0' }">产品详情</van-divider>
-      <div v-for="(item, index) in productImages" :key="index" class="img-text">
-        <van-image :src="item">
-          <template v-slot:loading>
-            <van-loading type="spinner" size="20" />
-          </template>
-        </van-image>
-      </div>
-    </div>
-    <!-- <van-tabbar safe-area-inset-bottom>
-    <van-tabbar-item>-->
+    <div class="bigContent" ref="bigContent">
+      <div ref="scrollBox">
+        <div class="img-text min-height">
+          <van-image :src="goods.picture" width="100%" height="auto">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
+        </div>
+        <van-row class="pd-left-right">
+          <van-col span="24" class="tip">
+            <div class="font-style">￥{{ sku.price }}</div>
+            <div class="text-color-eee">
+              原价：<span class="line-through">￥{{ goods.id === 1 ? 5999 : 8999 }}</span>
+            </div>
+          </van-col>
+          <van-col span="24">{{ goods.description }}</van-col>
+        </van-row>
+        <van-row type="flex" justify="space-between" align="center" style="background:#fff">
+          <van-col>
+            <van-notice-bar
+              color="rgb(255, 66, 0)"
+              background="#fff"
+              :wrapable="true"
+              :scrollable="true"
+              left-icon="volume-o"
+            >
+              首期预约1000份，先约先得</van-notice-bar
+            >
+          </van-col>
+        </van-row>
+        <van-row type="flex" align="center" justify="space-between" class="ad_tip">
+          <van-col>
+            <div class="tip">
+              <van-icon name="friends-o" />
+              <span style="margin-left:5px;">{{ sku.stock_num }}人预约</span>
+            </div>
+          </van-col>
+          <van-col>
+            <div class="tip">
+              <van-icon name="clock-o" />
+              <span style="margin-left:5px;">预约倒计时：{{ downTime }}</span>
+            </div>
+          </van-col>
+        </van-row>
 
-    <!-- </van-tabbar-item>
-    </van-tabbar>-->
+        <van-divider :style="{ color: 'rgba(0,0,0,1)', padding: '0px 20px', margin: '5px 0' }">产品详情</van-divider>
+        <div v-for="(item, index) in productImages" :key="index" class="img-text">
+          <van-image :src="item">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
+        </div>
+      </div>
+      <img :src="icon" alt width="40px" class="icon_top" v-if="iconShow" />
+    </div>
     <van-sku
       :close-on-click-overlay="true"
       v-model="show"
@@ -39,7 +66,8 @@
       :goods-id="goods.id"
       :show-add-cart-btn="false"
       hide-selected-text
-      :buy-text="'立即预定'"
+      :buy-text="'立即' + appointBuyText"
+      :stepper-title="appointBuyText + '数量'"
       disable-stepper-input
       @buy-clicked="onBuyClicked"
       @stepper-change="totalNumber"
@@ -61,14 +89,14 @@
       @confirm="dialogClose"
     ></van-dialog>
     <van-row class="fixed">
-      <van-col span="12" v-if="sku.stock_num !== 0">
+      <!-- <van-col span="12" v-if="sku.stock_num !== 0">
         <van-button size="large" @click="purchase" color="rgba(255, 66, 0, 1)">
-          库存状态：剩余{{ sku.stock_num }}份
+          库存状态：剩余{{  }}份
         </van-button>
-      </van-col>
-      <van-col :span="sku.stock_num === 0 ? 24 : 12">
+      </van-col> -->
+      <van-col span="24">
         <van-button size="large" @click="purchase" color="rgba(255, 66, 0, 1)" :disabled="sku.stock_num === 0">{{
-          sku.stock_num === 0 ? '已售罄' : '立即预定'
+          sku.stock_num === 0 ? '已售罄' : '立即' + appointBuyText
         }}</van-button>
       </van-col>
     </van-row>
@@ -89,17 +117,23 @@ import {
   Loading,
   Toast,
   NoticeBar,
-  Dialog
+  Dialog,
+  Icon
 } from 'vant'
 import NavBar from '@/components/nav-bar.vue'
 import request from '@/utils/request.js'
 import mixin from '@/utils/mixin.js'
 import ProductDetailConfig from '@/config/product-detail.config'
+import icon from '@/assets/images/new/bot-icon.png'
 export default {
   name: 'ProductDetail',
   mixins: [mixin],
   data() {
     return {
+      icon,
+      iconShow: false,
+      downTime: '',
+      people: '',
       // 点击提交按钮时候自动获取的参数
       getValue: {},
       show: false,
@@ -133,6 +167,32 @@ export default {
     }
   },
   methods: {
+    // 倒计时
+    countDown() {
+      1000 * 24 * 60 * 60
+      let currentTime = new Date().getTime()
+      const timerDown = setInterval(() => {
+        currentTime = new Date().getTime()
+        let endTime = new Date('2020.1.9 00:00:00').getTime()
+        let timeDiff = (endTime - currentTime) / 1000
+        let day = parseInt(timeDiff / 86400)
+        let hour = parseInt((timeDiff % 86400) / 3600)
+        let min = parseInt(((timeDiff % 86400) % 3600) / 60)
+        let sec = parseInt(((timeDiff % 86400) % 3600) % 60)
+        this.downTime =
+          (day < 10 ? '0' + day : day) +
+          '天' +
+          (hour < 10 ? '0' + hour : hour) +
+          '小时' +
+          (min < 10 ? '0' + min : min) +
+          '分' +
+          (sec < 10 ? '0' + sec : sec) +
+          '秒'
+      }, 1000)
+      this.$once('hook:beforeDestroy', () => {
+        clearInterval(timerDown)
+      })
+    },
     // 点击购买判断用户是否登录
     purchase() {
       let isLogin = parseInt(localStorage.getItem('isLogin'))
@@ -156,7 +216,11 @@ export default {
     },
     onBuyClicked(value) {
       this.getValue = value
-      this.dialogShow = true
+      this.$router.push({
+        name: 'ProductSubmit',
+        params: { sku: this.sku, goods: this.getValue }
+      })
+      // this.dialogShow = true
     },
     dialogClose() {
       this.$router.push({
@@ -179,7 +243,6 @@ export default {
       })
     },
     getProductById() {
-      console.log(this.$route.params.id)
       this.productId = this.$route.params.id
       if (this.$route.params.id) {
         this.fun()
@@ -207,9 +270,11 @@ export default {
       return this.goods.id === 1 ? msg + '（2kg/199）费用' : this.goods.id === 2 ? msg + '（3kg/299）费用' : ''
     }
   },
+
   mounted() {
     this.initPage()
     this.getProductById()
+    this.countDown()
   },
 
   components: {
@@ -225,6 +290,7 @@ export default {
     [Loading.name]: Loading,
     [TabbarItem.name]: TabbarItem,
     [NoticeBar.name]: NoticeBar,
+    [Icon.name]: Icon,
     [Dialog.Component.name]: Dialog.Component,
     NavBar
   }
@@ -249,7 +315,7 @@ export default {
 }
 .pd-left-right {
   background-color: #fff;
-  padding: 10px;
+  padding: 10px 10px 0 10px;
 }
 .font-style {
   font-size: 18px;
@@ -277,7 +343,37 @@ export default {
   color: #ccc;
   font-size: 11px;
 }
+.text-color-eee {
+  margin-left: 20px;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.5);
+}
+.line-through {
+  text-decoration: line-through;
+}
 .min-height {
-  min-height: 60%;
+  min-height: 50%;
+  position: relative;
+}
+.ad_tip {
+  background: linear-gradient(to bottom, rgba(255, 44, 11, 0.5), rgba(256, 44, 11, 1));
+  height: 30px;
+  width: 100%;
+  color: #fff;
+  font-size: 12px;
+  padding: 0 10px;
+}
+.tip {
+  display: flex;
+  align-items: center;
+}
+.icon_top {
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  transform: translate(-50%, -50%);
+}
+.van-notice-bar--wrapable {
+  padding: 8px 10px !important;
 }
 </style>

@@ -29,7 +29,7 @@
         align="right"
         @click="clickBtn(item)"
         v-if="
-          item.orderStatus === 0 ||
+          (item.orderStatus === 0 && appointBuy) ||
             (item.orderStatus === 1 && new Date().getTime() - new Date(item.orderTime).getTime() < cancelTime)
         "
       >
@@ -49,12 +49,15 @@
     </van-dialog>
     <van-dialog
       v-model="dialogCancelShow"
-      title="温馨提示"
+      title="请确认"
       show-cancel-button
       @cancel="dialogCancelShow = false"
       @confirm="cancelOrder(goodId)"
     >
-      <div class="text-center">七天无理由退订，客户已收现货需在认购金额中扣除（2kg/199）费用</div>
+      <div class="text-center">是否确认取消订单？</div>
+    </van-dialog>
+    <van-dialog v-model="dialogTipShow" title="温馨提示" @confirm="dialogTipShow = false">
+      <div class="text-center">正在加速开发中</div>
     </van-dialog>
   </div>
 </template>
@@ -97,6 +100,7 @@ export default {
     return {
       dialogShow: false,
       dialogCancelShow: false,
+      dialogTipShow: false,
       centered: true,
       totalAmount: '',
       cancelTime: 1000 * 7 * 24 * 60 * 60,
@@ -120,10 +124,15 @@ export default {
     clickBtn(val) {
       this.goodId = val.id
       this.totalAmount = val.totalAmount
-      if (val.oederStatus === 0) {
-        this.dialogShow = true
+      console.log(process.env.APPOINT_BUY)
+      if (process.env.APPOINT_BUY) {
+        if (val.orderStatus === 0) {
+          this.dialogShow = true
+        }
       } else if (val.orderStatus === 1) {
         this.dialogCancelShow = true
+      } else {
+        this.dialogTipShow = true
       }
     },
     submit(id) {
@@ -157,7 +166,7 @@ export default {
             message: '取消成功，稍候将为您退款',
             icon: 'like-o'
           })
-          this.$router.go(0)
+          this.$emit('changeSort')
         }
       })
     }

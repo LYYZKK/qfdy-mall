@@ -88,6 +88,7 @@ export default {
   },
   mounted() {
     this.getProductById()
+    console.log(window.location)
   },
   components: {
     [Sku.name]: Sku,

@@ -1,9 +1,10 @@
 import request from '@/utils/request.js'
-const envConfig = require('../config/env.config')
 export default {
   data() {
     return {
-      webBaseUrl: envConfig[process.env.mode].HOME_PAGE_URL,
+      webBaseUrl: process.env.HOME_PAGE_URL,
+      appointBuyText: process.env.APPOINT_BUY ? '预购' : '预约',
+      appointBuy: process.env.APPOINT_BUY,
       flag: false,
       api: {
         // 民生银行参数解密
@@ -78,6 +79,7 @@ export default {
     },
     // 解密从民生银行跳转的连接参数
     cmbcDescrypt() {
+      let isLogin = ''
       console.log('民生银行param===', this.$route.query.param)
       let params = {
         param: this.$route.query.param
@@ -85,27 +87,32 @@ export default {
       let linkStatus = localStorage.getItem('linkStatus')
       let purchaseStatus = localStorage.getItem('purchaseStatus')
       let mineStatus = localStorage.getItem('mineStatus')
+      let orderStatus = localStorage.getItem('orderStatus')
       if (linkStatus !== null) {
         localStorage.setItem('linkStatus', linkStatus)
       } else {
         if (purchaseStatus !== null) {
           localStorage.setItem('purchaseStatus', purchaseStatus)
-        } else {
-          if (mineStatus !== null) {
-            localStorage.setItem('mineStatus', mineStatus)
-          }
+        }
+        if (mineStatus !== null) {
+          localStorage.setItem('mineStatus', mineStatus)
+        }
+        if (orderStatus !== null) {
+          localStorage.setItem('orderStatus', orderStatus)
         }
       }
       if (params.param !== undefined) {
         request({ ...this.api.cmbcDescrypt, params }).then(res => {
           if (res.success) {
             localStorage.setItem('isLogin', 1)
+
             let info = res.data.split('|')
             localStorage.setItem('phone', info[0])
             localStorage.setItem('cuserId', info[1]) // 银行客户id
           }
+
           this.checkCustomer().then(() => {
-            let isLogin = localStorage.getItem('isLogin')
+            isLogin = localStorage.getItem('isLogin')
             // 登录成功后自动跳转到linkMall
             if (isLogin === '1' && linkStatus === '1') {
               console.log('登录成功即将跳转到linkMall')
@@ -125,6 +132,12 @@ export default {
               localStorage.removeItem('mineStatus')
               gotoShopUrl(this.webBaseUrl + '/mine')
             }
+            // 登录后跳转到订单列表
+            if (isLogin === '1' && orderStatus !== null) {
+              console.log('登录成功即将跳转到订单列表')
+              localStorage.removeItem('orderStatus')
+              gotoShopUrl(this.webBaseUrl + '/order-list')
+            }
           })
         })
       } else if (this.$route.query.bankUserId && this.$route.query.cid) {
@@ -133,6 +146,12 @@ export default {
       } else {
         localStorage.setItem('isLogin', 0)
         this.linkAdd(1)
+      }
+      isLogin = localStorage.getItem('isLogin')
+      console.log(isLogin)
+      if (isLogin !== '1') {
+        localStorage.clear()
+        localStorage.setItem('isLogin', 0)
       }
     },
     // 验证客户身份

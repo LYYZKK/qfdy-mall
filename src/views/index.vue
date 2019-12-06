@@ -159,7 +159,6 @@
 import { Image, Row, Col, Dialog, Button, Icon, Toast } from 'vant'
 import mixin from '@/utils/mixin.js'
 import logo from '@/assets/images/new/LOGO.png'
-import video from '@/assets/images/new/video.png'
 import text_img from '@/assets/images/new/text-img.png'
 import text1 from '@/assets/images/new/text-1.png'
 import text2 from '@/assets/images/new/text-2.png'
@@ -211,7 +210,6 @@ export default {
       events: ['fullscreenchange'],
       images: {
         logo,
-        video,
         text_img,
         text1,
         text2,
@@ -259,31 +257,6 @@ export default {
         cuserId: '',
         phone: ''
       },
-      playerOptions: {
-        playbackRates: [0.5, 1.0, 1.5, 2.0],
-        autoplay: false,
-        muted: false,
-        loop: false,
-        preload: 'auto',
-        language: 'zh-CN',
-        aspectRatio: '16:9',
-        fluid: true,
-        sources: [
-          {
-            type: 'video/mp4',
-            src: movie
-          }
-        ],
-        width: document.documentElement.clientWidth,
-        poster: video,
-        notSupportedMessage: '此视频暂无法播放，请稍后再试',
-        controlBar: {
-          timeDivider: true,
-          durationDisplay: true,
-          remainingTimeDisplay: false,
-          fullscreenToggle: false
-        }
-      },
       // api
       api: {
         // 获取签名
@@ -295,12 +268,6 @@ export default {
     }
   },
   methods: {
-    // 视频处理
-    onPlayerFullScreenchange(player) {
-      // 强制退出全屏，恢复正常大小
-      player.exitFullscreen()
-      this.videoDialogVisible = true
-    },
     // 预约购买
     prePurchase() {
       let param = this.$route.query.param
@@ -318,14 +285,15 @@ export default {
     // 现货购买
     spotBuy() {
       this.linkAdd(3)
+
       // 点击过现货购买的标志
-      let isLogin = localStorage.getItem('isLogin')
-      if (isLogin === '1') {
-        this.getSign()
-      } else {
-        localStorage.setItem('linkStatus', '1')
-        this.getSign()
-      }
+      // let isLogin = localStorage.getItem('isLogin')
+      // if (isLogin === '1') {
+      //   this.getSign()
+      // } else {
+      //   localStorage.setItem('linkStatus', '1')
+      //   this.getSign()
+      // }
     },
     initPage() {
       this.cmbcDescrypt()

@@ -79,9 +79,9 @@
       _locked = false
     }
     /* 重复的方法
- function getWebkitEventCode() {
-    return eventCode;
-}*/
+     function getWebkitEventCode() {
+        return eventCode;
+    }*/
     function getWebkitEvent() {
       return eventName
     }
@@ -109,9 +109,9 @@
       return _mevents.length > 0 ? _mevents.shift() : '0'
     }
     /* 重复的方法
-  function getWebkitEvent() {
-    return "";
-}*/
+      function getWebkitEvent() {
+        return "";
+    }*/
 
     // 判断手机类型
     function getPhoneType() {
@@ -234,7 +234,24 @@
     }
 
     function diyGoBack() {
-      window.history.go(-1)
+      const baseUrl = 'https://mall.wuchangdami.qiaofudayuan.net:8001'
+      const param = localStorage.getItem('param')
+      if (window.location.pathname === '/booking') {
+        //商品列表页
+        if (param) {
+          window.location.href = baseUrl + '/index' + '?param=' + param
+        } else {
+          window.location.href = baseUrl + '/index'
+        }
+      } else if (window.location.pathname === '/order-detail') {
+        // 订单详情页
+        window.location.href = baseUrl + '/order-list'
+      } else if (window.location.pathname === '/order-list' || window.location.pathname === '/mine') {
+        // 订单列表页或者个人中心
+        window.location.href = baseUrl + '/booking'
+      } else {
+        window.history.go(-1)
+      }
     }
     //隐藏民生的title
     function hideClientTitleBar() {
@@ -260,18 +277,18 @@
       setWebitEvent('clientLogin(@)', 'getLoginFlag')
     }
     /*//商户自己在页面写回调方法获取登录状态
- function clientLogin(flag){
- alert(flag);
- }*/
+     function clientLogin(flag){
+     alert(flag);
+     }*/
 
     //小薇之家获取设备信息  安卓手机：设备IMEI\设备IMSI\ID变形\MAC地址  苹果手机：ID变形（单独生成，非绑定设备ID）和IDFA
     function getDeviceMessage() {
       setWebitEvent('deviceMessage(@)', 'xiaoweihome')
     }
     /*//商户自己在页面写回调方法获取设备信息
- function deviceMessage(message){
- alert(message);
- }*/
+     function deviceMessage(message){
+     alert(message);
+     }*/
 
     // 商户联合登录，并跳转商户url
     function loginForComm(beforeUrl, toUrl) {

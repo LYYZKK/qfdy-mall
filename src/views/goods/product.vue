@@ -13,22 +13,26 @@
         <van-image :src="webBaseUrl + item.img" />
       </van-swipe-item>
     </van-swipe>
-    <van-card
-      v-for="(item, index) in list"
-      :key="index"
-      :centered="centered"
-      :thumb="webBaseUrl + item.img"
-      :title="item.name"
-      tag="预售"
-      :price="item.price"
-      :desc="item.description"
-      @click="getProductById(item.id)"
-    >
-      <div slot="footer">库存：{{ item.totalCount }}</div>
-      <template v-slot:loading>
-        <van-loading type="spinner" size="20" />
-      </template>
-    </van-card>
+    <div style="text-align:center"><van-loading type="spinner" color="#ee0a24" v-if="loadingShow" /></div>
+    <template v-if="!loadingShow">
+      <van-card
+        v-for="(item, index) in list"
+        :key="index"
+        :centered="centered"
+        :thumb="webBaseUrl + item.img"
+        :title="item.name"
+        tag="预售"
+        :price="item.price"
+        :desc="item.description"
+        @click="getProductById(item.id)"
+        :origin-price="item.id === 2 ? 8999 : 5999"
+      >
+        <div slot="footer">库存：{{ item.totalCount }}</div>
+        <template v-slot:loading>
+          <van-loading type="spinner" size="20" />
+        </template>
+      </van-card>
+    </template>
   </div>
 </template>
 
@@ -42,6 +46,7 @@ export default {
   mixins: [mixin],
   data() {
     return {
+      loadingShow: true,
       copyText: '今天天气真好呀!',
       list: [],
       title: '预购商品',
@@ -65,6 +70,7 @@ export default {
       request({ ...this.api.getProducts }).then(res => {
         if (res.success) {
           this.list = res.data
+          this.loadingShow = false
         } else {
           Toast('即将上架，敬请期待！')
         }
