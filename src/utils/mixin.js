@@ -79,28 +79,29 @@ export default {
     },
     // 解密从民生银行跳转的连接参数
     cmbcDescrypt() {
-      let isLogin = ''
       console.log('民生银行param===', this.$route.query.param)
       let params = {
         param: this.$route.query.param
       }
+      let productId = localStorage.getItem('productId')
       let linkStatus = localStorage.getItem('linkStatus')
-      let purchaseStatus = localStorage.getItem('purchaseStatus')
-      let mineStatus = localStorage.getItem('mineStatus')
-      let orderStatus = localStorage.getItem('orderStatus')
+      // let purchaseStatus = localStorage.getItem('purchaseStatus')
+      // let mineStatus = localStorage.getItem('mineStatus')
+      // let orderStatus = localStorage.getItem('orderStatus')
       if (linkStatus !== null) {
         localStorage.setItem('linkStatus', linkStatus)
-      } else {
-        if (purchaseStatus !== null) {
-          localStorage.setItem('purchaseStatus', purchaseStatus)
-        }
-        if (mineStatus !== null) {
-          localStorage.setItem('mineStatus', mineStatus)
-        }
-        if (orderStatus !== null) {
-          localStorage.setItem('orderStatus', orderStatus)
-        }
       }
+      // } else {
+      //   if (purchaseStatus !== null) {
+      //     localStorage.setItem('purchaseStatus', purchaseStatus)
+      //   }
+      //   if (mineStatus !== null) {
+      //     localStorage.setItem('mineStatus', mineStatus)
+      //   }
+      //   if (orderStatus !== null) {
+      //     localStorage.setItem('orderStatus', orderStatus)
+      //   }
+      // }
       if (params.param !== undefined) {
         request({ ...this.api.cmbcDescrypt, params }).then(res => {
           if (res.success) {
@@ -119,25 +120,25 @@ export default {
               localStorage.removeItem('linkStatus')
               this.goToLinkMall()
             }
-            // 登录成功后自动跳转到商品详情页
-            if (isLogin === '1' && purchaseStatus !== null) {
-              console.log('登录成功即将跳转到商品详情页')
-              let purchaseId = parseInt(localStorage.getItem('purchaseStatus'))
-              localStorage.removeItem('purchaseStatus')
-              gotoShopUrl(this.webBaseUrl + '/product-detail/' + purchaseId)
-            }
-            // 登录后自动跳转到当前客户信息页面
-            if (isLogin === '1' && mineStatus === '1') {
-              console.log('登录成功即将跳转到客户信息详情页')
-              localStorage.removeItem('mineStatus')
-              gotoShopUrl(this.webBaseUrl + '/mine')
-            }
-            // 登录后跳转到订单列表
-            if (isLogin === '1' && orderStatus !== null) {
-              console.log('登录成功即将跳转到订单列表')
-              localStorage.removeItem('orderStatus')
-              gotoShopUrl(this.webBaseUrl + '/order-list')
-            }
+            // // 登录成功后自动跳转到商品详情页
+            // if (isLogin === '1' && purchaseStatus !== null) {
+            //   console.log('登录成功即将跳转到商品详情页')
+            //   let purchaseId = parseInt(localStorage.getItem('purchaseStatus'))
+            //   localStorage.removeItem('purchaseStatus')
+            //   gotoShopUrl(this.webBaseUrl + '/product-detail/' + purchaseId)
+            // }
+            // // 登录后自动跳转到当前客户信息页面
+            // if (isLogin === '1' && mineStatus === '1') {
+            //   console.log('登录成功即将跳转到客户信息详情页')
+            //   localStorage.removeItem('mineStatus')
+            //   gotoShopUrl(this.webBaseUrl + '/mine')
+            // }
+            // // 登录后跳转到订单列表
+            // if (isLogin === '1' && orderStatus !== null) {
+            //   console.log('登录成功即将跳转到订单列表')
+            //   localStorage.removeItem('orderStatus')
+            //   gotoShopUrl(this.webBaseUrl + '/order-list')
+            // }
           })
         })
       } else if (this.$route.query.bankUserId && this.$route.query.cid) {
@@ -147,11 +148,12 @@ export default {
         localStorage.setItem('isLogin', 0)
         this.linkAdd(1)
       }
-      isLogin = localStorage.getItem('isLogin')
+      let isLogin = localStorage.getItem('isLogin')
       console.log(isLogin)
       if (isLogin !== '1') {
         localStorage.clear()
         localStorage.setItem('isLogin', 0)
+        localStorage.setItem('productId', productId)
       }
     },
     // 验证客户身份
@@ -170,7 +172,6 @@ export default {
             localStorage.setItem('isVip', res.data.isVip)
             localStorage.setItem('id', res.data.id) // 商城用户ID
             localStorage.setItem('userCode', res.data.code)
-
             resolve()
           }
         })

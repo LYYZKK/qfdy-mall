@@ -2,7 +2,7 @@
   <div class="mainContent">
     <!-- <NavBar :title="title" /> -->
     <van-swipe :autoplay="3000" indicator-color="white">
-      <van-swipe-item style="min-height: 60%">
+      <van-swipe-item style="min-height: 100px">
         <van-image :src="webBaseUrl + '/common/img/c_01.jpg'">
           <template v-slot:loading>
             <van-loading type="spinner" size="20" />
@@ -13,7 +13,9 @@
         <van-image :src="webBaseUrl + item.img" />
       </van-swipe-item>
     </van-swipe>
-    <div style="text-align:center"><van-loading type="spinner" color="#ee0a24" v-if="loadingShow" /></div>
+    <div style="text-align:center">
+      <van-loading type="spinner" color="#ee0a24" v-if="loadingShow" />
+    </div>
     <template v-if="!loadingShow">
       <van-card
         v-for="(item, index) in list"
@@ -38,7 +40,7 @@
 
 <script>
 import mixin from '@/utils/mixin.js'
-import { Image, Row, Col, Card, Tag, Button, List, Swipe, SwipeItem, Loading, Toast } from 'vant'
+import { Image, Row, Col, Card, Tag, Button, List, Swipe, SwipeItem, Loading, Toast, Locale } from 'vant'
 import NavBar from '@/components/nav-bar.vue'
 import request from '@/utils/request.js'
 export default {
@@ -63,7 +65,8 @@ export default {
   methods: {
     // 点击商品查看详情
     getProductById(id) {
-      this.$router.push({ name: 'ProductDetail', params: { id: id } })
+      localStorage.setItem('productId', id)
+      this.$router.push({ name: 'ProductDetail', params: { id } })
     },
     // 获取订单所有商品
     getProducts() {
@@ -75,13 +78,22 @@ export default {
           Toast('即将上架，敬请期待！')
         }
       })
+    },
+    initPage() {
+      let cmbcParam = this.$route.query.param
+      if (cmbcParam !== undefined) {
+        this.cmbcDescrypt()
+        this.getProducts()
+      } else {
+        this.getProducts()
+      }
     }
   },
   beforeMount() {
     this.setTitleBar('商品列表')
   },
   mounted() {
-    this.getProducts()
+    this.initPage()
   },
   components: {
     [Image.name]: Image,

@@ -2,30 +2,8 @@
   <div class="mainContent">
     <van-cell title="我的订单" is-link url="/order-list" />
     <van-cell title="我的收货地址" is-link url="/address-list" />
-    <!-- <van-cell-group>
-      <van-field v-model="customerInfo.name" label="姓名" left-icon="contact" />
-      <van-field v-model="customerInfo.tel" label="手机号" left-icon="phone-o" disabled />
-      <van-field
-        v-model="threeAddress"
-        label="省市区选择"
-        left-icon="location-o"
-        @click="addressShow = true"
-        disabled
-      ></van-field>
-      <van-field v-model="customerInfo.address.addressDetail" label="详细地址" left-icon="location-o" />
-    </van-cell-group>
-    <van-popup v-model="addressShow" position="bottom">
-      <van-area :area-list="areaList" @confirm="saveAddress" @cancel="cancelAddress" />
-    </van-popup>
-    <div class="mt">
-      <van-button @click="save" size="large" color="red" text="保存"></van-button>
-    </div>-->
-    <!-- <van-popup v-model="addressShow" position="bottom">
-      <van-area :area-list="areaList" @confirm="saveAddress" @cancel="cancelAddress" />
-    </van-popup>-->
   </div>
 </template>
-
 <script>
 import NavBar from '@/components/nav-bar.vue'
 import request from '@/utils/request.js'
@@ -83,6 +61,7 @@ export default {
     getCustomerInfo() {
       console.log('areaList', this.areaList)
       let isLogin = localStorage.getItem('isLogin')
+      console.log('mine isLogin', typeof isLogin)
       if (isLogin === '1') {
         this.customerInfo.tel = localStorage.getItem('phone')
         let id = localStorage.getItem('id')
@@ -113,7 +92,6 @@ export default {
         }
       } else {
         // 查看我的
-        localStorage.setItem('mineStatus', 1)
         loginForComm(
           window.location.protocol + '//' + window.location.host + this.$route.path,
           window.location.protocol + '//' + window.location.host + this.$route.path
@@ -121,7 +99,6 @@ export default {
       }
     },
     saveAddress(val) {
-      console.log(val)
       this.customerInfo.address.province = val[0].name
       this.customerInfo.address.city = val[1].name
       this.customerInfo.address.county = val[2].name
@@ -150,6 +127,19 @@ export default {
           Notify(res.message)
         }
       })
+    },
+    // initPage
+    initPage() {
+      let cmbcParam = this.$route.query.param
+      if (cmbcParam !== undefined) {
+        this.cmbcDescrypt()
+        this.getCustomerInfo()
+      } else {
+        let isLogin = localStorage.getItem('isLogin')
+        if (isLogin === '1') {
+          this.getCustomerInfo()
+        }
+      }
     }
   },
   computed: {
@@ -170,7 +160,7 @@ export default {
     this.setTitleBar('个人中心')
   },
   mounted() {
-    this.getCustomerInfo()
+    this.initPage()
   },
   components: {
     NavBar,

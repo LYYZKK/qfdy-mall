@@ -141,6 +141,8 @@ export default {
       show: false,
       checked: true,
       isDefaultAddress: '',
+      // 地址列表为空
+      isAddressNull: false,
       title: '确认订单',
       good: {
         img: '',
@@ -230,22 +232,27 @@ export default {
         )
       } else {
         request({ ...this.api.getAddressList, params }).then(res => {
-          res.data.forEach((element, index) => {
-            element.address = JSON.parse(element.address)
-            if (element.isDefault === 1) {
-              this.isDefaultAddress = index
+          if (res.success) {
+            if (res.data.length > 0) {
+              res.data.forEach((element, index) => {
+                element.address = JSON.parse(element.address)
+                if (element.isDefault === 1) {
+                  this.isDefaultAddress = index
+                }
+              })
+              if (this.isDefaultAddress !== '') {
+                this.customerInfo.name = res.data[this.isDefaultAddress].name
+                this.customerInfo.phone = res.data[this.isDefaultAddress].phone
+                this.customerInfo.address.province = res.data[this.isDefaultAddress].address.province
+                this.customerInfo.address.city = res.data[this.isDefaultAddress].address.city
+                this.customerInfo.address.county = res.data[this.isDefaultAddress].address.county
+                this.customerInfo.address.areaCode = res.data[this.isDefaultAddress].address.areaCode
+                this.customerInfo.address.addressDetail = res.data[this.isDefaultAddress].address.addressDetail
+                this.customerInfo.id = res.data[this.isDefaultAddress].id
+              }
+            } else {
+              this.isAddressNull = true
             }
-          })
-          if (this.isDefaultAddress !== '') {
-            this.customerInfo.name = res.data[this.isDefaultAddress].name
-            this.customerInfo.phone = res.data[this.isDefaultAddress].phone
-            this.customerInfo.address.province = res.data[this.isDefaultAddress].address.province
-            this.customerInfo.address.city = res.data[this.isDefaultAddress].address.city
-            this.customerInfo.address.county = res.data[this.isDefaultAddress].address.county
-            this.customerInfo.address.areaCode = res.data[this.isDefaultAddress].address.areaCode
-            this.customerInfo.address.addressDetail = res.data[this.isDefaultAddress].address.addressDetail
-            this.customerInfo.id = res.data[this.isDefaultAddress].id
-            console.log(this.customerInfo)
           }
         })
       }
@@ -263,14 +270,25 @@ export default {
           }
         })
       } else {
-        this.$router.push({
-          name: 'AddressList',
-          params: {
-            goods: this.$route.params.goods,
-            sku: this.$route.params.sku,
-            isSelect: 1
-          }
-        })
+        if (this.isAddressNull) {
+          this.$router.push({
+            name: 'AddressEdit',
+            params: {
+              goods: this.$route.params.goods,
+              sku: this.$route.params.sku,
+              isSelect: 1
+            }
+          })
+        } else {
+          this.$router.push({
+            name: 'AddressList',
+            params: {
+              goods: this.$route.params.goods,
+              sku: this.$route.params.sku,
+              isSelect: 1
+            }
+          })
+        }
       }
     },
     // 获取商品详情

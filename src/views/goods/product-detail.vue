@@ -42,6 +42,7 @@
             <div class="tip">
               <van-icon name="clock-o" />
               <span style="margin-left:5px;">预约倒计时：{{ downTime }}</span>
+              <!-- <span>{{ time }}</span> -->
             </div>
           </van-col>
         </van-row>
@@ -92,11 +93,6 @@
       @confirm="dialogClose"
     ></van-dialog>
     <van-row class="fixed">
-      <!-- <van-col span="12" v-if="sku.stock_num !== 0">
-        <van-button size="large" @click="purchase" color="rgba(255, 66, 0, 1)">
-          库存状态：剩余{{  }}份
-        </van-button>
-      </van-col>-->
       <van-col span="24">
         <van-button
           size="large"
@@ -105,7 +101,7 @@
           :disabled="sku.stock_num === 0"
         >
           {{
-          sku.stock_num === 0 ? '已售罄' : '立即' + appointBuyText
+            sku.stock_num === 0 ? '已售罄' : '立即' + appointBuyText
           }}
         </van-button>
       </van-col>
@@ -195,16 +191,16 @@ export default {
       let currentTime = new Date().getTime()
       const timerDown = setInterval(() => {
         currentTime = new Date().getTime()
-        let endTime = new Date('2020.1.9 00:00:00').getTime()
+        let endTime = new Date('2020/1/9 00:00:00').getTime()
         let timeDiff = (endTime - currentTime) / 1000
         let day = parseInt(timeDiff / 86400)
         let hour = parseInt((timeDiff % 86400) / 3600)
         let min = parseInt(((timeDiff % 86400) % 3600) / 60)
         let sec = parseInt(((timeDiff % 86400) % 3600) % 60)
-        this.time.day = day
-        this.time.hour = hour
-        this.time.min = min
-        this.time.sec = sec
+        // this.time.day = day
+        // this.time.hour = hour
+        // this.time.min = min
+        // this.time.sec = sec
         this.downTime =
           (day < 10 ? '0' + day : day) +
           '天' +
@@ -225,11 +221,6 @@ export default {
       if (isLogin === 1) {
         this.show = true
       } else {
-        console.log(
-          '未登录将跳转银行登录页面传输路径为',
-          window.location.protocol + '//' + window.location.host + this.$route.fullPath
-        )
-        localStorage.setItem('purchaseStatus', this.$route.params.id)
         // eslint-disable-next-line no-undef
         loginForComm(
           window.location.protocol + '//' + window.location.host + this.$route.fullPath,
@@ -302,6 +293,13 @@ export default {
       let cmbcParam = this.$route.query.param
       if (cmbcParam !== undefined) {
         this.cmbcDescrypt()
+        this.getProductById()
+        this.getOrderReport()
+        this.countDown()
+      } else {
+        this.getProductById()
+        this.getOrderReport()
+        this.countDown()
       }
     }
   },
@@ -317,9 +315,6 @@ export default {
 
   mounted() {
     this.initPage()
-    this.getProductById()
-    this.getOrderReport()
-    this.countDown()
   },
 
   components: {
@@ -397,7 +392,7 @@ export default {
   text-decoration: line-through;
 }
 .min-height {
-  min-height: 300px;
+  min-height: 100px;
   position: relative;
 }
 .ad_tip {

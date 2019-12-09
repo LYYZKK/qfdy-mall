@@ -3,7 +3,7 @@
     <van-row class="border font-size-12" v-for="(item, index) in orderList" :key="index">
       <van-col span="24" align="right" class="text-color">
         {{
-          item.orderStatus === 0 ? '待支付' : item.orderStatus === 1 ? '支付成功' : item.orderStatus === 3 ? '已取消' : ''
+        item.orderStatus === 0 ? '预约成功' : item.orderStatus === 3 ? '已取消' : ''
         }}
       </van-col>
       <van-col span="24">
@@ -31,21 +31,10 @@
         align="right"
         @click="clickBtn(item)"
         v-if="
-          (item.orderStatus === 0 && appointBuy) ||
-            (item.orderStatus === 1 && new Date().getTime() - new Date(item.orderTime).getTime() < cancelTime)
+          item.orderStatus === 0 && (new Date().getTime() - new Date(item.orderTime).getTime() < cancelTime)
         "
       >
-        <span class="border-box">
-          {{
-            item.orderStatus === 0
-              ? '立即付款'
-              : item.orderStatus === 1
-                ? '取消订单'
-                : item.orderStatus === 3
-                  ? '重新下单'
-                  : ''
-          }}
-        </span>
+        <span class="border-box">取消订单</span>
       </van-col>
     </van-row>
     <van-dialog
@@ -59,12 +48,12 @@
     </van-dialog>
     <van-dialog
       v-model="dialogCancelShow"
-      title="请确认"
+      title="是否确认取消订单？"
       show-cancel-button
       @cancel="dialogCancelShow = false"
       @confirm="cancelOrder(goodId)"
     >
-      <div class="text-center">是否确认取消订单？</div>
+      <div class="text-center"></div>
     </van-dialog>
     <van-dialog v-model="dialogTipShow" title="温馨提示" @confirm="dialogTipShow = false">
       <div class="text-center">正在加速开发中</div>
@@ -102,8 +91,7 @@ export default {
       }
     },
     orderStatus: {
-      type: Number,
-      default: 0
+      type: Number
     }
   },
   data() {
@@ -134,16 +122,16 @@ export default {
     clickBtn(val) {
       this.goodId = val.id
       this.totalAmount = val.totalAmount
-      console.log(process.env.APPOINT_BUY)
-      if (process.env.APPOINT_BUY) {
-        if (val.orderStatus === 0) {
-          this.dialogShow = true
-        }
-      } else if (val.orderStatus === 1) {
-        this.dialogCancelShow = true
-      } else {
-        this.dialogTipShow = true
-      }
+      this.dialogCancelShow = true
+      // if (process.env.APPOINT_BUY) {
+      //   if (val.orderStatus === 0) {
+      //     this.dialogShow = true
+      //   }
+      // } else if (val.orderStatus === 1) {
+      //   this.dialogCancelShow = true
+      // } else {
+      //   this.dialogTipShow = true
+      // }
     },
     submit(id) {
       request({
