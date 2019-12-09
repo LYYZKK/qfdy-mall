@@ -1,11 +1,17 @@
 <template>
   <div class="mainContent">
-    <!-- <NavBar :title="title" /> -->
-    <van-cell-group>
+    <van-cell title="我的订单" is-link url="/order-list" />
+    <van-cell title="我的收货地址" is-link url="/address-list" />
+    <!-- <van-cell-group>
       <van-field v-model="customerInfo.name" label="姓名" left-icon="contact" />
       <van-field v-model="customerInfo.tel" label="手机号" left-icon="phone-o" disabled />
-      <van-field v-model="threeAddress" label="省市区选择" left-icon="location-o" @click="addressShow = true" disabled>
-      </van-field>
+      <van-field
+        v-model="threeAddress"
+        label="省市区选择"
+        left-icon="location-o"
+        @click="addressShow = true"
+        disabled
+      ></van-field>
       <van-field v-model="customerInfo.address.addressDetail" label="详细地址" left-icon="location-o" />
     </van-cell-group>
     <van-popup v-model="addressShow" position="bottom">
@@ -13,10 +19,10 @@
     </van-popup>
     <div class="mt">
       <van-button @click="save" size="large" color="red" text="保存"></van-button>
-    </div>
+    </div>-->
     <!-- <van-popup v-model="addressShow" position="bottom">
       <van-area :area-list="areaList" @confirm="saveAddress" @cancel="cancelAddress" />
-    </van-popup> -->
+    </van-popup>-->
   </div>
 </template>
 

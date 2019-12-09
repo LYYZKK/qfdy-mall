@@ -1,9 +1,11 @@
 <template>
   <div>
     <van-row class="border font-size-12" v-for="(item, index) in orderList" :key="index">
-      <van-col span="24" align="right" class="text-color">{{
-        item.orderStatus === 0 ? '待支付' : item.orderStatus === 1 ? '支付成功' : item.orderStatus === 3 ? '已取消' : ''
-      }}</van-col>
+      <van-col span="24" align="right" class="text-color">
+        {{
+          item.orderStatus === 0 ? '待支付' : item.orderStatus === 1 ? '支付成功' : item.orderStatus === 3 ? '已取消' : ''
+        }}
+      </van-col>
       <van-col span="24">
         <van-card
           v-for="(a, i) in item.orderProducts"
@@ -33,18 +35,26 @@
             (item.orderStatus === 1 && new Date().getTime() - new Date(item.orderTime).getTime() < cancelTime)
         "
       >
-        <span class="border-box">{{
-          item.orderStatus === 0
-            ? '立即付款'
-            : item.orderStatus === 1
-              ? '取消订单'
-              : item.orderStatus === 3
-                ? '重新下单'
-                : ''
-        }}</span>
+        <span class="border-box">
+          {{
+            item.orderStatus === 0
+              ? '立即付款'
+              : item.orderStatus === 1
+                ? '取消订单'
+                : item.orderStatus === 3
+                  ? '重新下单'
+                  : ''
+          }}
+        </span>
       </van-col>
     </van-row>
-    <van-dialog v-model="dialogShow" title="确认付款" show-cancel-button @confirm="submit(goodId)" @cancel="cancel">
+    <van-dialog
+      v-model="dialogShow"
+      title="确认付款"
+      show-cancel-button
+      @confirm="submit(goodId)"
+      @cancel="cancel"
+    >
       <h1 class="text-center">￥{{ totalAmount }}</h1>
     </van-dialog>
     <van-dialog
@@ -142,7 +152,7 @@ export default {
       }).then(res => {
         if (res.success) {
           Toast({
-            message: '恭喜您支付成功',
+            message: '恭喜您预约成功',
             icon: 'like-o'
           })
           this.$router.go(0)

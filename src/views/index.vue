@@ -176,7 +176,6 @@ import title3 from '@/assets/images/new/title3.png'
 import title4 from '@/assets/images/new/title-4.png'
 import title5 from '@/assets/images/new/title-5.png'
 import img1 from '@/assets/images/new/img-1.png'
-import img1_1 from '@/assets/images/new/img-1-1.png'
 import img1_2 from '@/assets/images/new/img-1-2.png'
 import img2_1 from '@/assets/images/new/img-2-1.png'
 import img2_2 from '@/assets/images/new/img-2-2.png'
@@ -191,10 +190,8 @@ import img4_3 from '@/assets/images/new/img-4-3.png'
 import img4_4 from '@/assets/images/new/img-4-4.png'
 import img5 from '@/assets/images/new/img-5.png'
 import icon from '@/assets/images/new/bot-icon.png'
-import movie from '@/assets/images/new/movie.mp4'
 import poter from '@/assets/images/new/poter.png'
 import buy from '@/assets/images/new/buy.png'
-import fresh from '@/assets/images/new/fresh.png'
 import fresh_icon from '@/assets/images/new/fresh-icon.png'
 import pre_icon from '@/assets/images/new/pre-icon.png'
 import btn from '@/assets/images/new/button.png'
@@ -227,7 +224,6 @@ export default {
         title4,
         title5,
         img1,
-        img1_1,
         img1_2,
         img2_1,
         img2_2,
@@ -244,7 +240,6 @@ export default {
         icon,
         poter,
         buy,
-        fresh,
         fresh_icon,
         pre_icon,
         btn,
@@ -351,11 +346,7 @@ export default {
   background: url(../assets/images/new/bg.png) no-repeat;
   background-size: 100% auto;
 }
-.bg-long {
-  margin: 20px 0;
-  background: url(../assets/images/new/bg-2.png) no-repeat;
-  background-size: 100% auto;
-}
+
 .top {
   background-color: #fff;
   padding: 20px 15px;

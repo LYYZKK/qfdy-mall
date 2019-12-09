@@ -14,7 +14,8 @@
           <van-col span="24" class="tip">
             <div class="font-style">￥{{ sku.price }}</div>
             <div class="text-color-eee">
-              原价：<span class="line-through">￥{{ goods.id === 1 ? 5999 : 8999 }}</span>
+              原价：
+              <span class="line-through">￥{{ goods.id === 1 ? 5999 : 8999 }}</span>
             </div>
           </van-col>
           <van-col span="24">{{ goods.description }}</van-col>
@@ -27,16 +28,14 @@
               :wrapable="true"
               :scrollable="true"
               left-icon="volume-o"
-            >
-              首期预约1000份，先约先得</van-notice-bar
-            >
+            >首期预约1000份，先约先得</van-notice-bar>
           </van-col>
         </van-row>
         <van-row type="flex" align="center" justify="space-between" class="ad_tip">
           <van-col>
             <div class="tip">
               <van-icon name="friends-o" />
-              <span style="margin-left:5px;">{{ sku.stock_num }}人预约</span>
+              <span style="margin-left:5px;">{{ peopleNum }}人预约</span>
             </div>
           </van-col>
           <van-col>
@@ -46,7 +45,6 @@
             </div>
           </van-col>
         </van-row>
-
         <van-divider :style="{ color: 'rgba(0,0,0,1)', padding: '0px 20px', margin: '5px 0' }">产品详情</van-divider>
         <div v-for="(item, index) in productImages" :key="index" class="img-text">
           <van-image :src="item">
@@ -75,7 +73,12 @@
     >
       <div slot="sku-header-origin-price">{{ goods.title }}</div>
       <div slot="sku-messages">
-        <van-row type="flex" justify="space-between" align="center" style="width:100%;padding:0 12px;">
+        <van-row
+          type="flex"
+          justify="space-between"
+          align="center"
+          style="width:100%;padding:0 12px;"
+        >
           <van-col>总价</van-col>
           <van-col class="van-sku__goods-price van-sku__price-num">￥{{ sku.price * PayNumber }}</van-col>
         </van-row>
@@ -93,11 +96,18 @@
         <van-button size="large" @click="purchase" color="rgba(255, 66, 0, 1)">
           库存状态：剩余{{  }}份
         </van-button>
-      </van-col> -->
+      </van-col>-->
       <van-col span="24">
-        <van-button size="large" @click="purchase" color="rgba(255, 66, 0, 1)" :disabled="sku.stock_num === 0">{{
+        <van-button
+          size="large"
+          @click="purchase"
+          color="rgba(255, 66, 0, 1)"
+          :disabled="sku.stock_num === 0"
+        >
+          {{
           sku.stock_num === 0 ? '已售罄' : '立即' + appointBuyText
-        }}</van-button>
+          }}
+        </van-button>
       </van-col>
     </van-row>
   </div>
@@ -142,6 +152,13 @@ export default {
       title: '商品详情',
       productId: '',
       productImages: [],
+      peopleNum: '',
+      time: {
+        day: '',
+        hour: '',
+        min: '',
+        sec: ''
+      },
       sku: {
         tree: [],
         list: [],
@@ -162,6 +179,11 @@ export default {
         getProductById: {
           url: '/products/{id}',
           method: 'get'
+        },
+        // 根据产品Id获取销售情况
+        getOrderReport: {
+          url: 'product/order/reports',
+          method: 'get'
         }
       }
     }
@@ -179,6 +201,10 @@ export default {
         let hour = parseInt((timeDiff % 86400) / 3600)
         let min = parseInt(((timeDiff % 86400) % 3600) / 60)
         let sec = parseInt(((timeDiff % 86400) % 3600) % 60)
+        this.time.day = day
+        this.time.hour = hour
+        this.time.min = min
+        this.time.sec = sec
         this.downTime =
           (day < 10 ? '0' + day : day) +
           '天' +
@@ -242,6 +268,24 @@ export default {
         this.productImages = ProductDetailConfig[this.productId].images
       })
     },
+    // 获取预约人数
+    getOrderReport() {
+      let params = {
+        productId: this.$route.params.id,
+        orderStatus: 0
+      }
+      request({ ...this.api.getOrderReport, params }).then(res => {
+        this.peopleNum = res.data[0].orderNum
+      })
+      const timerPeople = setInterval(() => {
+        request({ ...this.api.getOrderReport, params }).then(res => {
+          this.peopleNum = res.data[0].orderNum
+        })
+      }, 3000)
+      this.$once('hook:beforeDestroy', () => {
+        clearInterval(timerPeople)
+      })
+    },
     getProductById() {
       this.productId = this.$route.params.id
       if (this.$route.params.id) {
@@ -274,6 +318,7 @@ export default {
   mounted() {
     this.initPage()
     this.getProductById()
+    this.getOrderReport()
     this.countDown()
   },
 
@@ -352,7 +397,7 @@ export default {
   text-decoration: line-through;
 }
 .min-height {
-  min-height: 50%;
+  min-height: 300px;
   position: relative;
 }
 .ad_tip {

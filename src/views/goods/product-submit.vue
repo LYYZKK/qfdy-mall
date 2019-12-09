@@ -19,19 +19,20 @@
                 </van-col>
               </van-row>
               <div class="text-color-999 font-size-10">
-                {{ customerInfo.address.province }}{{ customerInfo.address.city }}{{ customerInfo.address.county
-                }}{{ customerInfo.address.addressDetail }}
+                <span>{{ customerInfo.address.province }}{{ customerInfo.address.city }}{{ customerInfo.address.county }}{{ customerInfo.address.addressDetail }}</span>
               </div>
               <div class="text-color-yellow">完善的信息方便后期接收快递</div>
             </div>
           </van-col>
-          <van-col @click="userShow = true">
+          <van-col @click="editeAddress(customerInfo)">
             <van-icon name="edit" color="rgba(255, 66, 0, 1)" />
           </van-col>
         </van-row>
       </div>
       <van-row class="border">
-        <van-col span="24"> <van-icon name="shop-collect" />&nbsp;乔府商城 </van-col>
+        <van-col span="24">
+          <van-icon name="shop-collect" />&nbsp;乔府商城
+        </van-col>
         <van-col span="24">
           <van-card
             :centered="centered"
@@ -58,8 +59,7 @@
     <van-submit-bar :price="totalPrice" button-text="提交" @submit="onSubmit" safe-area-inset-bottom>
       <div slot="default" class="ml text-color-ccc">
         共计
-        <span style="color:#000;">{{ order.count }}</span
-        >&nbsp;件
+        <span style="color:#000;">{{ order.count }}</span>&nbsp;件
       </div>
     </van-submit-bar>
     <van-dialog v-model="show" title="确认付款" show-cancel-button @confirm="submit" @cancel="cancel">
@@ -87,7 +87,11 @@
           @click="addressShow = true"
           disabled
         />
-        <van-field v-model="customerInfo.address.addressDetail" label="收货人地址" left-icon="location-o" />
+        <van-field
+          v-model="customerInfo.address.addressDetail"
+          label="收货人地址"
+          left-icon="location-o"
+        />
       </van-cell-group>
       <van-button @click="save" @cancel="cancelAddress" size="large" color="red" text="保存"></van-button>
     </van-action-sheet>
@@ -136,6 +140,7 @@ export default {
       userShow: false,
       show: false,
       checked: true,
+      isDefaultAddress: '',
       title: '确认订单',
       good: {
         img: '',
@@ -152,11 +157,12 @@ export default {
       orderId: '',
       customerInfo: {
         name: '',
-        phone: localStorage.getItem('phone'),
+        phone: '',
         address: {
           province: '',
           city: '',
           county: '',
+          areaCode: '',
           addressDetail: ''
         }
       },
@@ -169,7 +175,15 @@ export default {
           url: '/orders',
           method: 'post'
         },
-
+        // 获取客户的地址列表
+        getAddressList: {
+          url: 'customer-addressees',
+          method: 'get'
+        },
+        searchAddress: {
+          url: 'customer-addressees/{id}',
+          method: 'get'
+        },
         // 获取客户信息
         getCustomerInfo: {
           url: '/customers/{id}',
@@ -192,50 +206,76 @@ export default {
     }
   },
   methods: {
-    // 获取用户详细信息
-    getCustomerInfo() {
-      this.customerInfo.phone = localStorage.getItem('phone')
-      let id = localStorage.getItem('id')
-      if (id) {
-        request({
-          ...this.api.getCustomerInfo,
-          urlReplacements: [{ substr: '{id}', replacement: id }]
-        }).then(res => {
-          if (res.success) {
-            this.customerInfo.name = res.data.name
-            if (res.data.address !== '') {
+    // 获取客户的地址信息
+    getAddressList() {
+      let params = {
+        customerId: parseInt(localStorage.getItem('id'))
+      }
+      console.log('地址详情id', this.$route.params.addressId)
+      let addressId = this.$route.params.addressId
+      if (this.$route.params.addressId) {
+        request({ ...this.api.searchAddress, urlReplacements: [{ substr: '{id}', replacement: addressId }] }).then(
+          res => {
+            if (res.success) {
               let address = JSON.parse(res.data.address)
+              this.customerInfo.name = res.data.name
+              this.customerInfo.phone = res.data.phone
               this.customerInfo.address.province = address.province
               this.customerInfo.address.city = address.city
               this.customerInfo.address.county = address.county
               this.customerInfo.address.addressDetail = address.addressDetail
-              this.threeAddress =
-                address.province === ''
-                  ? ''
-                  : address.province + '/' + address.city === ''
-                  ? ''
-                  : address.city + '/' + address.county === ''
-                  ? ''
-                  : address.county
+              this.customerInfo.address.areaCode = address.areaCode
             }
-            if (
-              this.customerInfo.phone === '' ||
-              this.customerInfo.name === '' ||
-              this.customerInfo.address.province === '' ||
-              this.customerInfo.address.city === '' ||
-              this.customerInfo.address.county === '' ||
-              this.customerInfo.address.addressDetail === ''
-            ) {
-              this.userShow = true
+          }
+        )
+      } else {
+        request({ ...this.api.getAddressList, params }).then(res => {
+          res.data.forEach((element, index) => {
+            element.address = JSON.parse(element.address)
+            if (element.isDefault === 1) {
+              this.isDefaultAddress = index
             }
+          })
+          if (this.isDefaultAddress !== '') {
+            this.customerInfo.name = res.data[this.isDefaultAddress].name
+            this.customerInfo.phone = res.data[this.isDefaultAddress].phone
+            this.customerInfo.address.province = res.data[this.isDefaultAddress].address.province
+            this.customerInfo.address.city = res.data[this.isDefaultAddress].address.city
+            this.customerInfo.address.county = res.data[this.isDefaultAddress].address.county
+            this.customerInfo.address.areaCode = res.data[this.isDefaultAddress].address.areaCode
+            this.customerInfo.address.addressDetail = res.data[this.isDefaultAddress].address.addressDetail
+            this.customerInfo.id = res.data[this.isDefaultAddress].id
+            console.log(this.customerInfo)
           }
         })
       }
-      console.log('userShouw', this.userShow)
+    },
+    editeAddress(val) {
+      console.log(val)
+      if (val.id) {
+        this.$router.push({
+          name: 'AddressEdit',
+          params: {
+            goods: this.$route.params.goods,
+            sku: this.$route.params.sku,
+            isModify: 1,
+            id: val.id
+          }
+        })
+      } else {
+        this.$router.push({
+          name: 'AddressList',
+          params: {
+            goods: this.$route.params.goods,
+            sku: this.$route.params.sku,
+            isSelect: 1
+          }
+        })
+      }
     },
     // 获取商品详情
     getGoodById() {
-      console.log(this.$route.params)
+      console.log('商品详情id', this.$route.params.goods.goodsId)
       if (this.$route.params.goods.goodsId) {
         request({
           ...this.api.getGoodById,
@@ -325,7 +365,8 @@ export default {
           }
         })
       } else {
-        this.userShow = true
+        Notify('请完善地址信息')
+        // this.userShow = true
       }
     },
     // 确定支付
@@ -378,7 +419,7 @@ export default {
     this.setTitleBar('确认订单')
   },
   mounted() {
-    this.getCustomerInfo()
+    this.getAddressList()
     this.getOrder()
   },
   components: {
