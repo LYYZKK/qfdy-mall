@@ -1,103 +1,92 @@
 <template>
-  <div class="mainContent">
-    <!-- <NavBar :title="title" /> -->
-    <div class>
-      <div style="text-align:center">
-        <van-loading type="spinner" color="#ee0a24" v-if="loadingShow" class="loading" />
-      </div>
-      <template>
-        <van-row>
-          <van-col span="24">
-            <van-tabs
-              v-model="active"
-              title-active-color="#ee0a24"
-              :border="false"
-              :sticky="true"
-              :offset-top="0"
-              :swipeable="true"
-              @change="changeSort"
-            >
-              <van-tab title="全部">
-                <template v-if="orderList.length === 0 && !loadingShow" class="text-center">
-                  <div class="round bg-color mt">
-                    <van-icon name="shopping-cart" size="40" color="#fff" class="icon-cart" />
-                  </div>
-                  <div class="text-color-999 font-size-14 text-center">您还没有相关的订单</div>
-                  <div class="text-color-999 font-size-14 text-center">可以去看看有哪些想买的</div>
-                  <div class="text-center">
-                    <van-button
-                      round
-                      color="linear-gradient(to right,rgba(255, 66, 0, 0.5),rgba(255, 66, 0, 1))"
-                      to="Home"
-                      class="mt"
-                    >快去预定</van-button>
-                  </div>
-                </template>
-                <template v-else>
-                  <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-                    <van-list
-                      v-model="loading"
-                      :finished="finished"
-                      finished-text="没有更多了"
-                      @load="onLoad"
-                    >
-                      <order-list-component :orderList="orderList"></order-list-component>
-                    </van-list>
-                  </van-pull-refresh>
-                </template>
-              </van-tab>
-              <van-tab title="预约成功">
-                <template v-if="orderList.length === 0 && !loadingShow" class="text-center">
-                  <div class="round bg-color mt">
-                    <van-icon name="shopping-cart" size="40" color="#fff" class="icon-cart" />
-                  </div>
-                  <div class="text-color-999 font-size-14 text-center">您还没有相关的订单</div>
-                  <div class="text-color-999 font-size-14 text-center">可以去看看有哪些想买的</div>
-                  <div class="text-center">
-                    <van-button
-                      round
-                      color="linear-gradient(to right,rgba(255, 66, 0, 0.5),rgba(255, 66, 0, 1))"
-                      to="Home"
-                      class="mt"
-                    >快去预定</van-button>
-                  </div>console.log(this.active)
-                </template>
-                <template v-else>
-                  <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-                    <van-list
-                      v-model="loading"
-                      :finished="finished"
-                      finished-text="没有更多了"
-                      @load="onLoad"
-                    >
-                      <order-list-component :orderList="orderList" :orderStatus="0"></order-list-component>
-                    </van-list>
-                  </van-pull-refresh>
-                </template>
-              </van-tab>
-              <van-tab title="已取消">
-                <template v-if="orderList.length === 0 && !loadingShow" class="text-center">
-                  <div class="round bg-color mt">
-                    <van-icon name="shopping-cart" size="40" color="#fff" class="icon-cart" />
-                  </div>
-                  <div class="text-color-999 font-size-14 text-center">您还没有相关的订单</div>console.log(this.active)
-                </template>
-                <template v-else>
-                  <van-list
-                    v-model="loading"
-                    :finished="finished"
-                    finished-text="没有更多了"
-                    @load="onLoad"
-                  >
-                    <order-list-component :orderList="orderList" :orderStatus="3"></order-list-component>
-                  </van-list>
-                </template>
-              </van-tab>
-            </van-tabs>
-          </van-col>
-        </van-row>
-      </template>
+  <div style="width:100%;height:100%;">
+    <div style="text-align:center">
+      <van-loading type="spinner" color="#ee0a24" v-if="loadingShow" class="loading" />
     </div>
+    <template>
+      <van-row>
+        <van-col span="24">
+          <van-tabs
+            v-model="active"
+            title-active-color="#ee0a24"
+            :border="false"
+            :sticky="true"
+            :offset-top="0"
+            @click="changeSort"
+          >
+            <van-tab title="全部">
+              <template v-if="orderList.length === 0 && !loadingShow" class="text-center">
+                <div class="round bg-color mt">
+                  <van-icon name="shopping-cart" size="40" color="#fff" class="icon-cart" />
+                </div>
+                <div class="text-color-999 font-size-14 text-center">您还没有相关的订单</div>
+                <div class="text-color-999 font-size-14 text-center">可以去看看有哪些想买的</div>
+              </template>
+              <template v-else>
+                <van-pull-refresh v-model="isDownLoading" @refresh="onRefresh">
+                  <van-list
+                    ref="list"
+                    v-model="isUploading"
+                    :finished="isUpfinished"
+                    finished-text="没有更多了"
+                    @load="onLoadList"
+                    :immediate-check="check"
+                    :offset="60"
+                  >
+                    <order-list-component :orderList="orderList" @changeSort="changeSort"></order-list-component>
+                  </van-list>
+                </van-pull-refresh>
+              </template>
+            </van-tab>
+            <van-tab title="预约成功">
+              <template v-if="orderList.length === 0 && !loadingShow" class="text-center">
+                <div class="round bg-color mt">
+                  <van-icon name="shopping-cart" size="40" color="#fff" class="icon-cart" />
+                </div>
+                <div class="text-color-999 font-size-14 text-center">您还没有相关的订单</div>
+                <div class="text-color-999 font-size-14 text-center">可以去看看有哪些想买的</div>
+              </template>
+              <template v-else>
+                <van-pull-refresh v-model="isDownLoading" @refresh="onRefresh">
+                  <van-list
+                    v-model="isUploading"
+                    :finished="isUpfinished"
+                    finished-text="没有更多了"
+                    :offset="60"
+                    @load="onLoadList"
+                    :immediate-check="check"
+                  >
+                    <order-list-component :orderList="orderList" @changeSort="changeSort"></order-list-component>
+                  </van-list>
+                </van-pull-refresh>
+              </template>
+            </van-tab>
+            <van-tab title="已取消">
+              <template v-if="orderList.length === 0 && !loadingShow" class="text-center">
+                <div class="round bg-color mt">
+                  <van-icon name="shopping-cart" size="40" color="#fff" class="icon-cart" />
+                </div>
+                <div class="text-color-999 font-size-14 text-center">您还没有相关的订单</div>
+              </template>
+              <template v-else>
+                <van-pull-refresh v-model="isDownLoading" @refresh="onRefresh">
+                  <van-list
+                    v-model="isUploading"
+                    :finished="isUpfinished"
+                    finished-text="没有更多了"
+                    :offset="60"
+                    @load="onLoadList"
+                    :immediate-check="check"
+                  >
+                    <order-list-component :orderList="orderList"></order-list-component>
+                  </van-list>
+                </van-pull-refresh>
+              </template>
+            </van-tab>
+          </van-tabs>
+        </van-col>
+      </van-row>
+    </template>
   </div>
 </template>
 <script>
@@ -127,12 +116,13 @@ export default {
   data() {
     return {
       title: '预购订单',
-      isLoading: false,
-      loading: false,
-      finished: true,
+      isDownLoading: false, // 是否上拉刷新
+      isUploading: false, // 是否下拉加载
+      isUpfinished: false, // 是否加载结束
+      loadingShow: false, // 是否无数据
+      offset: 10,
+      check: false,
       orderList: [],
-      sort: 0,
-      loadingShow: true,
       tag: '',
       active: 0,
       param: {
@@ -148,80 +138,66 @@ export default {
     }
   },
   methods: {
-    changeSort() {
-      // console.log('活跃 active status', this.active)
+    changeSort(item, index) {
+      console.log('点击切换数据', item, index)
+      this.isUploading = false
+      this.isUpfinished = false
       this.orderList = []
-      this.param.pageNo = 1
-      if (this.active === 1) {
-        this.param.orderStatus = 0
-      } else if (this.active === 2) {
-        this.param.orderStatus = 3
-      } else if (this.active === 0) {
+      if (item === 0) {
         this.param = {
           cuserId: localStorage.getItem('id'),
           pageNo: 1
         }
+      } else if (item === 1) {
+        this.param.orderStatus = 0
+      } else if (item === 2) {
+        this.param.orderStatus = 3
       }
-      // console.log('活跃OrderStatus', this.param.orderStatus)
       this.getOrder(this.param)
     },
-    // 上拉加载
+    // 上拉刷新
     onRefresh() {
-      this.finished = false
-      this.isLoading = false
-      this.param.pageNo = this.pageNo + 1
-      if (this.active === 0) {
-        this.param = {
-          cuserId: localStorage.getItem('id'),
-          pageNo: 1
-        }
-      } else if (this.active === 1) {
-        this.param.orderStatus = 0
-      } else if (this.active === 2) {
-        this.param.orderStatus = 3
-      }
-      console.log('this.active 是', this.active)
+      console.log('走到A')
+      this.param.pageNo = 1
+      this.isUpfinished = false
+      this.getOrder(this.param)
+    },
+    // 下拉加载
+    onLoadList() {
+      console.log('走到B')
+      this.param.pageNo = 1
       this.getOrder(this.param)
     },
     getOrder(param) {
       this.loadingShow = true
-      this.finished = false
       request({ ...this.api.getOrders, params: param }).then(res => {
         if (res.success) {
-          this.orderList = this.orderList.concat(res.data)
-          this.loading = false
-          if (this.orderList.length >= res.page.totalCount) {
-            this.finished = true
+          if (res.data.length !== 0) {
+            this.isUpfinished = true
+          }
+          if (this.param.pageNo === res.page.totalPage && res.data.length < 10) {
+            this.isUpfinished = true
+          }
+          if (this.param.pageNo === 1) {
+            this.orderList = res.data
+          } else {
+            this.orderList = this.orderList.concat(res.data)
           }
           this.loadingShow = false
-          console.log(this.orderList)
+          this.isDownLoading = false
+          this.isUploading = false
         }
       })
     },
-    onLoad() {
-      this.finished = false
-      this.param.pageNo = this.param.pageNo + 1
-      this.param.orderStatus = this.sort
-      this.getOrder(this.param)
-    },
     initPage() {
-      console.log(this.param)
       let cmbcParam = this.$route.query.param
       if (cmbcParam !== undefined) {
         this.cmbcDescrypt()
-        this.param = {
-          cuserId: localStorage.getItem('id'),
-          pageNo: 1
-        }
         this.getOrder(this.param)
       }
       const isLogin = localStorage.getItem('isLogin')
       console.log('orderList isLogin', typeof isLogin)
       if (isLogin === '1') {
-        this.param = {
-          cuserId: localStorage.getItem('id'),
-          pageNo: 1
-        }
         this.getOrder(this.param)
       } else {
         console.log('未登录')
@@ -236,8 +212,6 @@ export default {
     this.setTitleBar('预购订单')
   },
   mounted() {
-    console.log('active', this.active)
-    console.log('this.param.orderStatus', this.active)
     this.initPage()
   },
   components: {

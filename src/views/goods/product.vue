@@ -9,9 +9,23 @@
           </template>
         </van-image>
       </van-swipe-item>
-      <van-swipe-item v-for="(item, index) in list" :key="index">
-        <van-image :src="webBaseUrl + item.img" />
+      <van-swipe-item style="min-height: 100px">
+        <van-image :src="webBaseUrl + '/common/img/p_1.jpg'">
+          <template v-slot:loading>
+            <van-loading type="spinner" size="20" />
+          </template>
+        </van-image>
       </van-swipe-item>
+      <van-swipe-item style="min-height: 100px">
+        <van-image :src="webBaseUrl + '/common/img/p_2.jpg'">
+          <template v-slot:loading>
+            <van-loading type="spinner" size="20" />
+          </template>
+        </van-image>
+      </van-swipe-item>
+      <!-- <van-swipe-item v-for="(item, index) in list" :key="index">
+        <van-image :src="webBaseUrl + item.img" />
+      </van-swipe-item>-->
     </van-swipe>
     <div style="text-align:center">
       <van-loading type="spinner" color="#ee0a24" v-if="loadingShow" />

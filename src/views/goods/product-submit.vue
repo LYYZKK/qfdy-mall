@@ -47,7 +47,7 @@
         <van-col span="24">
           <van-cell-group>
             <van-cell :title="appointBuyText + '数量'" value="内容">
-              <van-stepper v-model="order.count" :disable-input="true" />
+              <van-stepper v-model="order.count" />
             </van-cell>
             <van-col span="24">
               <van-field v-model="good.mark" placeholder="请输入备注" rows="1" autosize label="备注" />
@@ -75,26 +75,6 @@
     >
       <h1 class="text-center">￥{{ totalPrice / 100 }}</h1>
     </van-dialog>
-    <!-- 修改当前订单的客户信息 -->
-    <van-action-sheet v-model="userShow" title="请完善用户信息">
-      <van-cell-group>
-        <van-field v-model="customerInfo.name" label="收货人姓名" left-icon="contact" />
-        <van-field v-model="customerInfo.phone" label="手机号" left-icon="phone-o" disabled></van-field>
-        <van-field
-          v-model="threeAddress"
-          label="省市区选择"
-          left-icon="location-o"
-          @click="addressShow = true"
-          disabled
-        />
-        <van-field
-          v-model="customerInfo.address.addressDetail"
-          label="收货人地址"
-          left-icon="location-o"
-        />
-      </van-cell-group>
-      <van-button @click="save" @cancel="cancelAddress" size="large" color="red" text="保存"></van-button>
-    </van-action-sheet>
     <van-popup v-model="addressShow" position="bottom" :overlay="true" round>
       <van-area :area-list="areaList" @confirm="saveAddress" @cancel="cancelAddress" />
     </van-popup>
@@ -210,12 +190,16 @@ export default {
   methods: {
     // 获取客户的地址信息
     getAddressList() {
-      let params = {
-        customerId: parseInt(localStorage.getItem('id'))
+      let goodParam = localStorage.getItem('goodParam')
+      let addressId
+      if (goodParam) {
+        goodParam = JSON.parse(goodParam)
+        addressId = goodParam.addressId
+      } else {
+        addressId = this.$route.params.addressId
       }
-      console.log('地址详情id', this.$route.params.addressId)
-      let addressId = this.$route.params.addressId
-      if (this.$route.params.addressId) {
+
+      if (addressId) {
         request({ ...this.api.searchAddress, urlReplacements: [{ substr: '{id}', replacement: addressId }] }).then(
           res => {
             if (res.success) {
@@ -231,6 +215,9 @@ export default {
           }
         )
       } else {
+        let params = {
+          customerId: parseInt(localStorage.getItem('id'))
+        }
         request({ ...this.api.getAddressList, params }).then(res => {
           if (res.success) {
             if (res.data.length > 0) {
@@ -258,46 +245,43 @@ export default {
       }
     },
     editeAddress(val) {
-      console.log(val)
-      if (val.id) {
-        this.$router.push({
-          name: 'AddressEdit',
-          params: {
-            goods: this.$route.params.goods,
-            sku: this.$route.params.sku,
-            isModify: 1,
-            id: val.id
-          }
-        })
+      let goodParam = localStorage.getItem('goodParam')
+      let param
+      if (goodParam) {
+        goodParam = JSON.parse(goodParam)
+        param = {
+          goods: goodParam.goods,
+          sku: goodParam.sku,
+          addressId: goodParam.addressId
+        }
+        localStorage.removeItem('goodParam')
       } else {
-        if (this.isAddressNull) {
-          this.$router.push({
-            name: 'AddressEdit',
-            params: {
-              goods: this.$route.params.goods,
-              sku: this.$route.params.sku,
-              isSelect: 1
-            }
-          })
-        } else {
-          this.$router.push({
-            name: 'AddressList',
-            params: {
-              goods: this.$route.params.goods,
-              sku: this.$route.params.sku,
-              isSelect: 1
-            }
-          })
+        param = {
+          goods: this.$route.params.goods,
+          sku: this.$route.params.sku,
+          addressId: val.id
         }
       }
+      localStorage.setItem('addressListFromPath', 'ProductSubmit')
+      localStorage.setItem('goodParam', JSON.stringify(param))
+      this.$router.push({
+        name: 'AddressList'
+      })
     },
     // 获取商品详情
     getGoodById() {
-      console.log('商品详情id', this.$route.params.goods.goodsId)
-      if (this.$route.params.goods.goodsId) {
+      let goodParam = localStorage.getItem('goodParam')
+      let goodsId
+      if (goodParam) {
+        goodParam = JSON.parse(goodParam)
+        goodsId = goodParam.goods.goodsId
+      } else {
+        goodsId = this.$route.params.goods.goodsId
+      }
+      if (goodsId) {
         request({
           ...this.api.getGoodById,
-          urlReplacements: [{ substr: '{id}', replacement: this.$route.params.goods.goodsId }]
+          urlReplacements: [{ substr: '{id}', replacement: goodsId }]
         }).then(res => {
           this.good.img = res.data.img
           this.good.name = res.data.name
@@ -416,9 +400,11 @@ export default {
         query: { id: this.orderId }
       })
     },
-    //
     getOrder() {
       let info = this.$route.params
+      if (JSON.stringify(this.$route.params) === '{}') {
+        info = JSON.parse(localStorage.getItem('goodParam'))
+      }
       this.order.price = info.sku.price
       this.order.count = info.goods.selectedNum
       this.getGoodById()
@@ -436,9 +422,14 @@ export default {
   beforeMount() {
     this.setTitleBar('确认订单')
   },
+  // created() {
+  //   this.getOrder()
+  //   this.getAddressList()
+  // },
   mounted() {
-    this.getAddressList()
+    console.log('加载localstorage数据1')
     this.getOrder()
+    this.getAddressList()
   },
   components: {
     [SubmitBar.name]: SubmitBar,
@@ -468,14 +459,4 @@ export default {
 </script>
 
 <style scoped>
-.text-color-yellow {
-  color: #ee0a24;
-  font-size: 13px;
-}
-.font-size-10 {
-  font-size: 10px;
-}
-.text-color-ccc {
-  color: #ccc;
-}
 </style>

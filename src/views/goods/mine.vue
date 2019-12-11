@@ -1,7 +1,7 @@
 <template>
   <div class="mainContent">
     <van-cell title="我的订单" is-link url="/order-list" />
-    <van-cell title="我的收货地址" is-link url="/address-list" />
+    <van-cell title="收货地址" is-link @click="goMyaddress" />
   </div>
 </template>
 <script>
@@ -58,44 +58,38 @@ export default {
     }
   },
   methods: {
+    goMyaddress() {
+      localStorage.setItem('addressListFromPath', 'Mine')
+      this.$router.push({
+        name: 'AddressList'
+      })
+    },
     getCustomerInfo() {
-      console.log('areaList', this.areaList)
-      let isLogin = localStorage.getItem('isLogin')
-      console.log('mine isLogin', typeof isLogin)
-      if (isLogin === '1') {
-        this.customerInfo.tel = localStorage.getItem('phone')
-        let id = localStorage.getItem('id')
-        if (id !== null) {
-          request({
-            ...this.api.getCustomerInfo,
-            urlReplacements: [{ substr: '{id}', replacement: id }]
-          }).then(res => {
-            if (res.success) {
-              this.customerInfo.name = res.data.name
-              if (res.data.address !== '') {
-                let address = JSON.parse(res.data.address)
-                this.customerInfo.address.province = address.province
-                this.customerInfo.address.city = address.city
-                this.customerInfo.address.county = address.county
-                this.customerInfo.address.addressDetail = address.addressDetail
-                this.threeAddress =
-                  address.province === ''
-                    ? ''
-                    : address.province + '/' + address.city === ''
-                    ? ''
-                    : address.city + '/' + address.county === ''
-                    ? ''
-                    : address.county
-              }
+      let id = localStorage.getItem('id')
+      if (id !== null) {
+        request({
+          ...this.api.getCustomerInfo,
+          urlReplacements: [{ substr: '{id}', replacement: id }]
+        }).then(res => {
+          if (res.success) {
+            this.customerInfo.name = res.data.name
+            if (res.data.address !== '') {
+              let address = JSON.parse(res.data.address)
+              this.customerInfo.address.province = address.province
+              this.customerInfo.address.city = address.city
+              this.customerInfo.address.county = address.county
+              this.customerInfo.address.addressDetail = address.addressDetail
+              this.threeAddress =
+                address.province === ''
+                  ? ''
+                  : address.province + '/' + address.city === ''
+                  ? ''
+                  : address.city + '/' + address.county === ''
+                  ? ''
+                  : address.county
             }
-          })
-        }
-      } else {
-        // 查看我的
-        loginForComm(
-          window.location.protocol + '//' + window.location.host + this.$route.path,
-          window.location.protocol + '//' + window.location.host + this.$route.path
-        )
+          }
+        })
       }
     },
     saveAddress(val) {
@@ -131,14 +125,19 @@ export default {
     // initPage
     initPage() {
       let cmbcParam = this.$route.query.param
-      if (cmbcParam !== undefined) {
-        this.cmbcDescrypt()
-        this.getCustomerInfo()
-      } else {
-        let isLogin = localStorage.getItem('isLogin')
+      let isLogin = localStorage.getItem('isLogin')
+      if (!cmbcParam) {
         if (isLogin === '1') {
           this.getCustomerInfo()
+        } else {
+          loginForComm(
+            window.location.protocol + '//' + window.location.host + '/booking',
+            window.location.protocol + '//' + window.location.host + this.$route.path
+          )
         }
+      } else {
+        this.cmbcDescrypt()
+        this.getCustomerInfo()
       }
     }
   },

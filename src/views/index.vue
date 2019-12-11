@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-color" ref="bigBox">
+  <van-row class="bg-color" ref="bigBox">
     <!-- 顶部 -->
     <van-row type="flex" justify="space-between" align="center" class="top">
       <van-image :src="images.logo" width="40%"></van-image>
@@ -51,7 +51,7 @@
     </van-row>
     <van-row @click="prePurchase" class="text-align-center margin-top-20">
       <van-col span="24">
-        <img :src="images.btn" alt width="40%" />
+        <img :src="images.btn5" alt width="50%" />
         <div class="text-color-ccc font-size-12 font-size-12">点击跳转至详情页了解更多</div>
       </van-col>
     </van-row>
@@ -63,7 +63,12 @@
       </van-col>
     </van-row>
     <van-row class="pd" gutter="10">
-      <van-col span="12" class="text-align-center" @click="spotBuy">
+      <van-col span="24" class="text-align-center">
+        <img :src="images.img2" alt width="100%" />
+        <!-- <img :src="images.btn1" alt width="80%" class="margin-top-20" />
+        <div class="text-color-ccc font-size-12">点击跳转至详情了解更多</div>-->
+      </van-col>
+      <!-- <van-col span="12" class="text-align-center" @click="spotBuy">
         <img :src="images.img2_1" alt width="100%" />
         <img :src="images.btn1" alt width="80%" class="margin-top-20" />
         <div class="text-color-ccc font-size-12">点击跳转至详情了解更多</div>
@@ -72,7 +77,7 @@
         <img :src="images.img2_2" alt width="100%" />
         <img :src="images.btn2" alt width="80%" class="margin-top-20" />
         <div class="text-color-ccc font-size-12">点击跳转至详情了解更多</div>
-      </van-col>
+      </van-col>-->
     </van-row>
     <van-row>
       <van-col class="margin-top-bottom text-align-center">
@@ -80,7 +85,7 @@
       </van-col>
     </van-row>
     <van-row class="pd2 text-color-yellow">
-      <van-col :span="10" class="font-size-12">
+      <!-- <van-col :span="10" class="font-size-12">
         <img :src="images.poter" width="8px" />
         <span>&nbsp;先进的留胚加工工艺</span>
       </van-col>
@@ -95,6 +100,24 @@
       <van-col :span="13" class="font-size-12">
         <img :src="images.poter" alt width="8px" />
         <span class="margin-top-5">&nbsp;9.9元限量尝鲜10000份五常大米</span>
+      </van-col>-->
+      <van-col :span="24" class="font-size-12">
+        <img :src="images.poter" width="8px" />
+        <span>&nbsp;现加工 现邮寄</span>
+      </van-col>
+      <van-col :span="24" class="font-size-12">
+        <img :src="images.poter" width="8px" />
+        <span>&nbsp;先进的留胚加工工艺</span>
+      </van-col>
+      <van-col :span="24" class="font-size-12">
+        <img :src="images.poter" width="8px" />
+        <span>&nbsp;世界领先恒温仓储技术</span>
+      </van-col>
+    </van-row>
+    <van-row>
+      <van-col :span="24" class="text-align-center" @click="spotBuy">
+        <img :src="images.btn4" alt width="50%" class="margin-top-20" />
+        <div class="text-color-ccc font-size-12">点击跳转至详情了解更多</div>
       </van-col>
     </van-row>
     <!-- 官方出品 -->
@@ -130,9 +153,9 @@
           <img :src="images.img4_4" alt width="100%" />
         </van-col>
       </van-row>
-      <van-row class="pd text-align-center text-color-yellow margin-top-20">
-        “农业产业化国家重点龙头企业”、“中国国家地理标志产品”、“中国十大好吃米饭”
-      </van-row>
+      <van-row
+        class="pd text-align-center text-color-yellow margin-top-20"
+      >“农业产业化国家重点龙头企业”、“中国国家地理标志产品”、“中国十大好吃米饭”</van-row>
     </van-row>
     <!-- 尊贵礼遇 -->
     <van-row>
@@ -143,16 +166,20 @@
         <img :src="images.img5" alt width="100%" />
       </van-col>
     </van-row>
-    <van-row @click="spotBuy">
-      <van-col span="24" class="text-align-center margin-top-bottom">
-        <img :src="images.btn3" alt width="40%" />
+    <van-row>
+      <van-col span="12" class="text-align-center margin-top-bottom" @click="prePurchase">
+        <img :src="images.btn5" alt width="80%" />
+        <div class="text-color-ccc font-size-12">点击跳转至详情页了解更多</div>
+      </van-col>
+      <van-col span="12" class="text-align-center margin-top-bottom" @click="spotBuy">
+        <img :src="images.btn4" alt width="80%" />
         <div class="text-color-ccc font-size-12">点击跳转至详情页了解更多</div>
       </van-col>
     </van-row>
     <van-row class="text-align-center margin-bottom-20" @click="goTop">
       <img :src="images.icon" alt width="40px" />
     </van-row>
-  </div>
+  </van-row>
 </template>
 
 <script>
@@ -179,6 +206,7 @@ import img1 from '@/assets/images/new/img-1.png'
 import img1_2 from '@/assets/images/new/img-1-2.png'
 import img2_1 from '@/assets/images/new/img-2-1.png'
 import img2_2 from '@/assets/images/new/img-2-2.png'
+import img2 from '@/assets/images/new/img-2.png'
 import img3_1 from '@/assets/images/new/img-3-1.png'
 import img3_2 from '@/assets/images/new/img-3-2.png'
 import img3_3 from '@/assets/images/new/img-3-3.png'
@@ -198,6 +226,8 @@ import btn from '@/assets/images/new/button.png'
 import btn1 from '@/assets/images/new/button1.png'
 import btn2 from '@/assets/images/new/button2.png'
 import btn3 from '@/assets/images/new/button3.png'
+import btn4 from '@/assets/images/new/button4.png'
+import btn5 from '@/assets/images/new/button5.png'
 export default {
   name: 'Index',
   mixins: [mixin],
@@ -227,6 +257,7 @@ export default {
         img1_2,
         img2_1,
         img2_2,
+        img2,
         img3_1,
         img3_2,
         img3_3,
@@ -245,7 +276,9 @@ export default {
         btn,
         btn1,
         btn2,
-        btn3
+        btn3,
+        btn4,
+        btn5
       },
       customerInfo: {
         cid: 1,
@@ -321,7 +354,6 @@ export default {
     this.setIndexTitleBar()
   },
   mounted() {
-    console.log(new Date())
     this.initPage()
   },
   components: {

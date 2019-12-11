@@ -115,4 +115,14 @@ img {
 .van-card {
   background-color: #fff !important;
 }
+.text-color-yellow {
+  color: #ee0a24;
+  font-size: 13px;
+}
+.font-size-10 {
+  font-size: 10px;
+}
+.text-color-ccc {
+  color: #ccc;
+}
 </style>

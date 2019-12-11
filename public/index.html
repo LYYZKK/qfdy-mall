@@ -250,12 +250,15 @@
         // 订单列表页或者个人中心
         window.location.href = baseUrl + '/booking'
       } else if (window.location.pathname === '/address-list') {
+        let addressListFromPath = localStorage.getItem('addressListFromPath')
+        if (addressListFromPath === 'ProductSubmit') {
+          window.location.href = baseUrl + '/product-submit'
+        } else if (addressListFromPath === 'Mine') {
+          window.location.href = baseUrl + '/mine'
+        }
         // 地址列表回到个人中心
-        window.location.href = baseUrl + '/mine'
       } else if (window.location.pathname === '/product-submit') {
         let productId = localStorage.getItem('productId')
-        console.log('productId', productId)
-        //
         window.location.href = baseUrl + '/product-detail/' + productId
       } else if (window.location.pathname.lastIndexOf('/product-detail') !== -1) {
         window.location.href = baseUrl + '/booking'

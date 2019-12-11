@@ -67,7 +67,6 @@
       hide-selected-text
       :buy-text="'立即' + appointBuyText"
       :stepper-title="appointBuyText + '数量'"
-      disable-stepper-input
       @buy-clicked="onBuyClicked"
       @stepper-change="totalNumber"
       :safe-area-inset-bottom="true"
@@ -101,7 +100,7 @@
           :disabled="sku.stock_num === 0"
         >
           {{
-            sku.stock_num === 0 ? '已售罄' : '立即' + appointBuyText
+          sku.stock_num === 0 ? '已售罄' : '立即' + appointBuyText
           }}
         </van-button>
       </van-col>
@@ -229,6 +228,9 @@ export default {
       }
     },
     totalNumber(val) {
+      if (val > this.sku.stock_num) {
+        Toast.fail('数量超出库存')
+      }
       this.PayNumber = val
     },
     onBuyClicked(value) {

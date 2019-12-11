@@ -3,7 +3,7 @@
     <van-row class="border font-size-12" v-for="(item, index) in orderList" :key="index">
       <van-col span="24" align="right" class="text-color">
         {{
-        item.orderStatus === 0 ? '预约成功' : item.orderStatus === 3 ? '已取消' : ''
+          item.orderStatus === 0 ? '预约成功' : item.orderStatus === 3 ? '已取消' : ''
         }}
       </van-col>
       <van-col span="24">
@@ -31,7 +31,7 @@
         align="right"
         @click="clickBtn(item)"
         v-if="
-          item.orderStatus === 0 && (new Date().getTime() - new Date(item.orderTime).getTime() < cancelTime)
+          item.orderStatus === 0 && (new Date().getTime() - (new Date(item.orderTime.replace(/\-/g, '/'))).getTime() < cancelTime)
         "
       >
         <span class="border-box">取消订单</span>

@@ -3,10 +3,11 @@
     <van-address-list
       v-model="chosenAddressId"
       :list="addressList"
+      :default-tag-text="defaultText"
       @add="onAdd"
       @edit="onEdit"
       @select="selectDefault"
-    />
+    ></van-address-list>
   </div>
 </template>
 
@@ -18,8 +19,9 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      chosenAddressId: '1',
-      fromPath: '',
+      chosenAddressId: '',
+      addressListFromPath: '',
+      defaultText: '默认',
       api: {
         getAddressList: {
           url: 'customer-addressees',
@@ -61,55 +63,58 @@ export default {
       })
     },
     selectDefault(val) {
-      val.isDefault = 1
-      let params = {
-        isDefault: val.isDefault,
-        customerId: parseInt(localStorage.getItem('id')),
-        id: val.id
+      let addressListFromPath = localStorage.getItem('addressListFromPath')
+      let goodParam = JSON.parse(localStorage.getItem('goodParam'))
+      let paramInfo = {
+        goods: goodParam.goods,
+        sku: goodParam.sku,
+        addressId: val.id
       }
-      request({ ...this.api.updateAddress, params }).then(res => {
-        if (res.success) {
-          Toast.success('设为默认值成功')
-          if (this.$route.params.isSelect === 1) {
-            this.$router.push({
-              name: 'ProductSubmit',
-              params: {
-                goods: this.$route.params.goods,
-                sku: this.$route.params.sku,
-                addressId: val.id
-              }
-            })
-          } else {
-            this.getAddressList()
+      if (goodParam) {
+        localStorage.removeItem('goodParam')
+        localStorage.setItem('goodParam', JSON.stringify(paramInfo))
+      }
+      if (addressListFromPath === 'ProductSubmit') {
+        this.$router.push({
+          name: 'ProductSubmit',
+          params: {
+            goods: goodParam.goods,
+            sku: goodParam.sku,
+            addressId: val.id
           }
-        } else {
-          Toast.success(res.message)
+        })
+      } else if (addressListFromPath === 'Mine') {
+        val.isDefault = 1
+        let params = {
+          isDefault: val.isDefault,
+          customerId: parseInt(localStorage.getItem('id')),
+          id: val.id
         }
-      })
+        request({ ...this.api.updateAddress, params }).then(res => {
+          if (res.success) {
+            Toast.success('设置默认收货人成功')
+            this.getAddressList()
+          } else {
+            Toast.success(res.message)
+          }
+        })
+      }
     },
     onAdd() {
-      if (this.$route.params.isSelect === 1) {
-        this.$router.push({
-          name: 'AddressEdit',
-          params: {
-            isSelect: 1,
-            goods: this.$route.params.goods,
-            sku: this.$route.params.sku
-          }
-        })
-      } else {
-        this.$router.push({
-          name: 'AddressEdit'
-        })
-      }
+      this.$router.push({
+        name: 'AddressEdit'
+      })
     },
 
     onEdit(item) {
-      this.$router.push({ name: 'AddressEdit', params: { id: item.id } })
+      this.$router.push({
+        name: 'AddressEdit',
+        params: { id: item.id }
+      })
     }
   },
   beforeMount() {
-    this.setTitleBar('我的收货地址')
+    this.setTitleBar('地址管理')
   },
   mounted() {
     this.getAddressList()

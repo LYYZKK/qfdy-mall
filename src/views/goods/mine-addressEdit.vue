@@ -68,18 +68,7 @@ export default {
       request({ ...this.api.addAddress, params: val }).then(res => {
         if (res.success) {
           Toast.success('保存成功')
-          if (this.$route.params.isSelect === 1) {
-            this.$router.push({
-              name: 'ProductSubmit',
-              params: {
-                addressId: res.data.id,
-                goods: this.$route.params.goods,
-                sku: this.$route.params.sku
-              }
-            })
-          } else {
-            this.$router.push({ name: 'AddressList' })
-          }
+          this.$router.push({ name: 'AddressList' })
         } else {
           Toast.success(res.message)
         }
@@ -88,19 +77,8 @@ export default {
     updateAddress(val) {
       request({ ...this.api.updateAddress, params: val }).then(res => {
         if (res.success) {
-          Toast.success('保存成功')
-          if (this.$route.params.isModify === 1) {
-            this.$router.push({
-              name: 'ProductSubmit',
-              params: {
-                goods: this.$route.params.goods,
-                sku: this.$route.params.sku,
-                addressId: this.$route.params.id
-              }
-            })
-          } else {
-            this.$router.push({ name: 'AddressList' })
-          }
+          Toast.success('修改成功')
+          this.$router.push({ name: 'AddressList' })
         } else {
           Toast.success(res.message)
         }
