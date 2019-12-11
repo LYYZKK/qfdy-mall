@@ -23,19 +23,35 @@
           </template>
         </van-image>
       </van-swipe-item>
-      <!-- <van-swipe-item v-for="(item, index) in list" :key="index">
-        <van-image :src="webBaseUrl + item.img" />
-      </van-swipe-item>-->
     </van-swipe>
     <div style="text-align:center">
       <van-loading type="spinner" color="#ee0a24" v-if="loadingShow" />
     </div>
     <template v-if="!loadingShow">
-      <van-card
+      <van-row
+        class="productCard"
+        v-for="(item, index) in list"
+        :key="index"
+        @click="getProductById(item.id)"
+      >
+        <van-col span="12" style="font-size:0;">
+          <van-image :src="webBaseUrl+item.img" width="100%"></van-image>
+        </van-col>
+        <van-col span="12" class="right">
+          <div class="title">{{ item.name }}</div>
+          <div class="description">{{ item.description }}</div>
+          <div>
+            <span class="van-card__price">￥{{ item.price }}</span>
+            <span class="orgin-price">￥{{ item.id === 2 ? 8999 : 5999 }}</span>
+          </div>
+          <div class="rest">库存：{{ item.totalCount }}</div>
+        </van-col>
+      </van-row>
+
+      <!-- <van-card
         v-for="(item, index) in list"
         :key="index"
         :centered="centered"
-        :thumb="webBaseUrl + item.img"
         :title="item.name"
         tag="预售"
         :price="item.price"
@@ -43,11 +59,12 @@
         @click="getProductById(item.id)"
         :origin-price="item.id === 2 ? 8999 : 5999"
       >
-        <div slot="footer">库存：{{ item.totalCount }}</div>
+        <div slot="thumb"></div>
+        <div slot="footer">{{ item.totalCount }}</div>
         <template v-slot:loading>
           <van-loading type="spinner" size="20" />
         </template>
-      </van-card>
+      </van-card>-->
     </template>
   </div>
 </template>
@@ -126,4 +143,34 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped lang="less">
+.productCard {
+  margin-top: 10px;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  .right {
+    margin: 0 10px;
+    .title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+    .description {
+      font-size: 14px;
+    }
+    .rest {
+      text-align: right;
+      color: #7d7e80;
+      font-size: 13px;
+    }
+    .orgin-price {
+      text-decoration: line-through;
+      font-size: 13px;
+      color: #7d7e80;
+      margin-left: 5px;
+    }
+  }
+}
+</style>
