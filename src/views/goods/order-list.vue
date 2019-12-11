@@ -29,6 +29,7 @@
                     v-model="isUploading"
                     :finished="isUpfinished"
                     finished-text="没有更多了"
+                    :check="checkStatus"
                     @load="onLoadList"
                     :immediate-check="check"
                     :offset="60"
@@ -138,11 +139,15 @@ export default {
     }
   },
   methods: {
+    checkStatus(val) {
+      console.log('checkStatus', val)
+    },
     changeSort(item, index) {
       console.log('点击切换数据', item, index)
       this.isUploading = false
       this.isUpfinished = false
       this.orderList = []
+      this.param.pageNo = 1
       if (item === 0) {
         this.param = {
           cuserId: localStorage.getItem('id'),
@@ -165,16 +170,16 @@ export default {
     // 下拉加载
     onLoadList() {
       console.log('走到B')
-      this.param.pageNo = 1
+      this.param.pageNo++
       this.getOrder(this.param)
     },
     getOrder(param) {
       this.loadingShow = true
       request({ ...this.api.getOrders, params: param }).then(res => {
         if (res.success) {
-          if (res.data.length !== 0) {
-            this.isUpfinished = true
-          }
+          // if (res.data.length !== 0) {
+          //   this.isUpfinished = true
+          // }
           if (this.param.pageNo === res.page.totalPage && res.data.length < 10) {
             this.isUpfinished = true
           }
