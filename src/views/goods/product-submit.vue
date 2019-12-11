@@ -341,34 +341,33 @@ export default {
         request({ ...this.api.addOrder, params }).then(res => {
           if (res.success) {
             this.orderId = res.data.id
+            this.show = true
             // 提交订单接收加密的参数
-            let info = res.data.signAndEncryptOrder
-            if (process.env.APPOINT_BUY) {
-              alert('即将调用圈存方法')
-              console.log(info)
-              submitOrderForCashNew(info, 'wuchang')
-            } else {
-              Toast({
-                message: '恭喜您预约成功，等待联系付款',
-                icon: 'like-o'
-              })
-              this.$router.push({
-                name: 'OrderDetail',
-                query: { id: this.orderId }
-              })
-            }
+
+            // if (process.env.APPOINT_BUY) {
+            //   alert('即将调用圈存方法')
+            //   console.log(info)
+            // } else {
+            //   Toast({
+            //     message: '恭喜您预约成功，等待联系付款',
+            //     icon: 'like-o'
+            //   })
+            //   this.$router.push({
+            //     name: 'OrderDetail',
+            //     query: { id: this.orderId }
+            //   })
+            // }
             // 打开支付
             // this.show = true;
           } else {
             Toast({
-              message: '库存不足',
+              message: res.message,
               icon: 'warning-o'
             })
           }
         })
       } else {
         Notify('请完善地址信息')
-        // this.userShow = true
       }
     },
     // 确定支付
@@ -378,14 +377,19 @@ export default {
         urlReplacements: [{ substr: '{id}', replacement: this.orderId }]
       }).then(res => {
         if (res.success) {
-          Toast({
-            message: '恭喜您预定成功!',
-            icon: 'like-o'
-          })
-          this.$router.push({
-            name: 'OrderDetail',
-            query: { id: this.orderId }
-          })
+          if (res.data !== '') {
+            let info = res.data
+            alert('即将调起圈存 info===' + info)
+            submitOrderForCashNew(info, 'wuchang')
+          }
+          // Toast({
+          //   message: '恭喜您预定成功!',
+          //   icon: 'like-o'
+          // })
+          // this.$router.push({
+          //   name: 'OrderDetail',
+          //   query: { id: this.orderId }
+          // })
         }
       })
     },
