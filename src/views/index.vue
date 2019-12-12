@@ -5,7 +5,7 @@
       <van-image :src="images.logo" width="40%"></van-image>
       <van-col class="font-size-12 bg-blue" @click="prePurchase">
         <img :src="images.pre_icon" alt width="12px;" />
-        <span class="nav">稻田预约 >></span>
+        <span class="nav">稻田{{ appointBuyText }} >></span>
       </van-col>
       <van-col class="font-size-12 bg-blue" @click="spotBuy">
         <img :src="images.fresh_icon" alt width="12px;" />

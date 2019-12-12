@@ -19,7 +19,7 @@ module.exports = {
     LINKED_MALL_GOTO_URL: 'https%3a%2f%2fpages.tmall.com%2fwow%2fwt%2fact%2fqiaofudayuan%3fwh_biz%3dtm',
     LINKED_MALL_bizId: 'LMALL201910180001',
     HOME_PAGE_URL: 'https://mall.wuchangdami.qiaofudayuan.net:8001',
-    APPOINT_BUY: false
+    APPOINT_BUY: true
     // LINKED_MALL_bizUid: '17004044917089927'
   },
   sit: {
@@ -28,7 +28,7 @@ module.exports = {
     LINKED_MALL_GOTO_URL: 'https%3a%2f%2fpages.tmall.com%2fwow%2fwt%2fact%2fqiaofudayuan%3fwh_biz%3dtm',
     LINKED_MALL_bizId: 'LMALL201910180001',
     HOME_PAGE_URL: 'https://mall.wuchangdami.qiaofudayuan.net:8001',
-    APPOINT_BUY: false
+    APPOINT_BUY: true
     // LINKED_MALL_bizUid: '17004044917089927'
   },
   prod: {
@@ -37,7 +37,7 @@ module.exports = {
     LINKED_MALL_GOTO_URL: 'https%3a%2f%2fpages.tmall.com%2fwow%2fwt%2fact%2fqiaofudayuan%3fwh_biz%3dtm',
     LINKED_MALL_bizId: 'LMALL201910180001',
     HOME_PAGE_URL: 'https://mall.wuchangrice.qiaofudayuan.net:8001',
-    APPOINT_BUY: false
+    APPOINT_BUY: true
     // LINKED_MALL_bizUid: '17004044917089927'
   }
 }
