@@ -3,7 +3,7 @@
     <van-row class="border font-size-12" v-for="(item, index) in orderList" :key="index">
       <van-col span="24" align="right" class="text-color">
         {{
-        item.orderStatus === 0 ? '待付款' : item.orderStatus === 2 ? '已付款':item.orderStatus === 3 ? '已取消' : ''
+          item.orderStatus === 0 ? '待付款' : item.orderStatus === 2 ? '已付款':item.orderStatus === 3 ? '已取消' : ''
         }}
       </van-col>
       <van-col span="24">
@@ -149,7 +149,7 @@ export default {
         console.log(res)
         if (res.data !== '') {
           let info = res.data
-          alert('即将调起圈存 info===', info)
+          alert('即将调起圈存 info===' + info)
           submitOrderForCashNew(info, 'wuchang')
         }
 
