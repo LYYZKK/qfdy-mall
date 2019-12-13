@@ -152,14 +152,6 @@ export default {
           alert('即将调起圈存 info===' + info)
           submitOrderForCashNew(info, 'wuchang')
         }
-
-        // if (res.success) {
-        //   Toast({
-        //     message: '恭喜您预约成功',
-        //     icon: 'like-o'
-        //   })
-        //   this.$router.go(0)
-        // }
       })
     },
     // 解圈存
