@@ -3,7 +3,7 @@
     <van-row class="border font-size-12" v-for="(item, index) in orderList" :key="index">
       <van-col span="24" align="right" class="text-color">
         {{
-          item.orderStatus === 0 ? '预约成功' : item.orderStatus === 3 ? '已取消' : ''
+          item.orderStatus === 0 ? '待付款' : item.orderStatus === 2 ? '已付款':item.orderStatus === 3 ? '已取消' : ''
         }}
       </van-col>
       <van-col span="24">
@@ -31,32 +31,37 @@
         align="right"
         @click="clickBtn(item)"
         v-if="
-          item.orderStatus === 0 && (new Date().getTime() - (new Date(item.orderTime.replace(/\-/g, '/'))).getTime() < cancelTime)
+          item.orderStatus === 0 || item.orderStatus ===2
         "
       >
-        <span class="border-box">取消订单</span>
+        <span
+          class="border-box"
+          v-if="item.orderStatus === 0 && (new Date().getTime() - (new Date(item.orderTime.replace(/\-/g, '/'))).getTime() < cancelTime)"
+        >立即付款</span>
+        <span
+          v-if="item.orderStatus === 2 && (new Date().getTime() - (new Date(item.orderTime.replace(/\-/g, '/'))).getTime() < cancelTime)"
+        >退款</span>
       </van-col>
     </van-row>
+    <!-- 确认付款 -->
     <van-dialog
       v-model="dialogShow"
       title="确认付款"
       show-cancel-button
       @confirm="submit(goodId)"
-      @cancel="cancel"
+      @cancel="dialogShow = false"
     >
       <h1 class="text-center">￥{{ totalAmount }}</h1>
     </van-dialog>
+    <!-- 退款 -->
     <van-dialog
       v-model="dialogCancelShow"
-      title="是否确认取消订单？"
+      title="是否确认退款？"
       show-cancel-button
       @cancel="dialogCancelShow = false"
-      @confirm="cancelOrder(goodId)"
+      @confirm="refund(goodId)"
     >
-      <div class="text-center"></div>
-    </van-dialog>
-    <van-dialog v-model="dialogTipShow" title="温馨提示" @confirm="dialogTipShow = false">
-      <div class="text-center">正在加速开发中</div>
+      <div class="text-center">可退款金额￥{{ refundAmount }}</div>
     </van-dialog>
   </div>
 </template>
@@ -89,9 +94,6 @@ export default {
       default() {
         return []
       }
-    },
-    orderStatus: {
-      type: Number
     }
   },
   data() {
@@ -101,16 +103,24 @@ export default {
       dialogTipShow: false,
       centered: true,
       totalAmount: '',
+      refundAmount: '',
       cancelTime: 1000 * 7 * 24 * 60 * 60,
       goodId: '',
       api: {
+        // 取消支付
         cancelOrder: {
           url: '/orders/{id}/cancel',
           method: 'patch'
         },
+        // 支付圈存
         payOrder: {
           url: '/orders/{id}/pay',
           method: 'patch'
+        },
+        // 取消圈存(退款）
+        refund: {
+          url: '/orders/{id}/refund',
+          method: 'get'
         }
       }
     }
@@ -122,34 +132,40 @@ export default {
     clickBtn(val) {
       this.goodId = val.id
       this.totalAmount = val.totalAmount
-      this.dialogCancelShow = true
-      // if (process.env.APPOINT_BUY) {
-      //   if (val.orderStatus === 0) {
-      //     this.dialogShow = true
-      //   }
-      // } else if (val.orderStatus === 1) {
-      //   this.dialogCancelShow = true
-      // } else {
-      //   this.dialogTipShow = true
-      // }
+      this.refundAmount = val.refundAmount || ''
+      console.log(val)
+      if (val.orderStatus === 0) {
+        this.dialogShow = true
+      } else if (val.orderStatus === 2) {
+        this.dialogCancelShow = true
+      }
     },
+    // 支付即调起圈存
     submit(id) {
       request({
         ...this.api.payOrder,
         urlReplacements: [{ substr: '{id}', replacement: id }]
       }).then(res => {
-        if (res.success) {
-          Toast({
-            message: '恭喜您预约成功',
-            icon: 'like-o'
-          })
-          this.$router.go(0)
+        console.log(res)
+        if (res.data !== '') {
+          let info = res.data
+          alert('即将调起圈存 info===' + info)
+          submitOrderForCashNew(info, 'wuchang')
         }
       })
     },
-    cancel() {
-      this.dialogShow = false
+    // 解圈存
+    refund(id) {
+      request({ ...this.api.refund, urlReplacements: [{ substr: '{id}', replacement: id }] }).then(res => {
+        if (res.success) {
+          console.log('退款成功')
+          this.$route.go(0)
+        } else {
+          console.log(res.message)
+        }
+      })
     },
+    // 取消支付
     cancelOrder(id) {
       request({
         ...this.api.cancelOrder,
@@ -160,10 +176,6 @@ export default {
           //   name: "OrderList",
           //   params: { customerId: this.customerId }
           // });
-          Toast({
-            message: '取消成功，稍候将为您退款',
-            icon: 'like-o'
-          })
           this.$emit('changeSort')
         }
       })

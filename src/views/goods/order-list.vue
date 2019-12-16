@@ -39,8 +39,31 @@
                 </van-pull-refresh>
               </template>
             </van-tab>
-            <van-tab title="预约成功">
-              <template v-if="orderList.length === 0 && !loadingShow" class="text-center">
+            <van-tab title="待付款">
+              <template v-if="orderList.length < 1 && !loadingShow" class="text-center">
+                <div class="round bg-color mt">
+                  <van-icon name="shopping-cart" size="40" color="#fff" class="icon-cart" />
+                </div>
+                <div class="text-color-999 font-size-14 text-center">您还没有相关的订单</div>
+                <div class="text-color-999 font-size-14 text-center">可以去看看有哪些想买的</div>
+              </template>
+              <template v-else>
+                <van-pull-refresh v-model="isDownLoading" @refresh="onRefresh">
+                  <van-list
+                    v-model="isUploading"
+                    :finished="isUpfinished"
+                    finished-text="没有更多了"
+                    :offset="60"
+                    @load="onLoadList"
+                    :immediate-check="check"
+                  >
+                    <order-list-component :orderList="orderList" @changeSort="changeSort"></order-list-component>
+                  </van-list>
+                </van-pull-refresh>
+              </template>
+            </van-tab>
+            <van-tab title="已付款">
+              <template v-if="orderList.length < 1 && !loadingShow" class="text-center">
                 <div class="round bg-color mt">
                   <van-icon name="shopping-cart" size="40" color="#fff" class="icon-cart" />
                 </div>
@@ -63,7 +86,7 @@
               </template>
             </van-tab>
             <van-tab title="已取消">
-              <template v-if="orderList.length === 0 && !loadingShow" class="text-center">
+              <template v-if="orderList.length < 1 && !loadingShow" class="text-center">
                 <div class="round bg-color mt">
                   <van-icon name="shopping-cart" size="40" color="#fff" class="icon-cart" />
                 </div>
@@ -149,13 +172,12 @@ export default {
       this.orderList = []
       this.param.pageNo = 1
       if (item === 0) {
-        this.param = {
-          cuserId: localStorage.getItem('id'),
-          pageNo: 1
-        }
+        console.log('全部')
       } else if (item === 1) {
         this.param.orderStatus = 0
       } else if (item === 2) {
+        this.param.orderStatus = 2
+      } else if (item === 3) {
         this.param.orderStatus = 3
       }
       this.getOrder(this.param)
@@ -177,10 +199,7 @@ export default {
       this.loadingShow = true
       request({ ...this.api.getOrders, params: param }).then(res => {
         if (res.success) {
-          // if (res.data.length !== 0) {
-          //   this.isUpfinished = true
-          // }
-          if (this.param.pageNo === res.page.totalPage && res.data.length < 10) {
+          if (this.param.pageNo === res.page.totalPage) {
             this.isUpfinished = true
           }
           if (this.param.pageNo === 1) {

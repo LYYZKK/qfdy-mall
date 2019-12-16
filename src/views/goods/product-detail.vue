@@ -28,20 +28,20 @@
               :wrapable="true"
               :scrollable="true"
               left-icon="volume-o"
-            >首期预约1000份，先约先得</van-notice-bar>
+            >首期{{ appointBuyText }}1000份，先约先得</van-notice-bar>
           </van-col>
         </van-row>
         <van-row type="flex" align="center" justify="space-between" class="ad_tip">
           <van-col>
             <div class="tip">
               <van-icon name="friends-o" />
-              <span style="margin-left:5px;">{{ peopleNum }}人预约</span>
+              <span style="margin-left:5px;">{{ peopleNum }}人{{ appointBuyText }}</span>
             </div>
           </van-col>
           <van-col>
             <div class="tip">
               <van-icon name="clock-o" />
-              <span style="margin-left:5px;">预约倒计时：{{ downTime }}</span>
+              <span style="margin-left:5px;">{{ appointBuyText }}倒计时：{{ downTime }}</span>
               <!-- <span>{{ time }}</span> -->
             </div>
           </van-col>
@@ -100,7 +100,7 @@
           :disabled="sku.stock_num === 0"
         >
           {{
-          sku.stock_num === 0 ? '已售罄' : '立即' + appointBuyText
+            sku.stock_num === 0 ? '已售罄' : '立即' + appointBuyText
           }}
         </van-button>
       </van-col>
@@ -261,7 +261,7 @@ export default {
         this.productImages = ProductDetailConfig[this.productId].images
       })
     },
-    // 获取预约人数
+    // 获取{{appointBuyText}}人数
     getOrderReport() {
       let params = {
         productId: this.$route.params.id,

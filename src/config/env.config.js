@@ -2,7 +2,7 @@ module.exports = {
   local: {
     VUE_APP_BASE_URL: 'http://dev.hkjindian.com:8900',
     LINKED_MALL_BASE_URL: 'https://pages.tmall.com/wow/wt/act/lm-partner-login?',
-    APPOINT_BUY: false,
+    APPOINT_BUY: true,
     /**
      * 注: 此参数如自己做 urlencode 需要处理 %3D、%2F 为 %3d、%2f 等小写问题.
      * 原地址: https://pre-wormhole.tmall.com/wow/wt/act/qiaofudayuan?wh_biz=tm&env=wapa
@@ -19,7 +19,7 @@ module.exports = {
     LINKED_MALL_GOTO_URL: 'https%3a%2f%2fpages.tmall.com%2fwow%2fwt%2fact%2fqiaofudayuan%3fwh_biz%3dtm',
     LINKED_MALL_bizId: 'LMALL201910180001',
     HOME_PAGE_URL: 'https://mall.wuchangdami.qiaofudayuan.net:8001',
-    APPOINT_BUY: false
+    APPOINT_BUY: true
     // LINKED_MALL_bizUid: '17004044917089927'
   },
   sit: {
@@ -28,7 +28,7 @@ module.exports = {
     LINKED_MALL_GOTO_URL: 'https%3a%2f%2fpages.tmall.com%2fwow%2fwt%2fact%2fqiaofudayuan%3fwh_biz%3dtm',
     LINKED_MALL_bizId: 'LMALL201910180001',
     HOME_PAGE_URL: 'https://mall.wuchangdami.qiaofudayuan.net:8001',
-    APPOINT_BUY: false
+    APPOINT_BUY: true
     // LINKED_MALL_bizUid: '17004044917089927'
   },
   prod: {
@@ -37,7 +37,7 @@ module.exports = {
     LINKED_MALL_GOTO_URL: 'https%3a%2f%2fpages.tmall.com%2fwow%2fwt%2fact%2fqiaofudayuan%3fwh_biz%3dtm',
     LINKED_MALL_bizId: 'LMALL201910180001',
     HOME_PAGE_URL: 'https://mall.wuchangrice.qiaofudayuan.net:8001',
-    APPOINT_BUY: false
+    APPOINT_BUY: true
     // LINKED_MALL_bizUid: '17004044917089927'
   }
 }
