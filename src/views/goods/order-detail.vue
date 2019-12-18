@@ -1,77 +1,122 @@
 <template>
   <div class="mainContent">
-    <div class="info">
-      <van-row type="flex" justify="space-around" align="center">
-        <van-col span="2">
-          <div class="round bg-color">
-            <van-icon name="location-o" color="#fff" />
-          </div>
-        </van-col>
-        <!-- 默认用户信息 -->
-        <van-col span="18">
-          <div>
-            <van-row>
-              <van-col>
-                <span>{{ customerInfo.name }}</span>
-                <span class="text-color-999">{{ customerInfo.phone }}</span>
-              </van-col>
-            </van-row>
-            <div class="text-color-999 font-size-10">
-              <span>{{ customerInfo.address }}</span>
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh" class="mainBox">
+      <div
+        class="text-center text-style"
+      >{{ order.payStatus===0?'待付款':order.payStatus===1?'付款中':order.payStatus===2?'已付款':order.payStatus===3?'支付失败':order.payStatus===4?'取消支付中':order.payStatus===5?'取消支付成功':order.payStatus===6?'取消支付失败':'' }}</div>
+      <div class="info">
+        <van-row type="flex" justify="space-around" align="center">
+          <van-col span="2">
+            <div class="round bg-color">
+              <van-icon name="location-o" color="#fff" />
             </div>
-          </div>
-        </van-col>
-      </van-row>
-    </div>
-    <van-row>
-      <van-col span="24" v-for="(item, index) in order.orderProducts" :key="index">
-        <van-card
-          :centered="centered"
-          :thumb="webBaseUrl + item.product.img"
-          :title="item.product.name"
-          :num="item.productNum"
-          tag="预购"
-          :price="item.product.price"
-          :desc="item.product.description"
-        ></van-card>
-      </van-col>
-    </van-row>
-    <van-cell-group>
-      <van-cell title="订单编号" :value="order.orderNo"></van-cell>
-      <van-cell title="下单时间" :value="order.orderTime"></van-cell>
-      <van-cell title="付款时间" :value="order.payTime"></van-cell>
-      <van-cell title="取消时间" :value="order.orderCancelTime"></van-cell>
-      <van-cell title="备注" :value="order.mark"></van-cell>
-    </van-cell-group>
-    <!-- <div class="mt">
-        <van-row gutter="20">
-          <van-col :span="order.orderStatus===3?24:12">
-            <van-button size="large" color @click="gotoList">我的订单</van-button>
           </van-col>
-          <van-col v-if="order.orderStatus===1" span="12">
-            <van-button size="large" @click="cancelOrder" color="red" type="default">取消订单</van-button>
+
+          <!-- 默认用户信息 -->
+          <van-col span="12">
+            <div>
+              <van-row>
+                <van-col>
+                  <span>{{ customerInfo.name }}</span>
+                  <span class="text-color-999">{{ customerInfo.phone }}</span>
+                </van-col>
+              </van-row>
+              <div class="text-color-999 font-size-10">
+                <span>{{ customerInfo.address }}</span>
+              </div>
+            </div>
           </van-col>
-          <van-col span="12" v-if="order.orderStatus===0">
-            <van-button size="large" color="red" @click="show=true">立即付款</van-button>
+          <van-col span="4">
+            <span class="text-color-999">{{ order.orderStatus===6?'已发货':'' }}</span>
           </van-col>
         </van-row>
-    </div>-->
-    <!-- <van-dialog v-model="show" title="确认付款" show-cancel-button @confirm="submit" @cancel="cancel">
-      <h1 class="text-center">￥{{ order.totalAmount }}</h1>
-    </van-dialog>-->
+      </div>
+      <van-row>
+        <van-col span="24" v-for="(item, index) in order.orderProducts" :key="index">
+          <van-card
+            :centered="centered"
+            :title="item.specification.name"
+            :num="item.productNum"
+            tag="预购"
+            :price="item.specification.price"
+          ></van-card>
+        </van-col>
+      </van-row>
+      <van-cell-group>
+        <van-cell title="订单金额" :value="'￥'+order.totalAmount"></van-cell>
+        <van-cell title="订单编号" :value="order.orderNo"></van-cell>
+        <van-cell title="下单时间" :value="order.orderTime"></van-cell>
+        <van-cell title="付款时间" :value="order.payTime"></van-cell>
+        <van-cell title="取消时间" :value="order.orderCancelTime"></van-cell>
+        <van-cell title="备注" :value="order.mark"></van-cell>
+      </van-cell-group>
+      <van-cell-group v-if="order.orderInvoice!==null&&order.orderInvoice.isInvoice===1">
+        <van-cell title="发票抬头" :value="order.orderInvoice.type===1?'个人':'单位'"></van-cell>
+        <van-cell
+          title="单位名称"
+          :value="order.orderInvoice.name===1"
+          v-if="order.orderInvoice.type===2"
+        ></van-cell>
+        <van-cell
+          title="纳税人识别号"
+          :value="order.orderInvoice.taxId"
+          v-if="order.orderInvoice.type===2"
+        ></van-cell>
+        <van-cell title="收票人手机号" :value="order.orderInvoice.phone"></van-cell>
+        <van-cell title="收票人邮箱" :value="order.orderInvoice.email"></van-cell>
+      </van-cell-group>
+      <van-row class="showCard" v-if="order.orderStatus===2">
+        <van-col span="12">
+          <div class="line">专属订制稻田证书</div>
+          <div class="text-center">
+            <img :src="book" alt width="90%" />
+          </div>
+        </van-col>
+        <van-col span="12">
+          <div class="line">全程溯源</div>
+          <div style="color:rgba(0,0,0,.6)">敬请期待...</div>
+        </van-col>
+      </van-row>
+    </van-pull-refresh>
+    <van-row class="fixedBottom">
+      <van-col span="12" @click="goBook">
+        <van-button size="large" color="rgba(255, 66, 0, 1)">再来一单</van-button>
+      </van-col>
+      <van-col span="12" @click="spotBuy">
+        <van-button size="large" color="rgba(255, 66, 0, 1)">鲜米现货购买</van-button>
+      </van-col>
+    </van-row>
   </div>
 </template>
 
 <script>
-import { Sku, Image, Button, Lazyload, Card, Row, Col, Cell, CellGroup, Dialog, Icon } from 'vant'
+import {
+  Sku,
+  Image,
+  Button,
+  Lazyload,
+  Card,
+  Row,
+  Col,
+  Cell,
+  CellGroup,
+  Dialog,
+  Icon,
+  Tabbar,
+  TabbarItem,
+  PullRefresh
+} from 'vant'
 import NavBar from '@/components/nav-bar.vue'
 import request from '@/utils/request.js'
 import mixin from '@/utils/mixin.js'
+import book from '@/assets/images/book.png'
 export default {
   name: 'ProductDetail',
   mixins: [mixin],
   data() {
     return {
+      book,
+      isLoading: false,
       show: false,
       centered: true,
       title: '订单详情',
@@ -90,20 +135,39 @@ export default {
     gotoList() {
       this.$router.push({ name: 'OrderList' })
     },
-
+    onRefresh() {
+      this.isLoading = true
+      console.log('触发刷新')
+      this.getProductById()
+    },
+    goBook() {
+      this.$router.push({ name: 'Index' })
+    },
+    // 现货购买r
+    spotBuy() {
+      this.linkAdd(3)
+      // 点击过现货购买的标志
+      let isLogin = localStorage.getItem('isLogin')
+      if (isLogin === '1') {
+        this.getSign()
+      } else {
+        localStorage.setItem('linkStatus', '1')
+        this.getSign()
+      }
+    },
     getProductById() {
       if (this.$route.query.id) {
         request({
           ...this.api.getProductById,
           urlReplacements: [{ substr: '{id}', replacement: this.$route.query.id }]
         }).then(res => {
+          this.isLoading = false
           this.order = res.data
           let address = JSON.parse(res.data.orderAddressee.address)
           this.customerInfo.address = address.province + address.city + address.county + address.addressDetail
           this.customerInfo.name = res.data.orderAddressee.name
           this.customerInfo.phone = res.data.orderAddressee.phone
           this.customerId = parseInt(localStorage.getItem('id'))
-          console.log(res.data)
         })
       }
     }
@@ -126,6 +190,9 @@ export default {
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
     [Icon.name]: Icon,
+    [TabbarItem.name]: TabbarItem,
+    [Tabbar.name]: Tabbar,
+    [PullRefresh.name]: PullRefresh,
     [Dialog.Component.name]: Dialog.Component,
     NavBar
   }
@@ -138,6 +205,15 @@ export default {
   bottom: 0;
   left: 0;
 }
+.fixedBottom {
+  width: 100%;
+  height: 50px;
+  background-color: #fff;
+  position: fixed;
+  z-index: 999;
+  bottom: 0;
+  left: 0;
+}
 .mt {
   margin-top: 30px;
 }
@@ -145,5 +221,27 @@ export default {
   background: #fff;
   margin-bottom: 10px;
   padding: 10px;
+}
+.showCard {
+  margin-top: 10px;
+  padding: 10px 0;
+  background: #fff;
+  text-align: center;
+}
+.text-style {
+  background: #fff;
+  padding: 10px 0;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+.line {
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+}
+.mainBox {
+  height: 100%;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 </style>

@@ -236,19 +236,12 @@
     function diyGoBack() {
       const baseUrl = 'https://mall.wuchangdami.qiaofudayuan.net:8001'
       const param = localStorage.getItem('param')
-      if (window.location.pathname === '/booking') {
-        //商品列表页
-        if (param) {
-          window.location.href = baseUrl + '/index' + '?param=' + param
-        } else {
-          window.location.href = baseUrl + '/index'
-        }
-      } else if (window.location.pathname === '/order-detail') {
+      if (window.location.pathname === '/order-detail') {
         // 订单详情页
         window.location.href = baseUrl + '/order-list'
       } else if (window.location.pathname === '/order-list' || window.location.pathname === '/mine') {
         // 订单列表页或者个人中心
-        window.location.href = baseUrl + '/booking'
+        window.location.href = baseUrl + '/booking' + '?param=' + param
       } else if (window.location.pathname === '/address-list') {
         let addressListFromPath = localStorage.getItem('addressListFromPath')
         if (addressListFromPath === 'ProductSubmit') {
@@ -261,7 +254,7 @@
         let productId = localStorage.getItem('productId')
         window.location.href = baseUrl + '/product-detail/' + productId
       } else if (window.location.pathname.lastIndexOf('/product-detail') !== -1) {
-        window.location.href = baseUrl + '/booking'
+        window.location.href = baseUrl + '/booking' + '?param=' + param
       } else {
         window.history.go(-1)
       }

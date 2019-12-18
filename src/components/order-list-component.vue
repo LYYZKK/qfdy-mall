@@ -26,19 +26,20 @@
         <span class="font-size-14">总金额:</span>
         <span class="van-card__price">￥{{ item.totalAmount }}</span>
       </van-col>
+
       <van-col
         span="24"
         align="right"
-        @click="clickBtn(item)"
         v-if="
           item.orderStatus === 0 || item.orderStatus ===2
         "
       >
+        <span class="border-box" v-if="item.orderStatus === 0" @click="clickBtn(item,0)">取消订单</span>
+        <span class="border-box" v-if="item.orderStatus === 0" @click="clickBtn(item,2)">立即付款</span>
+
         <span
           class="border-box"
-          v-if="item.orderStatus === 0 && (new Date().getTime() - (new Date(item.orderTime.replace(/\-/g, '/'))).getTime() < cancelTime)"
-        >立即付款</span>
-        <span
+          @click="clickBtn(item,3)"
           v-if="item.orderStatus === 2 && (new Date().getTime() - (new Date(item.orderTime.replace(/\-/g, '/'))).getTime() < cancelTime)"
         >退款</span>
       </van-col>
@@ -62,6 +63,16 @@
       @confirm="refund(goodId)"
     >
       <div class="text-center">可退款金额￥{{ refundAmount }}</div>
+    </van-dialog>
+    <!-- 未支付状态下取消订单 -->
+    <van-dialog
+      v-model="cancelOrderShow"
+      title="再次确认"
+      show-cancel-button
+      @cancel="cancelOrderShow = false"
+      @confirm="cancelOrder(goodId)"
+    >
+      <div class="text-center">您将取消订单？</div>
     </van-dialog>
   </div>
 </template>
@@ -102,6 +113,7 @@ export default {
       dialogCancelShow: false,
       dialogTipShow: false,
       centered: true,
+      cancelOrderShow: false,
       totalAmount: '',
       refundAmount: '',
       cancelTime: 1000 * 7 * 24 * 60 * 60,
@@ -129,13 +141,19 @@ export default {
     getOrderById(id) {
       this.$router.push({ path: '/order-detail', query: { id: id } })
     },
-    clickBtn(val) {
+    clickBtn(val, index) {
+      console.log(val, index)
       this.goodId = val.id
       this.totalAmount = val.totalAmount
       this.refundAmount = val.refundAmount || ''
       console.log(val)
       if (val.orderStatus === 0) {
-        this.dialogShow = true
+        if (index === 0) {
+          // 未支付取消订单
+          this.cancelOrderShow = true
+        } else {
+          this.dialogShow = true
+        }
       } else if (val.orderStatus === 2) {
         this.dialogCancelShow = true
       }
@@ -159,7 +177,7 @@ export default {
       request({ ...this.api.refund, urlReplacements: [{ substr: '{id}', replacement: id }] }).then(res => {
         if (res.success) {
           console.log('退款成功')
-          this.$route.go(0)
+          this.$router.go(0)
         } else {
           console.log(res.message)
         }
@@ -172,11 +190,7 @@ export default {
         urlReplacements: [{ substr: '{id}', replacement: id }]
       }).then(res => {
         if (res.success) {
-          // this.$router.push({
-          //   name: "OrderList",
-          //   params: { customerId: this.customerId }
-          // });
-          this.$emit('changeSort')
+          this.$router.go(0)
         }
       })
     }
@@ -215,5 +229,6 @@ export default {
   border-radius: 10px;
   margin-top: 10px;
   color: #ee0a24;
+  margin-left: 10px;
 }
 </style>

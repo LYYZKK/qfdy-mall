@@ -26,9 +26,7 @@ export default new Router({
       path: '/index',
       name: 'Index',
       component: Index,
-      meta: {
-        title: '乔府商城'
-      }
+      redirect: '/booking'
     },
     {
       path: '/home',
@@ -53,11 +51,6 @@ export default new Router({
           path: '/mine',
           name: 'Mine',
           component: Mine
-        },
-        {
-          path: '/order-detail',
-          name: 'OrderDetail',
-          component: OrderDetail
         }
       ]
     },
@@ -77,7 +70,11 @@ export default new Router({
       name: 'AddressList',
       component: AddressList
     },
-
+    {
+      path: '/order-detail',
+      name: 'OrderDetail',
+      component: OrderDetail
+    },
     {
       path: '/address-edit',
       name: 'AddressEdit',

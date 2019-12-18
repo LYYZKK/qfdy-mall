@@ -66,6 +66,9 @@ img {
 .mt {
   margin-top: 10px;
 }
+.mt-5 {
+  margin-top: 5px;
+}
 .mb {
   margin-bottom: 10px;
 }
@@ -80,6 +83,7 @@ img {
 }
 .text-color-999 {
   color: #999;
+  font-size: 12px;
 }
 .text-color-ccc {
   color: #ccc;
@@ -124,5 +128,8 @@ img {
 }
 .text-color-ccc {
   color: #ccc;
+}
+.pd-10-0 {
+  padding: 10px 0;
 }
 </style>

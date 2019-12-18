@@ -3,47 +3,31 @@
     <!-- <NavBar :title="title" /> -->
     <div class="bigContent" ref="bigContent">
       <div ref="scrollBox">
-        <div class="img-text min-height">
+        <!-- <div class="img-text min-height">
           <van-image :src="goods.picture" width="100%" height="auto">
             <template v-slot:loading>
               <van-loading type="spinner" size="20" />
             </template>
           </van-image>
-        </div>
-        <van-row class="pd-left-right">
-          <van-col span="24" class="tip">
-            <div class="font-style">￥{{ sku.price }}</div>
-            <div class="text-color-eee">
-              原价：
-              <span class="line-through">￥{{ goods.id === 1 ? 5999 : 8999 }}</span>
-            </div>
-          </van-col>
+        </div>-->
+        <!-- <van-row class="pd-left-right">
           <van-col span="24">{{ goods.description }}</van-col>
-        </van-row>
-        <van-row type="flex" justify="space-between" align="center" style="background:#fff">
-          <van-col>
-            <van-notice-bar
-              color="rgb(255, 66, 0)"
-              background="#fff"
-              :wrapable="true"
-              :scrollable="true"
-              left-icon="volume-o"
-            >首期{{ appointBuyText }}1000份，先约先得</van-notice-bar>
-          </van-col>
-        </van-row>
+        </van-row>-->
         <van-row type="flex" align="center" justify="space-between" class="ad_tip">
           <van-col>
             <div class="tip">
               <van-icon name="friends-o" />
-              <span style="margin-left:5px;">{{ peopleNum }}人{{ appointBuyText }}</span>
+              <span style="margin-left:5px;">{{ peopleNum||0 }}人{{ appointBuyText }}</span>
             </div>
           </van-col>
           <van-col>
-            <div class="tip">
-              <van-icon name="clock-o" />
-              <span style="margin-left:5px;">{{ appointBuyText }}倒计时：{{ downTime }}</span>
-              <!-- <span>{{ time }}</span> -->
-            </div>
+            <van-notice-bar
+              color="#Fff"
+              background="transparent"
+              :wrapable="true"
+              :scrollable="true"
+              left-icon="volume-o"
+            >首期{{ appointBuyText }}1000份，先约先得</van-notice-bar>
           </van-col>
         </van-row>
         <van-divider :style="{ color: 'rgba(0,0,0,1)', padding: '0px 20px', margin: '5px 0' }">产品详情</van-divider>
@@ -62,17 +46,17 @@
       v-model="show"
       :sku="sku"
       :goods="goods"
-      :goods-id="goods.id"
+      :goods-id="goodsId"
       :show-add-cart-btn="false"
-      hide-selected-text
       :buy-text="'立即' + appointBuyText"
       :stepper-title="appointBuyText + '数量'"
+      :initial-sku="initialSku"
       @buy-clicked="onBuyClicked"
       @stepper-change="totalNumber"
       :safe-area-inset-bottom="true"
     >
       <div slot="sku-header-origin-price">{{ goods.title }}</div>
-      <div slot="sku-messages">
+      <!-- <div slot="sku-messages">
         <van-row
           type="flex"
           justify="space-between"
@@ -82,7 +66,7 @@
           <van-col>总价</van-col>
           <van-col class="van-sku__goods-price van-sku__price-num">￥{{ sku.price * PayNumber }}</van-col>
         </van-row>
-      </div>
+      </div>-->
     </van-sku>
     <van-dialog
       v-model="dialogShow"
@@ -139,6 +123,7 @@ export default {
       iconShow: false,
       downTime: '',
       people: '',
+      goodsId: '',
       // 点击提交按钮时候自动获取的参数
       getValue: {},
       show: false,
@@ -154,13 +139,18 @@ export default {
         min: '',
         sec: ''
       },
+      initialSku: {
+        s1: '1',
+        selectedNum: 1
+      },
       sku: {
         tree: [],
         list: [],
         price: '', // 默认价格（单位元）
         stock_num: '', // 商品总库存
         none_sku: false, // 是否无规格商品
-        hide_stock: true // 是否隐藏剩余库存
+        hide_stock: true, // 是否隐藏剩余库存
+        collection_id: 1
       },
       goods: {
         description: '',
@@ -179,6 +169,10 @@ export default {
         getOrderReport: {
           url: 'product/order/reports',
           method: 'get'
+        },
+        getProducts: {
+          url: '/products',
+          method: 'get'
         }
       }
     }
@@ -196,10 +190,6 @@ export default {
         let hour = parseInt((timeDiff % 86400) / 3600)
         let min = parseInt(((timeDiff % 86400) % 3600) / 60)
         let sec = parseInt(((timeDiff % 86400) % 3600) % 60)
-        // this.time.day = day
-        // this.time.hour = hour
-        // this.time.min = min
-        // this.time.sec = sec
         this.downTime =
           (day < 10 ? '0' + day : day) +
           '天' +
@@ -234,10 +224,17 @@ export default {
       this.PayNumber = val
     },
     onBuyClicked(value) {
-      this.getValue = value
+      console.log(value)
+      let param = {
+        name: value.selectedSkuComb.name,
+        selectedNum: value.selectedNum,
+        price: value.selectedSkuComb.price,
+        id: value.selectedSkuComb.id,
+        productId: value.selectedSkuComb.productId
+      }
       this.$router.push({
         name: 'ProductSubmit',
-        params: { sku: this.sku, goods: this.getValue }
+        params: { sku: this.sku, good: param }
       })
       // this.dialogShow = true
     },
@@ -249,16 +246,31 @@ export default {
     },
     fun() {
       request({
-        ...this.api.getProductById,
-        urlReplacements: [{ substr: '{id}', replacement: this.$route.params.id }]
+        ...this.api.getProducts
       }).then(res => {
-        this.goods.picture = this.webBaseUrl + res.data.img
-        this.goods.description = res.data.description
-        this.goods.id = res.data.id
-        this.goods.title = res.data.name
-        this.sku.price = res.data.price
-        this.sku.stock_num = res.data.totalCount
-        this.productImages = ProductDetailConfig[this.productId].images
+        this.goods.picture = this.webBaseUrl + res.data[0].img
+        this.goods.description = res.data[0].description
+        this.goods.id = res.data[0].id
+        this.goods.title = res.data[0].name
+        this.sku.stock_num = res.data[0].totalCount
+        // this.goodsId = 2259
+        let tree = res.data[0].specifications
+        let list = res.data[0].specifications
+        list.forEach(item => {
+          item.stock_num = res.data[0].totalCount
+          item.price = item.price * 100
+          item.s1 = String(item.id)
+        })
+        this.sku.list = list
+
+        this.sku.tree = [
+          {
+            k: '规格', // skuKeyName：规格类目名称
+            v: tree,
+            k_s: 's1' // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
+          }
+        ]
+        this.productImages = ProductDetailConfig[1].images
       })
     },
     // 获取{{appointBuyText}}人数
@@ -280,16 +292,7 @@ export default {
       })
     },
     getProductById() {
-      this.productId = this.$route.params.id
-      if (this.$route.params.id) {
-        this.fun()
-        const timer = setInterval(() => {
-          this.fun()
-        }, 5000)
-        this.$once('hook:beforeDestroy', () => {
-          clearInterval(timer)
-        })
-      }
+      this.fun()
     },
     initPage() {
       let cmbcParam = this.$route.query.param

@@ -31,17 +31,10 @@
       </div>
       <van-row class="border">
         <van-col span="24">
-          <van-icon name="shop-collect" />&nbsp;乔府商城
-        </van-col>
-        <van-col span="24">
           <van-card
             :centered="centered"
-            :thumb="webBaseUrl + good.img"
-            :title="good.name"
-            :num="good.count"
-            :tag="appointBuyText"
-            :price="good.price"
-            :desc="good.description"
+            :title="good.name+'('+good.specification+')'"
+            :price="good.price/100"
           ></van-card>
         </van-col>
         <van-col span="24">
@@ -50,13 +43,15 @@
               <van-stepper v-model="order.count" />
             </van-cell>
             <van-col span="24">
-              <van-field v-model="good.mark" placeholder="请输入备注" rows="1" autosize label="备注" />
+              <van-field v-model="order.mark" placeholder="请输入备注" rows="1" autosize label="备注" />
             </van-col>
             <van-col span="24">
               <van-switch-cell v-model="orderInvoice.isInvoice" title="发票" @change="switchChange" />
             </van-col>
             <van-col span="24" @click="orderInvoiceShow=true" v-if="orderInvoice.isInvoice">
-              <van-cell title="查看发票详情" />
+              <van-cell>
+                <van-tag round color="rgba(0,0,0,.1)" text-color="#000">查看发票详情</van-tag>
+              </van-cell>
             </van-col>
           </van-cell-group>
         </van-col>
@@ -183,7 +178,8 @@ import {
   Area,
   Popup,
   Notify,
-  SwitchCell
+  SwitchCell,
+  Tag
 } from 'vant'
 import NavBar from '@/components/nav-bar.vue'
 import request from '@/utils/request.js'
@@ -211,7 +207,6 @@ export default {
       isAddressNull: false,
       title: '确认订单',
       good: {
-        img: '',
         name: '',
         price: '',
         description: '',
@@ -347,15 +342,15 @@ export default {
       if (goodParam) {
         goodParam = JSON.parse(goodParam)
         param = {
-          goods: goodParam.goods,
-          sku: goodParam.sku,
+          good: goodParam.good,
+          order: goodParam.order,
           addressId: goodParam.addressId
         }
         localStorage.removeItem('goodParam')
       } else {
         param = {
-          goods: this.$route.params.goods,
-          sku: this.$route.params.sku,
+          good: this.$route.params.good,
+          order: this.order,
           addressId: val.id
         }
       }
@@ -368,23 +363,15 @@ export default {
     // 获取商品详情
     getGoodById() {
       let goodParam = localStorage.getItem('goodParam')
-      let goodsId
       if (goodParam) {
-        goodParam = JSON.parse(goodParam)
-        goodsId = goodParam.goods.goodsId
+        this.good = JSON.parse(goodParam).good
+        this.order = JSON.parse(goodParam).order
       } else {
-        goodsId = this.$route.params.goods.goodsId
-      }
-      if (goodsId) {
-        request({
-          ...this.api.getGoodById,
-          urlReplacements: [{ substr: '{id}', replacement: goodsId }]
-        }).then(res => {
-          this.good.img = res.data.img
-          this.good.name = res.data.name
-          this.good.price = res.data.price
-          this.good.description = res.data.description
-        })
+        let info = this.$route.params.good
+        let order = this.$route.params.good
+        this.good = info
+        this.order.count = order.selectedNum
+        console.log('good===', info)
       }
     },
     saveAddress(val) {
@@ -418,11 +405,12 @@ export default {
           totalAmount: this.totalPrice / 100,
           orderProducts: [
             {
-              productId: this.$route.params.goods.goodsId,
-              productNum: this.order.count
+              productId: this.good.productId,
+              productNum: this.order.count,
+              specificationId: this.good.id
             }
           ],
-          mark: this.good.mark,
+          mark: this.order.mark,
           orderAddressee: {
             address: JSON.stringify(this.customerInfo.address),
             name: this.customerInfo.name,
@@ -496,12 +484,13 @@ export default {
       })
     },
     getOrder() {
-      let info = this.$route.params
-      if (JSON.stringify(this.$route.params) === '{}') {
-        info = JSON.parse(localStorage.getItem('goodParam'))
-      }
-      this.order.price = info.sku.price
-      this.order.count = info.goods.selectedNum
+      console.log(this.$route.params)
+      // let info = this.$route.params
+      // if (JSON.stringify(this.$route.params) === '{}') {
+      //   info = JSON.parse(localStorage.getItem('goodParam'))
+      // }
+      // this.order.price = info.price
+      // this.order.count = info.selectedNum
       this.getGoodById()
     },
     switchChange(val) {
@@ -606,18 +595,13 @@ export default {
   },
   computed: {
     totalPrice() {
-      return this.order.price * this.order.count * 100
+      return this.good.price * this.order.count
     }
   },
   beforeMount() {
     this.setTitleBar('确认订单')
   },
-  // created() {
-  //   this.getOrder()
-  //   this.getAddressList()
-  // },
   mounted() {
-    console.log('加载localstorage数据1')
     this.getOrder()
     this.getAddressList()
   },
@@ -644,6 +628,7 @@ export default {
     [AddressEdit.name]: AddressEdit,
     [Notify.name]: Notify,
     [SwitchCell.name]: SwitchCell,
+    [Tag.name]: Tag,
     NavBar
   }
 }

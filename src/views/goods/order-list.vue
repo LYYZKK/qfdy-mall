@@ -172,15 +172,18 @@ export default {
       this.orderList = []
       this.param.pageNo = 1
       if (item === 0) {
+        this.$router.go(0)
         console.log('全部')
       } else if (item === 1) {
         this.param.orderStatus = 0
+        this.getOrder(this.param)
       } else if (item === 2) {
         this.param.orderStatus = 2
+        this.getOrder(this.param)
       } else if (item === 3) {
         this.param.orderStatus = 3
+        this.getOrder(this.param)
       }
-      this.getOrder(this.param)
     },
     // 上拉刷新
     onRefresh() {
