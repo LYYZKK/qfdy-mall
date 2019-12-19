@@ -13,7 +13,7 @@
         <!-- <van-row class="pd-left-right">
           <van-col span="24">{{ goods.description }}</van-col>
         </van-row>-->
-        <van-row type="flex" align="center" justify="space-between" class="ad_tip">
+        <!-- <van-row type="flex" align="center" justify="space-between" class="ad_tip">
           <van-col>
             <div class="tip">
               <van-icon name="friends-o" />
@@ -29,7 +29,7 @@
               left-icon="volume-o"
             >首期{{ appointBuyText }}1000份，先约先得</van-notice-bar>
           </van-col>
-        </van-row>
+        </van-row>-->
         <van-divider :style="{ color: 'rgba(0,0,0,1)', padding: '0px 20px', margin: '5px 0' }">产品详情</van-divider>
         <div v-for="(item, index) in productImages" :key="index" class="img-text">
           <van-image :src="item">
@@ -230,7 +230,8 @@ export default {
         selectedNum: value.selectedNum,
         price: value.selectedSkuComb.price,
         id: value.selectedSkuComb.id,
-        productId: value.selectedSkuComb.productId
+        productId: value.selectedSkuComb.productId,
+        specification: value.selectedSkuComb.specification
       }
       this.$router.push({
         name: 'ProductSubmit',
@@ -299,11 +300,11 @@ export default {
       if (cmbcParam !== undefined) {
         this.cmbcDescrypt()
         this.getProductById()
-        this.getOrderReport()
+        // this.getOrderReport()
         this.countDown()
       } else {
         this.getProductById()
-        this.getOrderReport()
+        // this.getOrderReport()
         this.countDown()
       }
     }

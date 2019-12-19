@@ -1,7 +1,7 @@
 <template>
   <div class="mainContent">
     <!-- <NavBar :title="title" /> -->
-    <div>
+    <div class="bigBox">
       <div class="border">
         <van-row type="flex" justify="space-around" align="center">
           <van-col span="2">
@@ -46,6 +46,15 @@
               <van-field v-model="order.mark" placeholder="请输入备注" rows="1" autosize label="备注" />
             </van-col>
             <van-col span="24">
+              <van-field
+                v-model="order.serviceCode"
+                placeholder="请输入服务码"
+                rows="1"
+                autosize
+                label="服务码"
+              />
+            </van-col>
+            <van-col span="24">
               <van-switch-cell v-model="orderInvoice.isInvoice" title="发票" @change="switchChange" />
             </van-col>
             <van-col span="24" @click="orderInvoiceShow=true" v-if="orderInvoice.isInvoice">
@@ -56,8 +65,20 @@
           </van-cell-group>
         </van-col>
       </van-row>
+      <div class="agree">
+        <van-checkbox
+          v-model="agree"
+          checked-color="#ee0a24"
+        >认购成功后72小时内将配送同等品质五常大米现货1份，若发生7天无理由退订，需扣除已配送五常大米费用</van-checkbox>
+      </div>
     </div>
-    <van-submit-bar :price="totalPrice" button-text="提交" @submit="onSubmit" safe-area-inset-bottom>
+    <van-submit-bar
+      :price="totalPrice"
+      button-text="提交"
+      @submit="onSubmit"
+      safe-area-inset-bottom
+      :disabled="!agree"
+    >
       <div slot="default" class="ml text-color-ccc">
         共计
         <span style="color:#000;">{{ order.count }}</span>&nbsp;件
@@ -189,6 +210,7 @@ export default {
   mixins: [mixin],
   data() {
     return {
+      agree: true,
       orderInvoiceShow: false,
       phoneMessage: '',
       emailMessage: '',
@@ -269,7 +291,7 @@ export default {
         },
         payOrder: {
           url: '/orders/{id}/pay',
-          method: 'patch'
+          method: 'post'
         },
         // 保存客户地址信息
         modifyCustomerInfo: {
@@ -411,6 +433,7 @@ export default {
             }
           ],
           mark: this.order.mark,
+          serviceCode: this.ovder.serviceCode,
           orderAddressee: {
             address: JSON.stringify(this.customerInfo.address),
             name: this.customerInfo.name,
@@ -485,12 +508,6 @@ export default {
     },
     getOrder() {
       console.log(this.$route.params)
-      // let info = this.$route.params
-      // if (JSON.stringify(this.$route.params) === '{}') {
-      //   info = JSON.parse(localStorage.getItem('goodParam'))
-      // }
-      // this.order.price = info.price
-      // this.order.count = info.selectedNum
       this.getGoodById()
     },
     switchChange(val) {
@@ -635,6 +652,20 @@ export default {
 </script>
 
 <style scoped lang="less">
+.bigBox {
+  height: 100%;
+  position: relative;
+}
+.agree {
+  padding: 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 12px;
+  .van-checkbox__label {
+    color: rgba(0, 0, 0, 0.3);
+  }
+}
 .invoiceBody {
   padding: 10px;
   .title {

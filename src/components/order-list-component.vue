@@ -3,7 +3,7 @@
     <van-row class="border font-size-12" v-for="(item, index) in orderList" :key="index">
       <van-col span="24" align="right" class="text-color">
         {{
-          item.orderStatus === 0 ? '待付款' : item.orderStatus === 2 ? '已付款':item.orderStatus === 3 ? '已取消' : ''
+        item.orderStatus === 0 ? '待付款' : item.orderStatus === 2 ? '已付款':item.orderStatus === 3 ? '已取消' : ''
         }}
       </van-col>
       <van-col span="24">
@@ -122,17 +122,17 @@ export default {
         // 取消支付
         cancelOrder: {
           url: '/orders/{id}/cancel',
-          method: 'patch'
+          method: 'post'
         },
         // 支付圈存
         payOrder: {
           url: '/orders/{id}/pay',
-          method: 'patch'
+          method: 'post'
         },
         // 取消圈存(退款）
         refund: {
           url: '/orders/{id}/refund',
-          method: 'get'
+          method: 'post'
         }
       }
     }

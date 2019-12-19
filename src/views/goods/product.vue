@@ -1,101 +1,64 @@
 <template>
   <div class="mainContent bg-color">
     <!-- <NavBar :title="title" /> -->
-    <div class="banner">
-      <div class="title1">五常大米40万亩核心产区其中20万亩为</div>
+    <div class="banner mt-40">
+      <!-- <div class="title1">五常大米40万亩核心产区其中20万亩为</div> -->
       <van-row type="flex" align="center" justify="center" class="mt">
-        <van-col class="text-center">
-          <img :src="left" alt width="50%" />
-        </van-col>
         <van-col>
-          <span class="title2">民生银行客户专属订制稻田</span>
-        </van-col>
-        <van-col class="text-center">
-          <img :src="right" alt width="50%" />
+          <div class="text-center title">民生银行客户&nbsp;·&nbsp;专属订制稻田</div>
+          <div class="line"></div>
+          <span class="text-center title2">五常大米40万核心产区中20万亩为民生银行专属订制</span>
         </van-col>
       </van-row>
-      <img :src="banner" alt width="100%" />
+      <img :src="banner" alt width="100%" class="mt-40" />
+    </div>
+    <div align="right">
+      <div class="text-center btn" @click="getProductById(1)">详情介绍 >></div>
+      <div class="text-center btn" @click="spotBuy" v-if="isVip===1">现货尝鲜 >>{{ isVip }}</div>
     </div>
     <div class="goods">
-      <div class="text-center title">2020年新米预订</div>
+      <div class="text-center title">2020年&nbsp;·&nbsp;新米预订</div>
       <div class="line"></div>
-      <van-row type="flex" align="center" justify="space-between" class="ad_tip">
-        <van-col>
-          <div class="tip">
-            <van-icon name="friends-o" />
-            <span style="margin-left:5px;">{{ peopleNum }}人{{ appointBuyText }}</span>
-          </div>
-        </van-col>
-        <van-col>
-          <van-notice-bar
-            color="#Fff"
-            background="transparent"
-            :wrapable="true"
-            :scrollable="true"
-            left-icon="volume-o"
-          >首期{{ appointBuyText }}1000份，先约先得</van-notice-bar>
-        </van-col>
-      </van-row>
-      <van-row type="flex" align="center">
-        <van-col span="4" class="leftText bg2 pd-10-0">套餐名称</van-col>
-        <van-col
-          span="5"
-          class="topText pd-10-0"
-          :class="index%2===0?'bg1':'bg2'"
+      <div class="goodCards mt-40">
+        <div
           v-for="(item,index) in list.specifications"
           :key="index"
-        >{{ item.name }}</van-col>
-      </van-row>
-      <van-row type="flex" align="center" class="mt-5">
-        <van-col span="4" class="leftText bg2 pd-10-0">套餐规格</van-col>
-        <van-col
-          span="5"
-          class="pd-10-0"
-          :class="index%2===0?'bg1':'bg2'"
-          v-for="(item,index) in list.specifications"
-          :key="index"
-        >{{ item.specification }}</van-col>
-      </van-row>
-      <van-row type="flex" align="center" class="mt-5">
-        <van-col span="4" class="pd-10-0 leftText bg2">市场价格</van-col>
-        <van-col
-          span="5"
-          class="pd-10-0 line-through"
-          :class="index%2===0?'bg1':'bg2'"
-          v-for="(item,index) in list.specifications"
-          :key="index"
-        >￥{{ item.originalPrice }}</van-col>
-      </van-row>
-      <van-row type="flex" align="center" class="mt-5">
-        <van-col span="4" class="pd-10-0 leftText bg2">专属价格</van-col>
-        <van-col
-          span="5"
-          class="pd-10-0 sp-text2"
-          :class="index%2===0?'bg1':'bg2'"
-          v-for="(item,index) in list.specifications"
-          :key="index"
-        >￥{{ item.price }}</van-col>
-      </van-row>
-      <van-row type="flex" align="center" class="mt-5">
-        <van-col span="4" class="leftText bg2 pd-10-0 sp-text">立即购买</van-col>
-        <van-col
-          class="pd-10-0"
-          :class="index%2===0?'bg1':'bg2'"
-          span="5"
-          v-for="(item,index) in list.specifications"
-          :key="index"
+          class="singleGood"
           @click="buySubmit(item,index)"
         >
-          <span class="buy-btn">立即抢订</span>
+          <div class="topText">{{ item.specification }}</div>
+          <div class="bottomText sx1">
+            <div class="color1 text1">订制价</div>
+            <div class="color1">
+              <span>￥</span>
+              <span class="text2">{{ item.price }}</span>
+            </div>
+            <div class="buy-btn">立即抢订</div>
+          </div>
+          <img :src="goodRice[index]" alt width="100%" />
+          <div class="goodText">
+            <div class="text-color">{{ item.name }}</div>
+            <div class="text-color2">市场价格:￥{{ item.originalPrice }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <van-row>
+        <van-col span="24">
+          <div class="text-center title">中国民生银行&nbsp;·&nbsp;五常市政府&nbsp;·&nbsp;阿里云联合打造</div>
+          <div class="line"></div>
+          <div class="text-center">
+            <span class="title2">留胚工艺&nbsp;|&nbsp;</span>
+            <span class="title2">全程溯源&nbsp;|&nbsp;</span>
+            <span class="title2">恒温仓储&nbsp;|&nbsp;</span>
+            <span class="title2">按月配送</span>
+          </div>
+          <div class="mt-40">
+            <img :src="bottom" alt width="100%" />
+          </div>
         </van-col>
       </van-row>
-      <div class="text-center btn" @click="getProductById(1)">详情介绍 >></div>
-    </div>
-    <div class="mt">
-      <img :src="bar" alt width="100%" />
-    </div>
-    <div class="mt">
-      <img :src="bottom" alt width="100%" />
     </div>
   </div>
 </template>
@@ -109,7 +72,11 @@ import banner from '@/assets/images/home/banner.png'
 import left from '@/assets/images/home/left.png'
 import right from '@/assets/images/home/right.png'
 import bar from '@/assets/images/home/bar.png'
-import bottom from '@/assets/images/home/4.png'
+import rice1 from '@/assets/images/home/rice1.png'
+import rice2 from '@/assets/images/home/rice2.png'
+import rice3 from '@/assets/images/home/rice3.png'
+import rice4 from '@/assets/images/home/rice4.png'
+import bottom from '@/assets/images/home/bottom.png'
 export default {
   name: 'Product',
   mixins: [mixin],
@@ -126,6 +93,7 @@ export default {
       title: '预购商品',
       centered: true,
       peopleNum: 0,
+      goodRice: [rice1, rice2, rice3, rice4],
       api: {
         getProducts: {
           url: '/products',
@@ -202,9 +170,8 @@ export default {
     },
     initPage() {
       this.cmbcDescrypt()
-      this.linkAdd(3)
       this.getProducts()
-      this.getOrderReport()
+      // this.getOrderReport()
     },
     setIndexTitleBar() {
       const jsonParam = {
@@ -265,60 +232,120 @@ export default {
   padding: 0 10px;
 }
 .bg-color {
-  background: #fdf8e8;
+  background: url(../../assets/images/home/mainBg.png) no-repeat;
+  background-size: cover;
 }
 
 .banner {
   margin: 20px 0;
-  .title1 {
-    text-align: center;
-    background: #943003;
-    color: #fff;
-    width: 80%;
-    padding: 5px 10px;
-    margin: 0 auto;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: 1px;
-  }
-  .title2 {
-    color: #943003;
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: 3px;
-    &::before {
-      content: '';
-    }
-  }
+}
+.title {
+  color: #413f40;
+  font-size: 18px;
+  font-weight: 800;
+}
+.title2 {
+  color: #76736e;
+  font-size: 14px;
+}
+.line {
+  background: #000;
+  width: 20px;
+  height: 1px;
+  margin: 5px auto 10px;
+}
+.mt-40 {
+  margin-top: 40px;
 }
 .goods {
   font-size: 14px;
   text-align: center;
-  border: 1px solid rgba(233, 174, 66, 0.658);
-  padding: 10px;
-  background: #fff;
-  color: #482d00;
-  .title {
-    color: #943003;
-    font-weight: 800;
+  margin: 20px 10px 40px 10px;
+  .goodCards {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    .singleGood {
+      box-sizing: border-box;
+      position: relative;
+      margin-bottom: 10px;
+      width: 49%;
+      overflow: hidden;
+      border: 5px solid transparent;
+      border-image: linear-gradient(to right bottom, #fec27a, #fdf3e4, #fec27a) 5 5;
+      .topText {
+        width: 80%;
+        padding: 5px 0 5px 0;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, 0);
+        background: url(../../assets/images/home/topText.png) no-repeat;
+        background-size: cover;
+        color: #fdc179;
+        font-weight: 800;
+        z-index: 9;
+      }
+      .goodText {
+        padding: 5px 2px;
+        background: linear-gradient(to right, #feba6f 20%, #fcefdc 100%);
+        .text-color {
+          color: #a62218;
+          text-align: left;
+          font-weight: 800;
+          font-size: 12px;
+        }
+        .text-color2 {
+          color: #b44033;
+          text-align: left;
+          font-size: 10px;
+        }
+      }
+
+      .bottomText {
+        width: 100px;
+        height: 100px;
+        font-size: 12px;
+        position: absolute;
+        right: -12%;
+        bottom: -12%;
+        padding: 10px 10px 0px 5px;
+        border-radius: 50px;
+        border: 3px solid transparent;
+        // border-radius: 16px;
+        // border: 5px solid transparent;
+        // border-image: linear-gradient(to right bottom, #fec27a, #fdf3e4, #fec27a) 5 5;
+        border: 3px solid #f7cc97;
+        background: #ce2c1e;
+        display: flex;
+        flex-direction: column;
+        .text1 {
+          font-size: 10px;
+          color: #f8ca94;
+        }
+        .text2 {
+          font-size: 18px;
+          color: #f1dfc6;
+        }
+        .buy-btn {
+          width: 80%;
+          margin: 0 auto;
+          display: inline-block;
+          color: #e93f36;
+          background-color: #f7cc97;
+          font-size: 10px;
+          border-radius: 10px;
+          padding: 3px;
+        }
+        .color1 {
+          color: #f1ddc4;
+        }
+      }
+    }
   }
-  .line {
-    background: #cf8767;
-    width: 80px;
-    height: 3px;
-    margin: 5px auto 10px;
-  }
 }
-.leftText {
-  color: #724c0c;
-  font-size: 14px;
-  font-weight: 800;
-}
-.topText {
-  color: #452d00;
-  font-weight: 800;
-}
+
 .sp-text {
   color: #fff9cc;
   font-weight: 800;
@@ -337,20 +364,11 @@ export default {
   text-decoration: line-through;
 }
 .btn {
-  padding: 3px 10px;
-  border-radius: 10px;
-  background: #b95325;
-  width: 60%;
-  margin: 10px auto;
+  padding: 5px 10px;
+  border-radius: 15px 0 0 15px;
+  background: linear-gradient(to right, #a27142, #fed3a0);
+  width: 100px;
   color: #fff;
   font-size: 13px;
-}
-.buy-btn {
-  display: inline-block;
-  color: #fff;
-  background: url(../../assets/images/home/buy-btn.png) no-repeat;
-  background-size: 100% 100%;
-  padding: 2px 10px;
-  font-size: 12px;
 }
 </style>

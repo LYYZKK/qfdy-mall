@@ -240,7 +240,7 @@
         // 订单详情页
         window.location.href = baseUrl + '/order-list'
       } else if (window.location.pathname === '/order-list' || window.location.pathname === '/mine') {
-        // 订单列表页或者个人中心
+        // 订单列表页或者预购中心
         window.location.href = baseUrl + '/booking' + '?param=' + param
       } else if (window.location.pathname === '/address-list') {
         let addressListFromPath = localStorage.getItem('addressListFromPath')
@@ -249,7 +249,7 @@
         } else if (addressListFromPath === 'Mine') {
           window.location.href = baseUrl + '/mine'
         }
-        // 地址列表回到个人中心
+        // 地址列表回到预购中心
       } else if (window.location.pathname === '/product-submit') {
         let productId = localStorage.getItem('productId')
         window.location.href = baseUrl + '/product-detail/' + productId

@@ -4,7 +4,7 @@
     <van-tabbar v-model="active" route active-color="#ee0a24">
       <van-tabbar-item icon="home-o" to="/booking">商品列表</van-tabbar-item>
       <van-tabbar-item icon="search" to="/order-list">{{ orderListTitleName }}</van-tabbar-item>
-      <van-tabbar-item icon="friends-o" to="/mine">个人中心</van-tabbar-item>
+      <van-tabbar-item icon="friends-o" to="/mine">预购中心</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>

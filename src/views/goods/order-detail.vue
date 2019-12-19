@@ -49,6 +49,7 @@
         <van-cell title="付款时间" :value="order.payTime"></van-cell>
         <van-cell title="取消时间" :value="order.orderCancelTime"></van-cell>
         <van-cell title="备注" :value="order.mark"></van-cell>
+        <van-cell title="服务码" :value="order.serviceCode"></van-cell>
       </van-cell-group>
       <van-cell-group v-if="order.orderInvoice!==null&&order.orderInvoice.isInvoice===1">
         <van-cell title="发票抬头" :value="order.orderInvoice.type===1?'个人':'单位'"></van-cell>
@@ -79,10 +80,10 @@
       </van-row>
     </van-pull-refresh>
     <van-row class="fixedBottom">
-      <van-col span="12" @click="goBook">
+      <van-col :span="isVip===1?12:24" @click="goBook">
         <van-button size="large" color="rgba(255, 66, 0, 1)">再来一单</van-button>
       </van-col>
-      <van-col span="12" @click="spotBuy">
+      <van-col span="12" @click="spotBuy" v-if="isVip===1">
         <van-button size="large" color="rgba(255, 66, 0, 1)">鲜米现货购买</van-button>
       </van-col>
     </van-row>
@@ -116,6 +117,7 @@ export default {
   data() {
     return {
       book,
+      isVip: parseInt(localStorage.getItem('isVip')),
       isLoading: false,
       show: false,
       centered: true,
@@ -139,21 +141,10 @@ export default {
       this.isLoading = true
       console.log('触发刷新')
       this.getProductById()
+      this.searchIsVip()
     },
     goBook() {
       this.$router.push({ name: 'Index' })
-    },
-    // 现货购买r
-    spotBuy() {
-      this.linkAdd(3)
-      // 点击过现货购买的标志
-      let isLogin = localStorage.getItem('isLogin')
-      if (isLogin === '1') {
-        this.getSign()
-      } else {
-        localStorage.setItem('linkStatus', '1')
-        this.getSign()
-      }
     },
     getProductById() {
       if (this.$route.query.id) {
@@ -170,14 +161,27 @@ export default {
           this.customerId = parseInt(localStorage.getItem('id'))
         })
       }
+    },
+    // 查询客户是否是vip
+    searchIsVip() {
+      this.checkCustomer().then(res => {
+        console.log(res)
+        this.isVip = res.isVip
+        localStorage.removeItem('isVip')
+        localStorage.setItem('isVip', res.isVip)
+      })
+    },
+    initPage() {
+      this.getProductById()
+      this.searchIsVip()
     }
   },
   beforeMount() {
     this.setTitleBar('订单详情')
   },
+
   mounted() {
-    this.getProductById()
-    console.log(window.location)
+    this.initPage()
   },
   components: {
     [Sku.name]: Sku,

@@ -6,6 +6,7 @@ export default {
       appointBuyText: process.env.APPOINT_BUY ? '预购' : '预约',
       appointBuy: process.env.APPOINT_BUY,
       flag: false,
+      isVip: parseInt(localStorage.getItem('isVip')),
       api: {
         // 民生银行参数解密
         cmbcDescrypt: {
@@ -65,6 +66,7 @@ export default {
     },
     // 获取签名
     getSign() {
+      this.linkAdd(3)
       let isLogin = localStorage.getItem('isLogin')
       if (isLogin === '1') {
         this.goToLinkMall()
@@ -75,6 +77,17 @@ export default {
           window.location.protocol + '//' + window.location.host + this.$route.path,
           window.location.protocol + '//' + window.location.host + this.$route.path
         )
+      }
+    },
+    // 现货购买
+    spotBuy() {
+      // 点击过现货购买的标志
+      let isLogin = localStorage.getItem('isLogin')
+      if (isLogin === '1') {
+        this.getSign()
+      } else {
+        localStorage.setItem('linkStatus', '1')
+        this.getSign()
       }
     },
     // 解密从民生银行跳转的连接参数
@@ -116,37 +129,34 @@ export default {
       } else {
         localStorage.setItem('isLogin', 0)
         this.checkCustomer()
-        this.linkAdd(1)
       }
       let isLogin = localStorage.getItem('isLogin')
       console.log(isLogin)
-      if (isLogin !== '1') {
+      if (isLogin === '0') {
         localStorage.clear()
         localStorage.setItem('isLogin', 0)
         localStorage.setItem('productId', productId)
+        this.checkCustomer()
       }
+      this.linkAdd(2)
     },
     // 验证客户身份
     checkCustomer() {
-      console.log(localStorage.getItem('cuserId'))
       let params = {
         cid: 1,
         cuserId: localStorage.getItem('cuserId') || null,
         phone: localStorage.getItem('phone') || null
       }
-      const p = new Promise(resolve => {
+      return new Promise(resolve => {
         request({ ...this.api.checkCustomer, params }).then(res => {
           if (res.success) {
-            console.log('checkCustomer success with res =' + JSON.stringify(res.data))
             localStorage.setItem('isVip', res.data.isVip)
             localStorage.setItem('id', res.data.id) // 商城用户ID
             localStorage.setItem('userCode', res.data.code)
-            resolve()
+            resolve(res.data)
           }
         })
       })
-      this.linkAdd(1)
-      return p
     },
     // 访问次数增加(首页)type:1,(现货购买)type:3,(期货购买)type:2
     linkAdd(type) {
