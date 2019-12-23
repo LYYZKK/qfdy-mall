@@ -31,11 +31,7 @@
       </div>
       <van-row class="border">
         <van-col span="24">
-          <van-card
-            :centered="centered"
-            :title="good.name+'('+good.specification+')'"
-            :price="good.price/100"
-          ></van-card>
+          <van-card :centered="centered" :title="good.name" :price="good.price/100"></van-card>
         </van-col>
         <van-col span="24">
           <van-cell-group>
@@ -55,11 +51,17 @@
               />
             </van-col>
             <van-col span="24">
-              <van-switch-cell v-model="orderInvoice.isInvoice" title="发票" @change="switchChange" />
-            </van-col>
-            <van-col span="24" @click="orderInvoiceShow=true" v-if="orderInvoice.isInvoice">
-              <van-cell>
-                <van-tag round color="rgba(0,0,0,.1)" text-color="#000">查看发票详情</van-tag>
+              <van-cell class="isInvoice">
+                <div slot="title" class="title">发票</div>
+                <van-switch v-model="orderInvoice.isInvoice" size="24px" @change="switchChange" />
+                <van-tag
+                  round
+                  size="large"
+                  color="rgba(0,0,0,.1)"
+                  text-color="#000"
+                  @click="orderInvoiceShow=true"
+                  v-if="orderInvoice.isInvoice"
+                >查看发票详情</van-tag>
               </van-cell>
             </van-col>
           </van-cell-group>
@@ -199,7 +201,7 @@ import {
   Area,
   Popup,
   Notify,
-  SwitchCell,
+  Switch,
   Tag
 } from 'vant'
 import NavBar from '@/components/nav-bar.vue'
@@ -210,7 +212,7 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      agree: true,
+      agree: false,
       orderInvoiceShow: false,
       phoneMessage: '',
       emailMessage: '',
@@ -433,21 +435,23 @@ export default {
             }
           ],
           mark: this.order.mark,
-          serviceCode: this.ovder.serviceCode,
+          serviceCode: this.order.serviceCode,
           orderAddressee: {
             address: JSON.stringify(this.customerInfo.address),
             name: this.customerInfo.name,
             phone: this.customerInfo.phone
           },
-          orderInvoice: {
-            type: this.orderInvoice.type,
-            taxId: this.orderInvoice.taxId,
-            businessName: this.orderInvoice.businessName,
-            email: this.orderInvoice.email,
-            isInvoice: this.orderInvoice.isInvoice ? 1 : 0,
-            name: this.orderInvoice.name,
-            phone: this.orderInvoice.phone
-          }
+          orderInvoice: this.orderInvoice.isInvoice
+            ? {
+                type: this.orderInvoice.type,
+                taxId: this.orderInvoice.taxId,
+                businessName: this.orderInvoice.businessName,
+                email: this.orderInvoice.email,
+                isInvoice: 1,
+                name: this.orderInvoice.name,
+                phone: this.orderInvoice.phone
+              }
+            : null
         }
         request({ ...this.api.addOrder, params }).then(res => {
           if (res.success) {
@@ -474,7 +478,7 @@ export default {
         if (res.success) {
           if (res.data !== '') {
             let info = res.data
-            alert('即将调起圈存 info===' + info)
+            // alert('即将调起圈存 info===' + info)
             submitOrderForCashNew(info, 'wuchang')
           }
           // Toast({
@@ -644,7 +648,7 @@ export default {
     [Popup.name]: Popup,
     [AddressEdit.name]: AddressEdit,
     [Notify.name]: Notify,
-    [SwitchCell.name]: SwitchCell,
+    [Switch.name]: Switch,
     [Tag.name]: Tag,
     NavBar
   }
@@ -690,6 +694,20 @@ export default {
   .btnActive {
     color: #ee0a24;
     border-color: #ee0a24;
+  }
+}
+.isInvoice {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .van-cell__title {
+    flex: 2;
+  }
+  .van-cell__value {
+    flex: 6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 </style>

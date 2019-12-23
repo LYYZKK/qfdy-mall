@@ -13,7 +13,7 @@
           </van-col>
 
           <!-- 默认用户信息 -->
-          <van-col span="12">
+          <van-col span="18">
             <div>
               <van-row>
                 <van-col>
@@ -25,9 +25,6 @@
                 <span>{{ customerInfo.address }}</span>
               </div>
             </div>
-          </van-col>
-          <van-col span="4">
-            <span class="text-color-999">{{ order.orderStatus===6?'已发货':'' }}</span>
           </van-col>
         </van-row>
       </div>
@@ -43,7 +40,14 @@
         </van-col>
       </van-row>
       <van-cell-group>
-        <van-cell title="订单金额" :value="'￥'+order.totalAmount"></van-cell>
+        <template v-if="order.simpleStatus===1">
+          <van-cell title="订单金额" :value="'￥'+order.totalAmount"></van-cell>
+          <van-cell title="尝鲜米（3kg）发货状态" :value="order.simpleStatus===1?'已发货':'未发货'"></van-cell>
+          <van-cell title="物流公司" :value="order.orderLogistics[0].courierCompany"></van-cell>
+          <van-cell title="快递单号" :value="order.orderLogistics[0].trackingNo"></van-cell>
+          <van-cell title="发货时间" :value="order.orderLogistics[0].shippingTime"></van-cell>
+        </template>
+
         <van-cell title="订单编号" :value="order.orderNo"></van-cell>
         <van-cell title="下单时间" :value="order.orderTime"></van-cell>
         <van-cell title="付款时间" :value="order.payTime"></van-cell>
@@ -51,7 +55,7 @@
         <van-cell title="备注" :value="order.mark"></van-cell>
         <van-cell title="服务码" :value="order.serviceCode"></van-cell>
       </van-cell-group>
-      <van-cell-group v-if="order.orderInvoice!==null&&order.orderInvoice.isInvoice===1">
+      <van-cell-group v-if="order.orderInvoice!==null">
         <van-cell title="发票抬头" :value="order.orderInvoice.type===1?'个人':'单位'"></van-cell>
         <van-cell
           title="单位名称"

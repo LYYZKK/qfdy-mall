@@ -14,7 +14,7 @@
     </div>
     <div align="right">
       <div class="text-center btn" @click="getProductById(1)">详情介绍 >></div>
-      <div class="text-center btn" @click="spotBuy" v-if="isVip===1">现货尝鲜 >>{{ isVip }}</div>
+      <div class="text-center btn mt" @click="spotBuy" v-if="isVip===1">现货尝鲜 >></div>
     </div>
     <div class="goods">
       <div class="text-center title">2020年&nbsp;·&nbsp;新米预订</div>
@@ -38,7 +38,7 @@
           <img :src="goodRice[index]" alt width="100%" />
           <div class="goodText">
             <div class="text-color">{{ item.name }}</div>
-            <div class="text-color2">市场价格:￥{{ item.originalPrice }}</div>
+            <div class="text-color2">市场价:￥{{ item.originalPrice }}</div>
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@ export default {
           name: 'ProductSubmit',
           params: {
             good: {
-              name: val.name,
+              name: val.name + '(' + val.specification + ')',
               selectedNum: 1,
               price: val.price * 100,
               id: val.id,

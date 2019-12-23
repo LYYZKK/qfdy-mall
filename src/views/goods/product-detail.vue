@@ -84,7 +84,7 @@
           :disabled="sku.stock_num === 0"
         >
           {{
-            sku.stock_num === 0 ? '已售罄' : '立即' + appointBuyText
+          sku.stock_num === 0 ? '已售罄' : '立即' + appointBuyText
           }}
         </van-button>
       </van-col>
@@ -256,6 +256,9 @@ export default {
         this.sku.stock_num = res.data[0].totalCount
         // this.goodsId = 2259
         let tree = res.data[0].specifications
+        tree.forEach(item => {
+          item.name = item.name + '(' + item.specification + ')'
+        })
         let list = res.data[0].specifications
         list.forEach(item => {
           item.stock_num = res.data[0].totalCount

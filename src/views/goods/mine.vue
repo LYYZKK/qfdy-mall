@@ -31,7 +31,7 @@ export default {
     return {
       areaList,
       addressShow: false,
-      title: '预购中心',
+      title: '个人中心',
       disabled: true,
       customerInfo: {
         name: '',
@@ -156,7 +156,7 @@ export default {
     }
   },
   beforeMount() {
-    this.setTitleBar('预购中心')
+    this.setTitleBar('个人中心')
   },
   mounted() {
     this.initPage()

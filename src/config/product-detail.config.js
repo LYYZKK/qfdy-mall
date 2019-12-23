@@ -6,7 +6,11 @@ export default {
       require('../assets/images/lands/2/02.jpg'),
       require('../assets/images/lands/2/03.jpg'),
       require('../assets/images/lands/2/04.jpg'),
-      require('../assets/images/lands/2/05.jpg')
+      require('../assets/images/lands/2/05.jpg'),
+      require('../assets/images/lands/2/06.jpg'),
+      require('../assets/images/lands/2/07.jpg'),
+      require('../assets/images/lands/2/08.jpg'),
+      require('../assets/images/lands/2/09.jpg')
     ]
   },
   2: {
