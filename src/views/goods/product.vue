@@ -169,6 +169,7 @@ export default {
       })
     },
     initPage() {
+      console.log(window.location.protocol + '//' + window.location.host + this.$route.fullPath)
       this.cmbcDescrypt()
       this.getProducts()
       // this.getOrderReport()

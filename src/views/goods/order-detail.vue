@@ -40,8 +40,8 @@
         </van-col>
       </van-row>
       <van-cell-group>
+        <van-cell title="订单金额" :value="'￥'+order.totalAmount"></van-cell>
         <template v-if="order.simpleStatus===1">
-          <van-cell title="订单金额" :value="'￥'+order.totalAmount"></van-cell>
           <van-cell title="尝鲜米（3kg）发货状态" :value="order.simpleStatus===1?'已发货':'未发货'"></van-cell>
           <van-cell title="物流公司" :value="order.orderLogistics[0].courierCompany"></van-cell>
           <van-cell title="快递单号" :value="order.orderLogistics[0].trackingNo"></van-cell>
@@ -50,8 +50,8 @@
 
         <van-cell title="订单编号" :value="order.orderNo"></van-cell>
         <van-cell title="下单时间" :value="order.orderTime"></van-cell>
-        <van-cell title="付款时间" :value="order.payTime"></van-cell>
-        <van-cell title="取消时间" :value="order.orderCancelTime"></van-cell>
+        <van-cell title="付款时间" :value="order.payTime" v-if="order.orderStatus===2"></van-cell>
+        <van-cell title="取消时间" :value="order.orderCancelTime" v-if="order.orderStatus===3"></van-cell>
         <van-cell title="备注" :value="order.mark"></van-cell>
         <van-cell title="服务码" :value="order.serviceCode"></van-cell>
       </van-cell-group>

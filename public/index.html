@@ -234,13 +234,17 @@
     }
 
     function diyGoBack() {
+      console.log('window.location.pathname', window.location.pathname)
       const baseUrl = 'https://mall.wuchangdami.qiaofudayuan.net:8001'
       const param = localStorage.getItem('param')
       if (window.location.pathname === '/order-detail') {
-        // 订单详情页
+        // 订单详情页跳转到订单列表页
         window.location.href = baseUrl + '/order-list'
+      } else if (window.location.pathname === '/booking') {
+        // 订单列表页或者个人中心跳转到商品列表页面
+        window.location.href = baseUrl + '/booking' + '?param=' + param
       } else if (window.location.pathname === '/order-list' || window.location.pathname === '/mine') {
-        // 订单列表页或者个人中心
+        // 订单列表页或者个人中心跳转到商品列表页面
         window.location.href = baseUrl + '/booking' + '?param=' + param
       } else if (window.location.pathname === '/address-list') {
         let addressListFromPath = localStorage.getItem('addressListFromPath')

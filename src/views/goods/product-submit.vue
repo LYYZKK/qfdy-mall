@@ -654,6 +654,17 @@ export default {
   }
 }
 </script>
+<style lang="less">
+.agree {
+  .van-checkbox {
+    .van-checkbox__icon {
+      .van-icon {
+        border-color: #ee0a24;
+      }
+    }
+  }
+}
+</style>
 
 <style scoped lang="less">
 .bigBox {

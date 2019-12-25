@@ -124,6 +124,7 @@ export default {
     },
     // initPage
     initPage() {
+      console.log(window.location.protocol + '//' + window.location.host + this.$route.path)
       let cmbcParam = this.$route.query.param
       let isLogin = localStorage.getItem('isLogin')
       if (!cmbcParam) {
@@ -131,7 +132,7 @@ export default {
           this.getCustomerInfo()
         } else {
           loginForComm(
-            window.location.protocol + '//' + window.location.host + '/booking',
+            window.location.protocol + '//' + window.location.host + '/index',
             window.location.protocol + '//' + window.location.host + this.$route.path
           )
         }

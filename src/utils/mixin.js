@@ -92,29 +92,30 @@ export default {
     },
     // 解密从民生银行跳转的连接参数
     cmbcDescrypt() {
-      console.log('民生银行param===', this.$route.query.param)
-      let params = {
-        param: this.$route.query.param
+      let params = {}
+      if (this.$route.query.param !== undefined) {
+        params.param = this.$route.query.param
+      } else if (localStorage.getItem('param') !== null) {
+        params.param = localStorage.getItem('param')
       }
-      let productId = localStorage.getItem('productId')
+      console.log('民生银行param===', this.$route.query.param)
       let linkStatus = localStorage.getItem('linkStatus')
       if (linkStatus !== null) {
         localStorage.setItem('linkStatus', linkStatus)
       }
-
-      if (params.param !== undefined) {
+      console.log('params.param===', params.param)
+      if (params.param !== null || params.param !== undefined) {
         localStorage.setItem('param', params.param)
         request({ ...this.api.cmbcDescrypt, params }).then(res => {
           if (res.success) {
             localStorage.setItem('isLogin', 1)
-
             let info = res.data.split('|')
             localStorage.setItem('phone', info[0])
             localStorage.setItem('cuserId', info[1]) // 银行客户id
           }
 
           this.checkCustomer().then(() => {
-            isLogin = localStorage.getItem('isLogin')
+            let isLogin = localStorage.getItem('isLogin')
             // 登录成功后自动跳转到linkMall
             if (isLogin === '1' && linkStatus === '1') {
               console.log('登录成功即将跳转到linkMall')
@@ -131,11 +132,10 @@ export default {
         this.checkCustomer()
       }
       let isLogin = localStorage.getItem('isLogin')
-      console.log(isLogin)
-      if (isLogin === '0') {
+      console.log('isLogin', isLogin)
+      if (isLogin !== '1') {
         localStorage.clear()
         localStorage.setItem('isLogin', 0)
-        localStorage.setItem('productId', productId)
         this.checkCustomer()
       }
       this.linkAdd(2)
