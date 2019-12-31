@@ -239,7 +239,9 @@ export default {
       centered: true,
       order: {
         price: 0,
-        count: 0
+        count: 0,
+        mark: '',
+        serviceCode: ''
       },
       orderId: '',
       customerInfo: {
@@ -392,10 +394,11 @@ export default {
         this.order = JSON.parse(goodParam).order
       } else {
         let info = this.$route.params.good
-        let order = this.$route.params.good
+        let order = this.$route.params.order
         this.good = info
-        this.order.count = order.selectedNum
-        console.log('good===', info)
+        this.order.count = info.selectedNum
+        this.order.mark = order.mark
+        this.order.serviceCode = order.serviceCode
       }
     },
     saveAddress(val) {
@@ -481,14 +484,6 @@ export default {
             // alert('即将调起圈存 info===' + info)
             submitOrderForCashNew(info, 'wuchang')
           }
-          // Toast({
-          //   message: '恭喜您预定成功!',
-          //   icon: 'like-o'
-          // })
-          // this.$router.push({
-          //   name: 'OrderDetail',
-          //   query: { id: this.orderId }
-          // })
         }
       })
     },
@@ -511,7 +506,6 @@ export default {
       })
     },
     getOrder() {
-      console.log(this.$route.params)
       this.getGoodById()
     },
     switchChange(val) {

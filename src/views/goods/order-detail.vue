@@ -1,9 +1,13 @@
 <template>
   <div class="mainContent">
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh" class="mainBox">
-      <div
-        class="text-center text-style"
-      >{{ order.payStatus===0?'待付款':order.payStatus===1?'付款中':order.payStatus===2?'已付款':order.payStatus===3?'支付失败':order.payStatus===4?'取消支付中':order.payStatus===5?'取消支付成功':order.payStatus===6?'取消支付失败':order.payStatus===7?'退款中':order.payStatus===8?'已退款':order.payStatus===9?'退款失败':'' }}</div>
+      <div class="text-center text-style">
+        {{ order.orderStatus===6?'交易超时已关闭':order.orderStatus===3?'交易已取消':order.payStatus===0?'未付款':order.payStatus===1?'付款中':order.payStatus===2?'已付款':order.payStatus===3?'支付失败':order.payStatus===4?'取消支付中':order.payStatus===5?'取消支付成功':order.payStatus===6?'取消支付失败':order.payStatus===7?'退款中':order.payStatus===8?'已退款':order.payStatus===9?'退款失败':'' }}
+        <span
+          v-if="order.orderStatus === 0&&restTime!==''"
+        >剩{{ restTime }}自动关闭</span>
+      </div>
+
       <div class="info">
         <van-row type="flex" justify="space-around" align="center">
           <van-col span="2">
@@ -41,35 +45,38 @@
       </van-row>
       <van-cell-group>
         <van-cell title="订单金额" :value="'￥'+order.totalAmount"></van-cell>
+        <van-cell title="退款金额" :value="'￥'+order.refundAmount" v-if="order.payStatus===8"></van-cell>
         <template v-if="order.simpleStatus===1">
           <van-cell title="尝鲜米（3kg）发货状态" :value="order.simpleStatus===1?'已发货':'未发货'"></van-cell>
           <van-cell title="物流公司" :value="order.orderLogistics[0].courierCompany"></van-cell>
           <van-cell title="快递单号" :value="order.orderLogistics[0].trackingNo"></van-cell>
           <van-cell title="发货时间" :value="order.orderLogistics[0].shippingTime"></van-cell>
         </template>
-
         <van-cell title="订单编号" :value="order.orderNo"></van-cell>
         <van-cell title="下单时间" :value="order.orderTime"></van-cell>
         <van-cell title="付款时间" :value="order.payTime" v-if="order.orderStatus===2"></van-cell>
         <van-cell title="取消时间" :value="order.orderCancelTime" v-if="order.orderStatus===3"></van-cell>
+        <van-cell title="退款时间" :value="order.refundTime" v-if="order.payStatus===8"></van-cell>
         <van-cell title="备注" :value="order.mark"></van-cell>
         <van-cell title="服务码" :value="order.serviceCode"></van-cell>
       </van-cell-group>
-      <van-cell-group v-if="order.orderInvoice!==null">
-        <van-cell title="发票抬头" :value="order.orderInvoice.type===1?'个人':'单位'"></van-cell>
-        <van-cell
-          title="单位名称"
-          :value="order.orderInvoice.name===1"
-          v-if="order.orderInvoice.type===2"
-        ></van-cell>
-        <van-cell
-          title="纳税人识别号"
-          :value="order.orderInvoice.taxId"
-          v-if="order.orderInvoice.type===2"
-        ></van-cell>
-        <van-cell title="收票人手机号" :value="order.orderInvoice.phone"></van-cell>
-        <van-cell title="收票人邮箱" :value="order.orderInvoice.email"></van-cell>
-      </van-cell-group>
+      <template v-if="order.orderInvoice!==null">
+        <van-cell-group>
+          <van-cell title="发票抬头" :value="order.orderInvoice.type===1?'个人':'单位'"></van-cell>
+          <van-cell
+            v-if="order.orderInvoice.type===2"
+            title="单位名称"
+            :value="order.orderInvoice.name===1"
+          ></van-cell>
+          <van-cell
+            v-if="order.orderInvoice.type===2"
+            title="纳税人识别号"
+            :value="order.orderInvoice.taxId"
+          ></van-cell>
+          <van-cell title="收票人手机号" :value="order.orderInvoice.phone"></van-cell>
+          <van-cell title="收票人邮箱" :value="order.orderInvoice.email"></van-cell>
+        </van-cell-group>
+      </template>
       <van-row class="showCard" v-if="order.orderStatus===2">
         <van-col span="12">
           <div class="line">专属订制稻田证书</div>
@@ -125,8 +132,17 @@ export default {
       isLoading: false,
       show: false,
       centered: true,
+      restTime: '', // 剩余付款时间
       title: '订单详情',
-      order: {},
+      order: {
+        orderInvoice: {
+          type: '',
+          name: '',
+          phone: '',
+          taxId: '',
+          email: ''
+        }
+      },
       customerId: '',
       customerInfo: {},
       api: {
@@ -138,6 +154,21 @@ export default {
     }
   },
   methods: {
+    // 倒计时
+    countDown(val) {
+      let currentTime = new Date().getTime()
+      let endTime = new Date(val).getTime() + 30 * 60 * 1000
+      const timerDown = setInterval(() => {
+        currentTime = new Date().getTime()
+        let timeDiff = (endTime - currentTime) / 1000
+        let min = parseInt(((timeDiff % 86400) % 3600) / 60)
+        let sec = parseInt(((timeDiff % 86400) % 3600) % 60)
+        this.restTime = min + '分' + sec + '秒'
+      }, 1000)
+      if (endTime - currentTime < 0) {
+        clearInterval(timerDown)
+      }
+    },
     gotoList() {
       this.$router.push({ name: 'OrderList' })
     },
@@ -156,6 +187,9 @@ export default {
           ...this.api.getProductById,
           urlReplacements: [{ substr: '{id}', replacement: this.$route.query.id }]
         }).then(res => {
+          if (res.data.orderStatus === 0) {
+            this.countDown(res.data.orderTime)
+          }
           this.isLoading = false
           this.order = res.data
           let address = JSON.parse(res.data.orderAddressee.address)

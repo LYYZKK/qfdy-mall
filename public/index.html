@@ -236,28 +236,32 @@
     function diyGoBack() {
       const baseUrl = 'http://mall.wuchangdami.qiaofudayuan.net:8001'
       const param = localStorage.getItem('param')
-      if (window.location.pathname === '/order-detail') {
+      if (window.location.pathname.lastIndexOf('/order-detail') !== -1) {
         // 订单详情页跳转到订单列表页
         window.location.href = baseUrl + '/order-list'
-      } else if (window.location.pathname === '/booking') {
-        // 订单列表页或者个人中心跳转到商品列表页面
-        window.location.href = baseUrl + '/booking' + '?param=' + param
-      } else if (window.location.pathname === '/order-list' || window.location.pathname === '/mine') {
-        // 订单列表页或者个人中心跳转到商品列表页面
+      } else if (
+        window.location.pathname === '/order-list' ||
+        window.location.pathname === '/mine' ||
+        window.location.pathname.lastIndexOf('/product-detail') !== -1
+      ) {
+        // 订单列表页/个人中心/产品详情页、跳转到商品列表页面
         window.location.href = baseUrl + '/booking' + '?param=' + param
       } else if (window.location.pathname === '/address-list') {
+        // 地址列表回到个人中心
         let addressListFromPath = localStorage.getItem('addressListFromPath')
         if (addressListFromPath === 'ProductSubmit') {
           window.location.href = baseUrl + '/product-submit'
         } else if (addressListFromPath === 'Mine') {
           window.location.href = baseUrl + '/mine'
         }
-        // 地址列表回到个人中心
       } else if (window.location.pathname === '/product-submit') {
         let productId = localStorage.getItem('productId')
-        window.location.href = baseUrl + '/product-detail/' + productId
-      } else if (window.location.pathname.lastIndexOf('/product-detail') !== -1) {
-        window.location.href = baseUrl + '/booking' + '?param=' + param
+        let buyStatus = localStorage.getItem('buyStatus')
+        if (buyStatus === '1') {
+          window.location.href = baseUrl + '/booking' + '?param=' + param
+        } else if (buyStatus === '2') {
+          window.location.href = baseUrl + '/product-detail/' + productId
+        }
       } else {
         window.history.go(-1)
       }

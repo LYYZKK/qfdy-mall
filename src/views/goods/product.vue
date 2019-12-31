@@ -90,6 +90,7 @@ export default {
       loadingShow: true,
       copyText: '今天天气真好呀!',
       list: [],
+      isVip: localStorage.getItem('isVip'),
       title: '预购商品',
       centered: true,
       peopleNum: 0,
@@ -114,7 +115,7 @@ export default {
       this.$router.push({ name: 'ProductDetail', params: { id } })
     },
     buySubmit(val, i) {
-      console.log(val)
+      localStorage.setItem('buyStatus', 1)
       let isLogin = localStorage.getItem('isLogin')
       if (isLogin === '1') {
         console.log(val, i)

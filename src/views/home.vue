@@ -1,9 +1,8 @@
 <template>
   <div class="mainContent">
-    <router-view to="/booking" />
+    <router-view :to="{path:'/booking',query:{param}}" />
     <van-tabbar v-model="active" route active-color="#ee0a24">
-      <van-tabbar-item icon="home-o" to="/booking">商品列表</van-tabbar-item>
-      <!-- <van-tabbar-item icon="search" to="/order-list">{{ orderListTitleName }}</van-tabbar-item> -->
+      <van-tabbar-item icon="home-o" :to="{path:'/booking',query:{param}}">商品列表</van-tabbar-item>
       <van-tabbar-item icon="friends-o" to="/mine">个人中心</van-tabbar-item>
     </van-tabbar>
   </div>
@@ -16,6 +15,7 @@ export default {
   data() {
     return {
       active: 0,
+      param: localStorage.getItem('param'),
       orderListTitleName: process.env.APPOINT_BUY ? '预购订单' : '预约订单'
     }
   },

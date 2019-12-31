@@ -5,7 +5,6 @@
       show-postal
       show-set-default
       :show-delete="showDetele"
-      :area-columns-placeholder="['请选择', '请选择', '请选择']"
       @save="onSave"
       :address-info="orginAddress"
       @delete="onDelete"

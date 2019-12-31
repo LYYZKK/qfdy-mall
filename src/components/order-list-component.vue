@@ -3,7 +3,7 @@
     <van-row class="border font-size-12" v-for="(item, index) in orderList" :key="index">
       <van-col span="24" align="right" class="text-color">
         {{
-        item.orderStatus === 0 ? '待付款' : item.orderStatus === 2 ? '已付款':item.orderStatus === 3 ? '已取消' : item.orderStatus===5?'已退款':''
+        item.orderStatus === 0 ? '待付款' : item.orderStatus === 2 ? '已付款':item.orderStatus === 3 ? '已取消' : item.orderStatus===5?'已退款':item.orderStatus===6?'已关闭':''
         }}
       </van-col>
       <van-col span="24">
@@ -31,16 +31,15 @@
         span="24"
         align="right"
         v-if="
-          item.orderStatus === 0 || item.orderStatus ===2
+          (item.orderStatus === 0 || item.orderStatus ===2)&&item.orderStatus!==6
         "
       >
         <span class="border-box" v-if="item.orderStatus === 0" @click="clickBtn(item,0)">取消订单</span>
         <span class="border-box" v-if="item.orderStatus === 0" @click="clickBtn(item,2)">立即付款</span>
-
         <span
           class="border-box"
           @click="clickBtn(item,3)"
-          v-if="item.orderStatus === 2 && (new Date().getTime() - (new Date(item.orderTime.replace(/\-/g, '/'))).getTime() < cancelTime)"
+          v-if="item.orderStatus === 2 && (new Date().getTime() - (new Date(item.payTime.replace(/\-/g, '/'))).getTime() < cancelTime)"
         >退款</span>
       </van-col>
     </van-row>
@@ -195,6 +194,7 @@ export default {
       })
     }
   },
+
   components: {
     [Card.name]: Card,
     [Icon.name]: Icon,

@@ -180,7 +180,6 @@ export default {
   methods: {
     // 倒计时
     countDown() {
-      1000 * 24 * 60 * 60
       let currentTime = new Date().getTime()
       const timerDown = setInterval(() => {
         currentTime = new Date().getTime()
@@ -225,6 +224,7 @@ export default {
     },
     onBuyClicked(value) {
       console.log(value)
+      localStorage.setItem('buyStatus', 2)
       let param = {
         name: value.selectedSkuComb.name,
         selectedNum: value.selectedNum,

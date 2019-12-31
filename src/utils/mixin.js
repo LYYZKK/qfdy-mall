@@ -92,19 +92,24 @@ export default {
     },
     // 解密从民生银行跳转的连接参数
     cmbcDescrypt() {
-      let params = {}
-      if (this.$route.query.param !== undefined) {
-        params.param = this.$route.query.param
-      } else if (localStorage.getItem('param') !== null) {
-        params.param = localStorage.getItem('param')
-      }
-      console.log('民生银行param===', this.$route.query.param)
       let linkStatus = localStorage.getItem('linkStatus')
       if (linkStatus !== null) {
         localStorage.setItem('linkStatus', linkStatus)
       }
-      console.log('params.param===', params.param)
-      if (params.param !== null || params.param !== undefined) {
+
+      let params = {}
+
+      // 从 linkedmall 跳转过来时携带参数.
+      if (this.$route.query.bankUserId && this.$route.query.cid) {
+        localStorage.setItem('isLogin', 1)
+        this.checkCustomer()
+      } else if (this.$route.query.param === undefined || this.$route.query.param === null) {
+        // 从银行 APP 直接进入, 未登录.
+        localStorage.clear()
+        localStorage.setItem('isLogin', 0)
+      } else {
+        // 已登录.
+        params.param = this.$route.query.param
         localStorage.setItem('param', params.param)
         request({ ...this.api.cmbcDescrypt, params }).then(res => {
           if (res.success) {
@@ -112,32 +117,19 @@ export default {
             let info = res.data.split('|')
             localStorage.setItem('phone', info[0])
             localStorage.setItem('cuserId', info[1]) // 银行客户id
+            this.checkCustomer().then(() => {
+              let isLogin = localStorage.getItem('isLogin')
+              // 登录成功后自动跳转到linkMall
+              if (isLogin === '1' && linkStatus === '1') {
+                console.log('登录成功即将跳转到linkMall')
+                localStorage.removeItem('linkStatus')
+                this.goToLinkMall()
+              }
+            })
           }
-
-          this.checkCustomer().then(() => {
-            let isLogin = localStorage.getItem('isLogin')
-            // 登录成功后自动跳转到linkMall
-            if (isLogin === '1' && linkStatus === '1') {
-              console.log('登录成功即将跳转到linkMall')
-              localStorage.removeItem('linkStatus')
-              this.goToLinkMall()
-            }
-          })
         })
-      } else if (this.$route.query.bankUserId && this.$route.query.cid) {
-        localStorage.setItem('isLogin', 1)
-        this.checkCustomer()
-      } else {
-        localStorage.setItem('isLogin', 0)
-        this.checkCustomer()
       }
-      let isLogin = localStorage.getItem('isLogin')
-      console.log('isLogin', isLogin)
-      if (isLogin !== '1') {
-        localStorage.clear()
-        localStorage.setItem('isLogin', 0)
-        this.checkCustomer()
-      }
+
       this.linkAdd(2)
     },
     // 验证客户身份
