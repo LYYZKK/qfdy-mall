@@ -26,7 +26,6 @@
         <span class="font-size-14">总金额:</span>
         <span class="van-card__price">￥{{ item.totalAmount }}</span>
       </van-col>
-
       <van-col
         span="24"
         align="right"
@@ -39,7 +38,7 @@
         <span
           class="border-box"
           @click="clickBtn(item,3)"
-          v-if="item.orderStatus === 2 && (new Date().getTime() - (new Date(item.payTime.replace(/\-/g, '/'))).getTime() < cancelTime)"
+          v-if="item.orderStatus === 2 && (new Date().getTime() - (item.payTime===null?new Date():new Date(item.payTime.replace(/-/g, '/'))).getTime() < cancelTime)"
         >退款</span>
       </van-col>
     </van-row>
@@ -176,7 +175,12 @@ export default {
       request({ ...this.api.refund, urlReplacements: [{ substr: '{id}', replacement: id }] }).then(res => {
         if (res.success) {
           console.log('退款成功')
-          this.$router.go(0)
+          this.$router.push({
+            name: 'OrderDetail',
+            query: {
+              id
+            }
+          })
         } else {
           console.log(res.message)
         }
@@ -189,7 +193,12 @@ export default {
         urlReplacements: [{ substr: '{id}', replacement: id }]
       }).then(res => {
         if (res.success) {
-          this.$router.go(0)
+          this.$router.push({
+            name: 'OrderDetail',
+            query: {
+              id
+            }
+          })
         }
       })
     }

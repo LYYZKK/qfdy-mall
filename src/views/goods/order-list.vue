@@ -102,7 +102,7 @@
                     @load="onLoadList"
                     :immediate-check="check"
                   >
-                    <order-list-component :orderList="orderList"></order-list-component>
+                    <order-list-component :orderList="orderList" @changeSort="changeSort"></order-list-component>
                   </van-list>
                 </van-pull-refresh>
               </template>

@@ -161,7 +161,6 @@
             :clearable="true"
           />
         </van-cell-group>
-        <div class="title">发票内容</div>
         <div class="content">本店默认开具增值税普通电子发票，在您提交订单时，请务必核对好发票信息，订单中发票抬头一经确认将不支持修改。</div>
         <van-button
           type="primary"
@@ -362,17 +361,20 @@ export default {
       }
     },
     editeAddress(val) {
+      console.log(val)
+      console.log(this.$route.params)
       let goodParam = localStorage.getItem('goodParam')
       let param = {}
       if (goodParam) {
-        let goodParam = JSON.parse(goodParam)
-        param.good = goodParam.good
         localStorage.removeItem('goodParam')
-      } else {
-        param.good = this.$route.params.good
       }
+      param.good = this.good
       param.order = this.order
-      param.addressId = val.id
+      if (val.id !== undefined) {
+        param.addressId = val.id
+      } else {
+        console.log('没有默认地址')
+      }
       if (this.orderInvoice.isInvoice) {
         param.orderInvoice = this.orderInvoice
       }
@@ -491,7 +493,13 @@ export default {
     },
     // 取消支付
     cancel() {
-      this.cancelShow = true
+      this.$router.push({
+        name: 'OrderDetail',
+        query: {
+          id: this.orderId
+        }
+      })
+      // this.cancelShow = true
     },
     // 再次确认取消支付
     canselSure() {
@@ -685,8 +693,8 @@ export default {
     margin: 10px;
   }
   .content {
-    color: #323233;
-    padding: 0 10px 10px 10px;
+    color: rgba(0, 0, 0, 0.5);
+    padding: 20px 10px 10px 10px;
     font-size: 12px;
   }
   .selectBtn {

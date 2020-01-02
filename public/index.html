@@ -256,6 +256,10 @@
         }
       } else if (window.location.pathname === '/product-submit') {
         let productId = localStorage.getItem('productId')
+        let goodParam = localStorage.getItem('goodParam')
+        if (goodParam) {
+          localStorage.removeItem('goodParam')
+        }
         let buyStatus = localStorage.getItem('buyStatus')
         if (buyStatus === '1') {
           window.location.href = baseUrl + '/booking' + '?param=' + param

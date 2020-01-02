@@ -76,6 +76,7 @@ export default {
             addressId: val.id
           }
           localStorage.removeItem('goodParam')
+          localStorage.setItem('goodParam', JSON.stringify(paramInfo))
           this.$router.push({
             name: 'ProductSubmit',
             params: paramInfo

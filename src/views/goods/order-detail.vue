@@ -2,11 +2,15 @@
   <div class="mainContent">
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh" class="mainBox">
       <div class="text-center text-style">
-        {{ order.orderStatus===6?'交易超时已关闭':order.orderStatus===3?'交易已取消':order.payStatus===0?'未付款':order.payStatus===1?'付款中':order.payStatus===2?'已付款':order.payStatus===3?'支付失败':order.payStatus===4?'取消支付中':order.payStatus===5?'取消支付成功':order.payStatus===6?'取消支付失败':order.payStatus===7?'退款中':order.payStatus===8?'已退款':order.payStatus===9?'退款失败':order.payStatus===10?'订单已完成':
+        {{ order.orderStatus===6?'交易超时已关闭':order.orderStatus===3?'交易已取消':order.payStatus===0?'请在':order.payStatus===1?'付款中':order.payStatus===2?'已付款':order.payStatus===3?'支付失败':order.payStatus===4?'取消支付中':order.payStatus===5?'取消支付成功':order.payStatus===6?'取消支付失败':order.payStatus===7?'退款中':order.payStatus===8?'已退款':order.payStatus===9?'退款失败':order.payStatus===10?'订单已完成':
         order.payStatus===11?'订单超时已关闭':'' }}
-        <span
+        <template
           v-if="order.orderStatus === 0&&restTime!==''"
-        >剩{{ restTime }}自动关闭</span>
+        >
+          <span class="text-color-style">{{ restTime }}</span>
+          <span>&nbsp;内付款</span>
+          <span class="btn-style" @click="dialogShow=true">立即付款</span>
+        </template>
       </div>
 
       <div class="info">
@@ -99,6 +103,16 @@
         <van-button size="large" color="rgba(255, 66, 0, 1)">鲜米现货购买</van-button>
       </van-col>
     </van-row>
+    <!-- 确认付款 -->
+    <van-dialog
+      v-model="dialogShow"
+      title="确认付款"
+      show-cancel-button
+      @confirm="submit"
+      @cancel="dialogShow = false"
+    >
+      <h1 class="text-center">￥{{ totalAmount }}</h1>
+    </van-dialog>
   </div>
 </template>
 
@@ -129,6 +143,8 @@ export default {
   data() {
     return {
       book,
+      dialogShow: false,
+      totalAmount: '',
       isVip: parseInt(localStorage.getItem('isVip')),
       isLoading: false,
       show: false,
@@ -150,26 +166,67 @@ export default {
         getProductById: {
           url: '/orders/{id}',
           method: 'get'
+        },
+        // 支付圈存
+        payOrder: {
+          url: '/orders/{id}/pay',
+          method: 'post'
+        },
+        // 订单关闭
+        closeOrder: {
+          url: '/orders/{id}/close',
+          method: 'post'
         }
       }
     }
   },
   methods: {
+    // 支付即调起圈存
+    submit() {
+      request({
+        ...this.api.payOrder,
+        urlReplacements: [{ substr: '{id}', replacement: this.$route.query.id }]
+      }).then(res => {
+        console.log(res)
+        if (res.data !== '') {
+          let info = res.data
+          alert('即将调起圈存 info===' + info)
+          submitOrderForCashNew(info, 'wuchang')
+        }
+      })
+    },
+    // 关闭订单
+    closeOrder() {
+      request({
+        ...this.api.closeOrder,
+        urlReplacements: [{ substr: '{id}', replacement: this.$route.query.id }]
+      }).then(res => {
+        if (res.success) {
+          this.initPage()
+        }
+      })
+    },
     // 倒计时
     countDown(val) {
       let currentTime = new Date().getTime()
-      let endTime = new Date(val).getTime() + 30 * 60 * 1000
+      let endTime = new Date(val.replace(/-/g, '/')).getTime() + 30 * 60 * 1000
       const timerDown = setInterval(() => {
         currentTime = new Date().getTime()
         let timeDiff = (endTime - currentTime) / 1000
         let min = parseInt(((timeDiff % 86400) % 3600) / 60)
         let sec = parseInt(((timeDiff % 86400) % 3600) % 60)
-        this.restTime = min + '分' + sec + '秒'
+        this.restTime = min + ':' + sec
+        console.log(endTime - currentTime)
+        if (currentTime === endTime) {
+          this.closeOrder()
+          clearInterval(timerDown)
+        }
       }, 1000)
-      if (endTime - currentTime < 0) {
+      this.$once('hook:beforeDestroy', () => {
         clearInterval(timerDown)
-      }
+      })
     },
+
     gotoList() {
       this.$router.push({ name: 'OrderList' })
     },
@@ -191,6 +248,7 @@ export default {
           if (res.data.orderStatus === 0) {
             this.countDown(res.data.orderTime)
           }
+          this.totalAmount = res.data.totalAmount
           this.isLoading = false
           this.order = res.data
           let address = JSON.parse(res.data.orderAddressee.address)
@@ -286,5 +344,18 @@ export default {
   height: 100%;
   overflow: hidden;
   overflow-y: scroll;
+}
+.btn-style {
+  background: rgb(255, 66, 0);
+  border: 1px solid rgb(255, 66, 0);
+  border-radius: 7px;
+  padding: 2px 10px;
+  margin-left: 10px;
+  color: #fff;
+}
+.text-color-style {
+  color: #2d8cf8;
+  font-size: 16px;
+  font-weight: 800;
 }
 </style>
