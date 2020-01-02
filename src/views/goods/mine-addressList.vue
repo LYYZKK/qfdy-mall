@@ -69,21 +69,16 @@ export default {
 
         if (goodParam) {
           goodParam = JSON.parse(goodParam)
-
           let paramInfo = {
             good: goodParam.good,
             order: goodParam.order,
+            orderInvoice: goodParam.orderInvoice,
             addressId: val.id
           }
           localStorage.removeItem('goodParam')
-          // localStorage.setItem('goodParam', JSON.stringify(paramInfo))
           this.$router.push({
             name: 'ProductSubmit',
-            params: {
-              good: paramInfo.good,
-              order: paramInfo.order,
-              addressId: val.id
-            }
+            params: paramInfo
           })
         }
       } else if (addressListFromPath === 'Mine') {

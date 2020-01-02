@@ -2,7 +2,8 @@
   <div class="mainContent">
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh" class="mainBox">
       <div class="text-center text-style">
-        {{ order.orderStatus===6?'交易超时已关闭':order.orderStatus===3?'交易已取消':order.payStatus===0?'未付款':order.payStatus===1?'付款中':order.payStatus===2?'已付款':order.payStatus===3?'支付失败':order.payStatus===4?'取消支付中':order.payStatus===5?'取消支付成功':order.payStatus===6?'取消支付失败':order.payStatus===7?'退款中':order.payStatus===8?'已退款':order.payStatus===9?'退款失败':'' }}
+        {{ order.orderStatus===6?'交易超时已关闭':order.orderStatus===3?'交易已取消':order.payStatus===0?'未付款':order.payStatus===1?'付款中':order.payStatus===2?'已付款':order.payStatus===3?'支付失败':order.payStatus===4?'取消支付中':order.payStatus===5?'取消支付成功':order.payStatus===6?'取消支付失败':order.payStatus===7?'退款中':order.payStatus===8?'已退款':order.payStatus===9?'退款失败':order.payStatus===10?'订单已完成':
+        order.payStatus===11?'订单超时已关闭':'' }}
         <span
           v-if="order.orderStatus === 0&&restTime!==''"
         >剩{{ restTime }}自动关闭</span>

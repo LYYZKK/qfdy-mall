@@ -316,7 +316,6 @@ export default {
       } else {
         addressId = this.$route.params.addressId
       }
-
       if (addressId) {
         request({ ...this.api.searchAddress, urlReplacements: [{ substr: '{id}', replacement: addressId }] }).then(
           res => {
@@ -364,21 +363,18 @@ export default {
     },
     editeAddress(val) {
       let goodParam = localStorage.getItem('goodParam')
-      let param
+      let param = {}
       if (goodParam) {
-        goodParam = JSON.parse(goodParam)
-        param = {
-          good: goodParam.good,
-          order: goodParam.order,
-          addressId: goodParam.addressId
-        }
+        let goodParam = JSON.parse(goodParam)
+        param.good = goodParam.good
         localStorage.removeItem('goodParam')
       } else {
-        param = {
-          good: this.$route.params.good,
-          order: this.order,
-          addressId: val.id
-        }
+        param.good = this.$route.params.good
+      }
+      param.order = this.order
+      param.addressId = val.id
+      if (this.orderInvoice.isInvoice) {
+        param.orderInvoice = this.orderInvoice
       }
       localStorage.setItem('addressListFromPath', 'ProductSubmit')
       localStorage.setItem('goodParam', JSON.stringify(param))
@@ -395,10 +391,16 @@ export default {
       } else {
         let info = this.$route.params.good
         let order = this.$route.params.order
+        let orderInvoice = this.$route.params.orderInvoice
         this.good = info
         this.order.count = info.selectedNum
-        this.order.mark = order.mark
-        this.order.serviceCode = order.serviceCode
+        if (order) {
+          this.order.mark = order.mark
+          this.order.serviceCode = order.serviceCode
+        }
+        if (orderInvoice) {
+          this.orderInvoice = orderInvoice
+        }
       }
     },
     saveAddress(val) {
