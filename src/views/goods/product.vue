@@ -91,7 +91,6 @@ export default {
       copyText: '今天天气真好呀!',
       list: [],
       isVip: localStorage.getItem('isVip'),
-      title: '预购商品',
       centered: true,
       peopleNum: 0,
       goodRice: [rice1, rice2, rice3, rice4],
@@ -109,7 +108,7 @@ export default {
   },
   //
   methods: {
-    // 点击商品查看详情
+    // 点击产品查看详情
     getProductById(id) {
       localStorage.setItem('productId', id)
       this.$router.push({ name: 'ProductDetail', params: { id } })
@@ -140,7 +139,7 @@ export default {
         )
       }
     },
-    // 获取订单所有商品
+    // 获取订单所有产品
     getProducts() {
       request({ ...this.api.getProducts }).then(res => {
         if (res.success) {
@@ -177,7 +176,7 @@ export default {
     },
     setIndexTitleBar() {
       const jsonParam = {
-        title: '商品列表',
+        title: '产品列表',
         leftButton: {
           // 左按钮
           exist: 'true', // true:显示左按钮,false:也显示左按钮,客户端不调用左按钮的返回事件

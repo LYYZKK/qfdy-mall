@@ -71,7 +71,7 @@
           <van-cell
             v-if="order.orderInvoice.type===2"
             title="单位名称"
-            :value="order.orderInvoice.name===1"
+            :value="order.orderInvoice.businessName"
           ></van-cell>
           <van-cell
             v-if="order.orderInvoice.type===2"
@@ -154,7 +154,7 @@ export default {
       order: {
         orderInvoice: {
           type: '',
-          name: '',
+          businessName: '',
           phone: '',
           taxId: '',
           email: ''
@@ -190,7 +190,6 @@ export default {
         console.log(res)
         if (res.data !== '') {
           let info = res.data
-          alert('即将调起圈存 info===' + info)
           submitOrderForCashNew(info, 'wuchang')
         }
       })
@@ -209,14 +208,13 @@ export default {
     // 倒计时
     countDown(val) {
       let currentTime = new Date().getTime()
-      let endTime = new Date(val.replace(/-/g, '/')).getTime() + 30 * 60 * 1000
+      let endTime = new Date(val.orderTime.replace(/-/g, '/')).getTime() + 30 * 60 * 1000
       const timerDown = setInterval(() => {
         currentTime = new Date().getTime()
         let timeDiff = (endTime - currentTime) / 1000
         let min = parseInt(((timeDiff % 86400) % 3600) / 60)
         let sec = parseInt(((timeDiff % 86400) % 3600) % 60)
         this.restTime = min + ':' + sec
-        console.log(endTime - currentTime)
         if (currentTime === endTime) {
           this.closeOrder()
           clearInterval(timerDown)
@@ -245,8 +243,17 @@ export default {
           ...this.api.getProductById,
           urlReplacements: [{ substr: '{id}', replacement: this.$route.query.id }]
         }).then(res => {
-          if (res.data.orderStatus === 0) {
-            this.countDown(res.data.orderTime)
+          // 订单待支付状态
+          if (res.data.orderStatus === 0 && res.data.payStatus === 0) {
+            this.countDown(res.data)
+          } else if (res.data.orderStatus === 0 && res.data.payStatus === 1) {
+            // 圈存中状态
+            const paying = setInterval(() => {
+              this.initPage()
+            }, 1)
+            this.$once('hook:beforeDestroy', () => {
+              clearInterval(paying)
+            })
           }
           this.totalAmount = res.data.totalAmount
           this.isLoading = false

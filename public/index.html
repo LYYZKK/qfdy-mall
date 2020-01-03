@@ -244,7 +244,7 @@
         window.location.pathname === '/mine' ||
         window.location.pathname.lastIndexOf('/product-detail') !== -1
       ) {
-        // 订单列表页/个人中心/产品详情页、跳转到商品列表页面
+        // 订单列表页/个人中心/产品详情页、跳转到产品列表页面
         window.location.href = baseUrl + '/booking' + '?param=' + param
       } else if (window.location.pathname === '/address-list') {
         // 地址列表回到个人中心

@@ -167,8 +167,6 @@ export default {
     },
     changeSort(item, index) {
       console.log('点击切换数据', item, index)
-      this.isUploading = false
-      this.isUpfinished = false
       this.orderList = []
       this.param.pageNo = 1
       if (item === 0) {
@@ -187,14 +185,14 @@ export default {
     },
     // 上拉刷新
     onRefresh() {
-      console.log('走到A')
+      console.log('触发上拉刷新')
       this.param.pageNo = 1
       this.isUpfinished = false
       this.getOrder(this.param)
     },
     // 下拉加载
     onLoadList() {
-      console.log('走到B')
+      console.log('触发下拉加载')
       this.param.pageNo++
       this.getOrder(this.param)
     },

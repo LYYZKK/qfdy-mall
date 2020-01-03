@@ -384,7 +384,7 @@ export default {
         name: 'AddressList'
       })
     },
-    // 获取商品详情
+    // 获取产品详情
     getGoodById() {
       let goodParam = localStorage.getItem('goodParam')
       if (goodParam) {
@@ -485,7 +485,6 @@ export default {
         if (res.success) {
           if (res.data !== '') {
             let info = res.data
-            // alert('即将调起圈存 info===' + info)
             submitOrderForCashNew(info, 'wuchang')
           }
         }

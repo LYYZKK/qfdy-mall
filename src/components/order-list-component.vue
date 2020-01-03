@@ -165,7 +165,6 @@ export default {
         console.log(res)
         if (res.data !== '') {
           let info = res.data
-          alert('即将调起圈存 info===' + info)
           submitOrderForCashNew(info, 'wuchang')
         }
       })

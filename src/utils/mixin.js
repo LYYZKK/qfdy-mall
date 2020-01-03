@@ -22,6 +22,10 @@ export default {
         linkAdd: {
           url: '/system/view-logs',
           method: 'post'
+        },
+        getSignature: {
+          url: '/linked-mall/signature',
+          method: 'post'
         }
       }
     }
@@ -49,6 +53,7 @@ export default {
         params: { extJson: JSON.stringify(extJson) }
       }).then(res => {
         if (res.success) {
+          console.log('即将跳转到LinkMAll页面openUrl===', openUrl)
           let signature = res.data
           let openUrl =
             baseUrl +

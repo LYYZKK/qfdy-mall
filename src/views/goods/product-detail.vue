@@ -30,7 +30,7 @@
             >首期{{ appointBuyText }}1000份，先约先得</van-notice-bar>
           </van-col>
         </van-row>-->
-        <van-divider :style="{ color: 'rgba(0,0,0,1)', padding: '0px 20px', margin: '5px 0' }">产品详情</van-divider>
+        <!-- <van-divider :style="{ color: 'rgba(0,0,0,1)', padding: '0px 20px', margin: '5px 0' }">产品详情</van-divider> -->
         <div v-for="(item, index) in productImages" :key="index" class="img-text">
           <van-image :src="item">
             <template v-slot:loading>
@@ -84,7 +84,7 @@
           :disabled="sku.stock_num === 0"
         >
           {{
-          sku.stock_num === 0 ? '已售罄' : '立即' + appointBuyText
+            sku.stock_num === 0 ? '已售罄' : '立即' + appointBuyText
           }}
         </van-button>
       </van-col>
@@ -129,7 +129,6 @@ export default {
       show: false,
       dialogShow: false,
       PayNumber: 1,
-      title: '商品详情',
       productId: '',
       productImages: [],
       peopleNum: '',
@@ -147,16 +146,16 @@ export default {
         tree: [],
         list: [],
         price: '', // 默认价格（单位元）
-        stock_num: '', // 商品总库存
-        none_sku: false, // 是否无规格商品
+        stock_num: '', // 产品总库存
+        none_sku: false, // 是否无规格产品
         hide_stock: true, // 是否隐藏剩余库存
         collection_id: 1
       },
       goods: {
         description: '',
-        // 商品标题
+        // 产品标题
         title: '',
-        // 默认商品 sku 缩略图
+        // 默认产品 sku 缩略图
         picture: '',
         id: ''
       },
@@ -313,7 +312,7 @@ export default {
     }
   },
   beforeMount() {
-    this.setTitleBar('商品详情')
+    this.setTitleBar('产品详情')
   },
   computed: {
     message() {
