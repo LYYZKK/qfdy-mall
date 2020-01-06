@@ -87,13 +87,13 @@ export default {
     // 现货购买
     spotBuy() {
       // 点击过现货购买的标志
-      let isLogin = localStorage.getItem('isLogin')
-      if (isLogin === '1') {
-        this.getSign()
-      } else {
-        localStorage.setItem('linkStatus', '1')
-        this.getSign()
-      }
+      // let isLogin = localStorage.getItem('isLogin')
+      // if (isLogin === '1') {
+      //   this.getSign()
+      // } else {
+      //   localStorage.setItem('linkStatus', '1')
+      //   this.getSign()
+      // }
     },
     // 解密从民生银行跳转的连接参数
     cmbcDescrypt() {

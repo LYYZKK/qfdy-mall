@@ -5,10 +5,10 @@
         {{ order.orderStatus===6?'交易超时已关闭':order.orderStatus===3?'交易已取消':order.payStatus===0?'请在':order.payStatus===1?'付款中':order.payStatus===2?'已付款':order.payStatus===3?'支付失败':order.payStatus===4?'取消支付中':order.payStatus===5?'取消支付成功':order.payStatus===6?'取消支付失败':order.payStatus===7?'退款中':order.payStatus===8?'已退款':order.payStatus===9?'退款失败':order.payStatus===10?'订单已完成':
         order.payStatus===11?'订单超时已关闭':'' }}
         <template
-          v-if="order.orderStatus === 0&&restTime!==''"
+          v-if="order.orderStatus===0"
         >
-          <span class="text-color-style">{{ restTime }}</span>
-          <span>&nbsp;内付款</span>
+          <span class="text-color-style" v-if="order.payStatus===0">{{ restTime }}</span>
+          <span v-if="order.payStatus===0">&nbsp;内付款</span>
           <span class="btn-style" @click="dialogShow=true">立即付款</span>
         </template>
       </div>
@@ -187,10 +187,13 @@ export default {
         ...this.api.payOrder,
         urlReplacements: [{ substr: '{id}', replacement: this.$route.query.id }]
       }).then(res => {
-        console.log(res)
-        if (res.data !== '') {
-          let info = res.data
-          submitOrderForCashNew(info, 'wuchang')
+        if (res.success) {
+          if (res.data !== '') {
+            let info = res.data
+            submitOrderForCashNew(info, 'wuchang')
+          }
+        } else {
+          this.$message.error(res.message)
         }
       })
     },
@@ -202,6 +205,8 @@ export default {
       }).then(res => {
         if (res.success) {
           this.initPage()
+        } else {
+          this.$message.error(res.message)
         }
       })
     },
@@ -243,26 +248,29 @@ export default {
           ...this.api.getProductById,
           urlReplacements: [{ substr: '{id}', replacement: this.$route.query.id }]
         }).then(res => {
-          // 订单待支付状态
-          if (res.data.orderStatus === 0 && res.data.payStatus === 0) {
-            this.countDown(res.data)
-          } else if (res.data.orderStatus === 0 && res.data.payStatus === 1) {
-            // 圈存中状态
-            const paying = setInterval(() => {
-              this.initPage()
-            }, 1)
-            this.$once('hook:beforeDestroy', () => {
-              clearInterval(paying)
-            })
+          if (res.success) {
+            this.totalAmount = res.data.totalAmount
+            this.isLoading = false
+            this.order = res.data
+            let address = JSON.parse(res.data.orderAddressee.address)
+            this.customerInfo.address = address.province + address.city + address.county + address.addressDetail
+            this.customerInfo.name = res.data.orderAddressee.name
+            this.customerInfo.phone = res.data.orderAddressee.phone
+            this.customerId = parseInt(localStorage.getItem('id'))
+            // 订单待支付状态
+            if (res.data.orderStatus === 0) {
+              this.countDown(res.data)
+              // 圈存中状态
+              const paying = setInterval(() => {
+                this.initPage()
+              }, 60000)
+              this.$once('hook:beforeDestroy', () => {
+                clearInterval(paying)
+              })
+            }
+          } else {
+            this.$message.error(res.message)
           }
-          this.totalAmount = res.data.totalAmount
-          this.isLoading = false
-          this.order = res.data
-          let address = JSON.parse(res.data.orderAddressee.address)
-          this.customerInfo.address = address.province + address.city + address.county + address.addressDetail
-          this.customerInfo.name = res.data.orderAddressee.name
-          this.customerInfo.phone = res.data.orderAddressee.phone
-          this.customerId = parseInt(localStorage.getItem('id'))
         })
       }
     },
